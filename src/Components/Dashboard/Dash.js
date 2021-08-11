@@ -1,64 +1,73 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import NewPatient from './NewPatient'
-import PatientList from './PatientList';
 import styled from 'styled-components'
+import { NavLink } from 'react-router-dom';
+import PatientList from './PatientList';
 
 const useStyles = makeStyles((theme) => ({
     Button: {
         '& > *': {
             margin: theme.spacing(1),
             display: 'flex',
-            flexDirection: 'column',
             width: 300,
         },
     },
     MainButton: {
         width: 250,
-        height: 200,
+        height: 100,
+        margin: "10px 0px 10px 0px",
     }
 }));
 
 const Container = styled.div`
     display: flex;
 `
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    width:100vw;
+    padding: 30px;
+    justify-content: space-evenly;
+`
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [tab,setTab] = React.useState(0)
-
-    const setTabValue = (value) => {
-        setTab(value)
-    } 
 
     return (
         <>
             <Container>
-                <div className={classes.Button}>
-                    <Button onClick={() => setTabValue(1)} className={classes.MainButton} variant="contained" color="primary">
-                        New Patient
-                    </Button>
-                    <Button onClick={() => setTabValue(2)} className={classes.MainButton} variant="contained" color="primary">
-                        Patient List
-                    </Button>
-                    <Button onClick={() => setTabValue(3)} className={classes.MainButton} variant="contained" color="secondary">
-                    Discharge
-                    </Button>
-                    <Button onClick={() => setTabValue(4)} className={classes.MainButton} variant="contained" color="primary">
-                        SomeThing2
-                    </Button>
-                </div>
-                {tab===1 ? 
-                <NewPatient /> : "" }
-                {tab===2 ? 
-                <PatientList /> : "" }
-                {tab===3 ? 
-                <div>Something1</div> : "" }
-                {tab===4 ? 
-                <div>Something2</div> : "" }
-                
+
+                <ButtonContainer>
+                    <NavLink className="navlinkstyle" to="/OPD">
+                        <Button className={classes.MainButton} variant="contained" style={{ background: "#B27B90" }}>
+                            OPD
+                        </Button>
+                    </NavLink>
+                    <NavLink className="navlinkstyle" to="/IPD">
+                        <Button className={classes.MainButton} variant="contained" color="primary">
+                            IPD
+                        </Button>
+                    </NavLink>
+                    <NavLink className="navlinkstyle" to="/Discharge">
+                        <Button className={classes.MainButton} variant="contained" color="secondary">
+                            Discharge
+                        </Button>
+                    </NavLink>
+                    <NavLink className="navlinkstyle" to="/PatientsList">
+                        <Button className={classes.MainButton} variant="contained" color="primary">
+                            Patient List
+                        </Button>
+                    </NavLink>
+                    <NavLink className="navlinkstyle" to="/Lab">
+                        <Button className={classes.MainButton} variant="contained" color="primary">
+                            Lab
+                        </Button>
+                    </NavLink>
+                </ButtonContainer>
+
             </Container>
+            <PatientList/>
         </>
     );
 }
