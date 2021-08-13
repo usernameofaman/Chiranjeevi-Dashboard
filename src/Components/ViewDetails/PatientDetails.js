@@ -128,17 +128,7 @@ export default function NewPatient(props) {
         // console.log(patient)
     }
 
-    const saveData = () => {
-        const patientRef = firebase.database().ref("Patients");
-        const patientData = {
-            name: patient.name,
-            fileNo: patient.fileNo,
-            advance: patient.advance,
-            room: patient.room,
-        };
-
-        patientRef.push(patientData);
-    }
+    
 
 
     return (
@@ -149,25 +139,27 @@ export default function NewPatient(props) {
                 <Form>
 
                 <Typography className={classes.input} style={{ fontFamily: "Josefin Sans, sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
-                        ADD NEW PATIENTS
+                        FILE NO. 140
                     </Typography>
                     <OneField >
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Name" size="small" label="Name" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" type="number" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Sex" size="small" label="Sex" variant="outlined" />
-                    </OneField>
-                    <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Address" size="small" label="Address" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Refund by" size="small" label="Refund by" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" size="small" label="Consultant" variant="outlined" />
-
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Sarthak Garg" size="small" label="Name" variant="outlined" disabled  />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="19" size="small" label="Age" type="number" variant="outlined" disabled />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="M" size="small" label="Sex" variant="outlined" disabled/>
                     </OneField>
                     <Typography style={{ fontFamily: "Josefin Sans, sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         WARD
                     </Typography>
                     <OneField>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Address" size="small" label="Address" variant="outlined" disabled/>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Refund by" size="small" label="Refund by" variant="outlined" disabled/>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Consultant" size="small" label="Consultant" variant="outlined" disabled/>
+
+                    </OneField>
+                    
+                    <OneField>
                         {/* <Typography variant="h6" component="h2">Hello</Typography> */}
                         <TextField
+                            disabled
                             id="datetime-local"
                             label="Date of admit"
                             type="datetime-local"
@@ -180,6 +172,7 @@ export default function NewPatient(props) {
                             }}
                         />
                         <TextField
+                            disabled
                             id="datetime-local"
                             label="Date of Discharge"
                             name="date-discharge"
@@ -193,12 +186,14 @@ export default function NewPatient(props) {
                         />
                     </OneField>
                         <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Mobile Number" type="number" size="small" label="Mobile Number" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Register Number" type="number" size="small" label="Register Number" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" disabled name="Mobile Number" type="number" size="small" label="Mobile Number" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" disabled name="Register Number" type="number" size="small" label="Register Number" variant="outlined" />
 
                         </OneField>
                     <OneField>
-                        <Button onClick={ () => saveData} className={classes.buttonSubmit}  variant="contained" color="primary">Submit</Button>
+                    <NavLink className="navlinkstyle" to="/IPDForm">
+                        <Button  className={classes.buttonSubmit}  variant="contained" color="primary">Edit </Button>
+                    </NavLink>
                     </OneField>
                 </Form>
             </Container>

@@ -167,7 +167,7 @@ export default function NewPatient(props) {
                             }}
                         />
                         <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consulting Doctor" size="small" label="Consulting Doctor" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Amount" size="small" label="Amount" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Amount" size="small" label="Amount" type="number" variant="outlined" />
                     </OneField>
                     <OneField>
                         <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
