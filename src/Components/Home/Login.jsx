@@ -17,7 +17,14 @@ const useStyles = makeStyles((theme) => ({
     height: '200px'
   },
   btn: {
-    width: '100%',
+    width: "100%",
+      background: "#0C6361",
+      '&:hover': {
+          backgroundColor: '#0C6361',
+          boxShadow: 'none',
+      },
+ 
+    
   }
 }));
 

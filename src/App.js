@@ -4,6 +4,9 @@ import AppBar from './Components/Home/AppBar'
 import OPDForm from './Components/Forms/OPDForm'
 import IPDForm from './Components/Forms/IPDForm'
 import Patients from './Components/Dashboard/PatientList'
+import IPDReciept from './Components/Reciepts/IPDReciept'
+import UnderConstruction from './Components/UnderConstruction/UnderConstruction'
+import Error from './Components/Error/Error'
 
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
@@ -19,6 +22,10 @@ function App() {
         <Route exact path="/OPD" component={OPDForm} />
         <Route exact path="/IPD" component={IPDForm} />
         <Route exact path="/PatientsList" component={Patients} />
+        <Route exact path="/Reciept" component={IPDReciept} />
+        <Route exact path="/NAN" component={UnderConstruction} />
+        <Route exact path="*" component={Error} />        
+
       </Switch>
     </BrowserRouter>
   );

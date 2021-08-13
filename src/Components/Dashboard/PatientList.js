@@ -28,7 +28,7 @@ export default function PatientList() {
     return (
         <TableContainer>
             <TableComponent.Table cellpadding="0" cellspacing="0">
-        <TableComponent.TableHead>
+        <TableComponent.TableHead style={{ background: "#0C6361" }}>
         <TableComponent.HeadColumn>Name</TableComponent.HeadColumn>
           <TableComponent.HeadColumn>Room</TableComponent.HeadColumn>
           <TableComponent.HeadColumn>Advance</TableComponent.HeadColumn>

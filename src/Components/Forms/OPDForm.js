@@ -2,11 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import CloseIcon from '@material-ui/icons/Close'
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
+import 'date-fns';
+import { NavLink } from 'react-router-dom';
+import moment from 'moment';
+import { useEffect } from 'react'
+
 
 
 
@@ -23,12 +25,27 @@ const useStyles = makeStyles((theme) => ({
     },
     buttonSubmit: {
         marginLeft: 40,
+        background: "#0C6361",
+        '&:hover': {
+            backgroundColor: '#0C6361',
+            boxShadow: 'none',
+        },
     },
     fabIcon: {
         position: 'absolute',
-        top:"5%",
+        top: "5%",
         right: "2%"
 
+    },
+    MainButton: {
+        width: 140,
+        height: 40,
+        margin: "30px 0px 10px 0px",
+        background: "#0C6361",
+        fontFamily: "Josefin Sans, sans-serif",
+        fontWeight: "bolder",
+        fontSize: "11px",
+        color: "white"
     }
 }));
 
@@ -45,6 +62,13 @@ const OneField = styled.div`
     padding:10px;
     display: flex;
     flex-wrap: wrap;
+`
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    justify-content: space-evenly;
 `
 
 const Form = styled.div`
@@ -64,12 +88,23 @@ const Form = styled.div`
 `
 
 export default function NewPatient(props) {
+    const [date, setDate] = React.useState("")
+    useEffect(() => {
+        if (date === "") {
+
+            let date = Date.now();
+
+            setDate(moment(date).format("YYYY-MM-DDThh:mm"))
+        }
+    })
+  
     const classes = useStyles();
     const [patient, setPatient] = React.useState()
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
         console.log(patient)
     }
+
 
     const saveData = () => {
         const patientRef = firebase.database().ref("Patients");
@@ -85,27 +120,60 @@ export default function NewPatient(props) {
 
 
     return (
+        <>
+            <ButtonContainer>
+                <NavLink className="navlinkstyle" to="/NAN">
+                    <Button className={classes.MainButton} variant="contained">
+                        New Receipt
+                    </Button>
+                </NavLink>
+                <NavLink className="navlinkstyle" to="/NAN">
+                    <Button className={classes.MainButton} variant="contained" >
+                        View Receipt
+                    </Button>
+                </NavLink>
+                <NavLink className="navlinkstyle" to="/NAN">
+                    <Button className={classes.MainButton} variant="contained" >
+                        Modify Receipt
+                    </Button>
+                </NavLink>
+                <NavLink className="navlinkstyle" to="/NAN">
+                    <Button className={classes.MainButton} variant="contained" >
+                        Add Items
+                    </Button>
+                </NavLink>
+                <NavLink className="navlinkstyle" to="/NAN">
+                    <Button className={classes.MainButton} variant="contained" >
+                        Add Doctor
+                    </Button>
+                </NavLink>
+            </ButtonContainer>
+            <Container>
 
-        <Container>
-            <Form>
-                <Fab onClick={() =>props.setTabValue(0)} className={classes.fabIcon} color="primary" aria-label="add">
-                    <CloseIcon />
-                </Fab>
-                <OneField>
-                    {/* <Typography variant="h6" component="h2">Hello</Typography> */}
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="name" size="small" label="Name" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="fileNo" size="small" label="File No" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="advance" size="small" label="Advance Payment" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="room" size="small" label="Room No" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="room" size="small" label="Room No" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="room" size="small" label="Room No" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="room" size="small" label="Room No" variant="outlined" />
-                </OneField>
-                <OneField>
-                    <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
-                </OneField>
-            </Form>
-        </Container>
-       
+                <Form>
+                    <OneField>
+                        {/* <Typography variant="h6" component="h2">Hello</Typography> */}
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Patient Name" size="small" label="Patient Name" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" variant="outlined" />
+                        <TextField
+                            id="datetime-local"
+                            label="Date of admit"
+                            type="datetime-local"
+                            value={date}
+                            className={classes.input}
+                            onChange={handleinput}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consulting Doctor" size="small" label="Consulting Doctor" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Amount" size="small" label="Amount" variant="outlined" />
+                    </OneField>
+                    <OneField>
+                        <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
+                    </OneField>
+                </Form>
+            </Container>
+        </>
     )
 }
