@@ -28,8 +28,6 @@ function App() {
         <Route exact path="/IPD" component={IPD} />
         <Route exact path="/IPDNav" component={IPDNav} />
         <Route exact path="/PatientsList" component={Patients} />
-        <Route exact path="/ViewPatient" component={ViewPatientDetails} />
-        <Route exact path="/PatientDeatils" component={PatientDeatils} />
         <Route exact path="/NAN" component={UnderConstruction} />
         <Route exact path="*" component={Error} />        
 

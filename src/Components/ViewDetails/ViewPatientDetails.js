@@ -14,6 +14,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import IPD from '../Dashboard/IPD'
 import IPDNav from '../Dashboard/IPDNav'
+import DetailsView from './PatientDetails'
+import EditView from './PatientDetails'
 
 
 
@@ -94,11 +96,14 @@ const Form = styled.div`
 `
 export default function NewPatient(props) {
     const classes = useStyles();
+    const [fileNo, setFileNo] = React.useState("")
+    const [fileNoSend, setFileNoSend] = React.useState("")
     const handleinput = (e) => {
+        setFileNoSend("")
+        setFileNo(e.target.value)
     }
     return (
         <>
-            <IPDNav />
             <Container>
                 <Form>
                     <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
@@ -123,12 +128,13 @@ export default function NewPatient(props) {
 
 
                     <OneField>
-                        <NavLink className="navlinkstyle" to="/PatientDeatils">
-                            <Button className={classes.buttonSubmit} variant="contained" color="primary">View Patient Details</Button>
-                        </NavLink >
+                            <Button onClick={() =>  setFileNoSend(fileNo)} className={classes.buttonSubmit} variant="contained" color="primary">View Patient Details</Button>
                     </OneField>
                 </Form>
             </Container>
+    
+            {fileNoSend ==="" ? 
+            "" : <DetailsView fileNoSend={fileNoSend}/> }
         </>
 
     )

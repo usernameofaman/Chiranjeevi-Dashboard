@@ -11,6 +11,9 @@ import { NavLink } from 'react-router-dom';
 import moment from 'moment';
 import { useFormik } from 'formik';
 import IPDForm from '../Forms/IPDForm'
+import ViewPatientDetails from "../ViewDetails/ViewPatientDetails"
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -77,9 +80,8 @@ useEffect(() => {
 })
 
 
-// defaultValue="2017-05-24T10:30"
-console.log(admitdate)
-console.log(dischargedate)
+// console.log(admitdate)
+// console.log(dischargedate)
 
 const classes = useStyles();
 const [patient, setPatient] = React.useState()
@@ -93,18 +95,24 @@ const handleinput = (e) => {
         console.log(e.target.value, 'dischargedate')
     }
     setPatient({ ...patient, [e.target.name]: e.target.value })
-    // console.log(patient)
 }
+
+    // Tabs Management
+    const [tabs, setTabs] = React.useState(0)
+    const changeTabs = (value) => {
+        if(tabs===1){
+            
+        }
+        setTabs(value)
+    }
 
     return (
         <>
         
         <ButtonContainer>
-                <NavLink className="navlinkstyle" to="/ViewPatient">
-                    <Button className={classes.MainButton} variant="contained" >
+                    <Button onClick={()=> changeTabs(1)} className={classes.MainButton} variant="contained" >
                         View Patient Details
                     </Button>
-                </NavLink>
                 
                 <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
@@ -163,7 +171,12 @@ const handleinput = (e) => {
                     </Button>
                 </NavLink>
             </ButtonContainer>
-            <IPDForm/>
+
+            {/* Here is the code for Tabs */}
+            {tabs===0 && 
+            <IPDForm/> }
+            {tabs===1 && 
+            <ViewPatientDetails/> }
         </>
     )
 }

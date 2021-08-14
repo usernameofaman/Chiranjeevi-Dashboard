@@ -92,12 +92,13 @@ const Form = styled.div`
 export default function NewPatient(props) {
     const [patient, setPatient] = React.useState({})
     useEffect(() => {
+        console.log(props)
         getPatientsList();
     }, []);
 
     const getPatientsList = () => {
         const userRef = firebase.database().ref("Patients");
-        var userQuery = userRef.orderByChild("fileNo").equalTo("1994");
+        var userQuery = userRef.orderByChild("fileNo").equalTo(props.fileNoSend);
         userQuery.once("value", function (snapshot) {
             snapshot.forEach(function (child) {
                 setPatient(child.val())
@@ -105,23 +106,20 @@ export default function NewPatient(props) {
         });
 
     }
-
-    const [admitdate, setAdmitdate] = React.useState("");
     const classes = useStyles();
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
     }
 
-
-
-
+    const [editMode, setEditMode ] = React.useState(false)
+    const handleEditMode = () => {
+        setEditMode(!editMode)
+    }
     return (
         <>
-            <IPDNav />
+            {!editMode && 
             <Container>
-
                 <Form>
-
                     <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         FILE NO. {patient.fileNo}
                     </Typography>
@@ -175,12 +173,70 @@ export default function NewPatient(props) {
 
                     </OneField>
                     <OneField>
-                        <NavLink className="navlinkstyle" to="/IPDForm">
-                            <Button className={classes.buttonSubmit} variant="contained" color="primary">Edit </Button>
-                        </NavLink>
+                            <Button onClick={handleEditMode} className={classes.buttonSubmit} variant="contained" color="primary">Edit </Button>
                     </OneField>
                 </Form>
-            </Container>
+            </Container> }
+            {editMode && 
+            <Container>
+                <Form>
+                    <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                        FILE NO. {patient.fileNo}
+                    </Typography>
+                    <OneField >
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic"  value={patient.name} InputLabelProps={{ shrink: true }} size="small" label="Name" variant="outlined"  />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.age} InputLabelProps={{ shrink: true }} size="small" label="Age" type="number" variant="outlined"  />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.sex} InputLabelProps={{ shrink: true }} size="small" label="Sex" variant="outlined"  />
+                    </OneField>
+                    <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                        WARD
+                    </Typography>
+                    <OneField>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.address} InputLabelProps={{ shrink: true }} size="small" label="Address" variant="outlined"  />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.refundBy} InputLabelProps={{ shrink: true }} size="small" label="Refund by" variant="outlined"  />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.consultant} InputLabelProps={{ shrink: true }} size="small" label="Consultant" variant="outlined"  />
+
+                    </OneField>
+
+                    <OneField>
+                        {/* <Typography variant="h6" component="h2">Hello</Typography> */}
+                        <TextField
+                            
+                            id="datetime-local"
+                            label="Date of admit"
+                            type="datetime-local"
+                            name="date-admit"
+                            value={patient.dateAdmit}
+                            className={classes.input}
+                            onChange={handleinput}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <TextField
+                            
+                            id="datetime-local"
+                            label="Date of Discharge"
+                            name="date-discharge"
+                            type="datetime-local"
+                            onChange={handleinput}
+                            value={patient.dateDischarge}
+                            className={classes.input}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </OneField>
+                    <OneField>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" InputLabelProps={{ shrink: true }} value={patient.mobileNumber} size="small" label="Mobile Number" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" InputLabelProps={{ shrink: true }} value={patient.fileNo} size="small" label="Register Number" variant="outlined" />
+
+                    </OneField>
+                    <OneField>
+                            <Button className={classes.buttonSubmit} variant="contained" color="primary">Save </Button>
+                    </OneField>
+                </Form>
+            </Container> }
         </>
 
     )
