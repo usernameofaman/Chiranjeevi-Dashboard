@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
-import Loader from '../Common/loader'
 import firebase from '../utils/firebase'
 import { history } from "../utils/history";
 

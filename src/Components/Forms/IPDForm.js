@@ -3,15 +3,10 @@ import styled from 'styled-components'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import CloseIcon from '@material-ui/icons/Close'
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
-import { NavLink } from 'react-router-dom';
 import moment from 'moment';
-import { useFormik } from 'formik';
-import IPDNav from '../Dashboard/IPDNav'
-
+import Toast from '../Common/snackbar'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     input: {
         marginLeft: 40,
         marginTop: 10,
-        
+
     },
     buttonSubmit: {
         marginLeft: 40,
@@ -51,12 +46,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ButtonContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
-    justify-content: space-evenly;
-`
+
 const Container = styled.div`
     justify-content: center;
     align-items: center;
@@ -95,23 +85,14 @@ export default function NewPatient(props) {
     const [dischargedate, setDischargedate] = React.useState("")
     useEffect(() => {
         if (admitdate === "") {
-
             let admitdate = Date.now();
-
             setAdmitdate(moment(admitdate).format("YYYY-MM-DDThh:mm"))
         }
         if (dischargedate === "") {
-
             let dischargedate = Date.now();
-
             setDischargedate(moment(dischargedate).format("YYYY-MM-DDThh:mm"))
         }
     })
-
-
-    // defaultValue="2017-05-24T10:30"
-    console.log(admitdate)
-    console.log(dischargedate)
 
     const classes = useStyles();
     const [patient, setPatient] = React.useState({
@@ -149,81 +130,93 @@ export default function NewPatient(props) {
             sex: patient.Sex,
             address: patient.Address,
             refundBy: patient.Refundby,
-            consultant:patient.Consultant,
-            fileNo:patient.RegisterNumber,
+            consultant: patient.Consultant,
+            fileNo: patient.RegisterNumber,
             // advance:patient.advance,
             // room: patient.room,
-            dateAdmit:patient.dateAdmit,
-            dateDischarge:patient.dateDischarge,
-            mobileNumber:patient.MobileNumber,
+            dateAdmit: patient.dateAdmit,
+            dateDischarge: patient.dateDischarge,
+            mobileNumber: patient.MobileNumber,
         };
-
-        patientRef.push(patientData);
-        console.log("fn ran")
+        patientRef.push(patientData).then(() => {
+            Toast.apiSuccessToast("New patient added")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        });
+        setTab(1)
     }
+
+    const [tab, setTab] = React.useState(0)
+
 
 
     return (
         <>
-        {/* <IPDNav/> */}
-            <Container>
-
-                <Form>
-
-                <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
-                        ADD NEW PATIENTS
-                    </Typography>
-                    <OneField >
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Name" size="small" label="Name" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" type="number" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Sex" size="small" label="Sex" variant="outlined" />
-                    </OneField>
-                    <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Address" size="small" label="Address" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Refundby" size="small" label="Refund by" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" size="small" label="Consultant" variant="outlined" />
-
-                    </OneField>
-                    <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
-                        WARD
-                    </Typography>
-                    <OneField>
-                        {/* <Typography variant="h6" component="h2">Hello</Typography> */}
-                        <TextField
-                            id="datetime-local"
-                            label="Date of admit"
-                            type="datetime-local"
-                            name="dateAdmit"
-                            value={admitdate}
-                            className={classes.input}
-                            onChange={handleinput}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField
-                            id="datetime-local"
-                            label="Date of Discharge"
-                            name="dateDischarge"
-                            type="datetime-local"
-                            onChange={handleinput}
-                            value={dischargedate}
-                            className={classes.input}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </OneField>
-                        <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="RegisterNumber" type="number" size="small" label="Register Number" variant="outlined" />
-
+            {tab === 0 &&
+                <Container>
+                    <Form>
+                        <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                            ADD NEW PATIENTS
+                        </Typography>
+                        <OneField >
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Name" size="small" label="Name" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" type="number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Sex" size="small" label="Sex" variant="outlined" />
                         </OneField>
+                        <OneField>
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Address" size="small" label="Address" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Refundby" size="small" label="Refund by" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" size="small" label="Consultant" variant="outlined" />
+                        </OneField>
+                        <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                            WARD
+                        </Typography>
+                        <OneField>
+                            <TextField
+                                id="datetime-local"
+                                label="Date of admit"
+                                type="datetime-local"
+                                name="dateAdmit"
+                                value={admitdate}
+                                className={classes.input}
+                                onChange={handleinput}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <TextField
+                                id="datetime-local"
+                                label="Date of Discharge"
+                                name="dateDischarge"
+                                type="datetime-local"
+                                onChange={handleinput}
+                                value={dischargedate}
+                                className={classes.input}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </OneField>
+                        <OneField>
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="RegisterNumber" type="number" size="small" label="Register Number" variant="outlined" />
+                        </OneField>
+                        <OneField>
+                            <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
+                        </OneField>
+                    </Form>
+                </Container>
+            }
+            {tab === 1 &&
+                <Container>
+                    <Typography style={{margin:"30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                        Patient has been added successfully
+                    </Typography>
                     <OneField>
-                        <Button onClick={() => saveData()} className={classes.buttonSubmit}  variant="contained" color="primary">Submit</Button>
+                        <Button onClick={() => setTab(0)} className={classes.buttonSubmit} variant="contained" color="primary">Add More</Button>
                     </OneField>
-                </Form>
-            </Container>
+                </Container>
+            }
         </>
 
     )

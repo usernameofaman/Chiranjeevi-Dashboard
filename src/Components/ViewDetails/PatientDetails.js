@@ -3,14 +3,9 @@ import styled from 'styled-components'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import CloseIcon from '@material-ui/icons/Close'
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
-import { NavLink } from 'react-router-dom';
-import moment from 'moment';
-import { useFormik } from 'formik';
-import IPDNav from '../Dashboard/IPDNav'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -90,12 +85,12 @@ const Form = styled.div`
 `
 
 export default function NewPatient(props) {
-    const [patient, setPatient] = React.useState({})
     useEffect(() => {
         console.log(props)
         getPatientsList();
     }, []);
-
+    
+    const [patient, setPatient] = React.useState({})
     const getPatientsList = () => {
         const userRef = firebase.database().ref("Patients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(props.fileNoSend);

@@ -13,7 +13,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
@@ -114,7 +113,7 @@ export default function ButtonAppBar() {
             <IconButton onClick={toggleDrawer('left', true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <img style={{width:"40px"}} src="./Images/logo.png" />
+            <img style={{width:"40px"}} src="./Images/logo.png" alt="logo"/>
             <Typography style={{fontFamily:"'Source Sans Pro', sans-serif", fontWeight:"bolder", fontSize:"26px"}} variant="h6" className={classes.title}>
               Cheeranjeevi
             </Typography>

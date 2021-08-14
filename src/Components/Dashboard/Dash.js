@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import PatientList from './PatientList';
-import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
     Button: {
@@ -38,9 +37,6 @@ const ButtonContainer = styled.div`
     width:100vw;
     padding: 30px;
     justify-content: space-evenly;
-`
-const StethoIcon = styled.div`
-    width:100px;
 `
 
 export default function Dashboard() {

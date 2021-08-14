@@ -8,3 +8,12 @@
 Hover Button : #238887
 
 font-family: 'Source Sans Pro', sans-serif;
+
+
+Toast Display fn
+
+.then(() => {
+            Toast.apiSuccessToast("Patient details updated")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
