@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     input: {
         marginLeft: 40,
         marginTop: 10,
-        
+
     },
     buttonSubmit: {
         marginLeft: 40,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         margin: "30px 0px 10px 0px",
         background: "#0C6361",
-        fontFamily: "Josefin Sans, sans-serif",
+        fontFamily: "'Source Sans Pro', sans-serif",
         fontWeight: "bolder",
         fontSize: "11px",
         color: "white"
@@ -77,7 +77,7 @@ const Form = styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
-    justify-content:"center"
+    justify-content:center;
     border-radius: 5px;
     padding: 0 8% 0 0;
     margin-top: 10px;
@@ -90,72 +90,56 @@ const Form = styled.div`
 `
 
 export default function NewPatient(props) {
-
-    const [admitdate, setAdmitdate] = React.useState("")
-    const [dischargedate, setDischargedate] = React.useState("")
+    const [patient, setPatient] = React.useState({})
     useEffect(() => {
-        if (admitdate === "") {
+        getPatientsList();
+    }, []);
 
-            let admitdate = Date.now();
+    const getPatientsList = () => {
+        const userRef = firebase.database().ref("Patients");
+        var userQuery = userRef.orderByChild("fileNo").equalTo("1994");
+        userQuery.once("value", function (snapshot) {
+            snapshot.forEach(function (child) {
+                setPatient(child.val())
+            });
+        });
 
-            setAdmitdate(moment(admitdate).format("YYYY-MM-DDThh:mm"))
-        }
-        if (dischargedate === "") {
-
-            let dischargedate = Date.now();
-
-            setDischargedate(moment(dischargedate).format("YYYY-MM-DDThh:mm"))
-        }
-    })
-
-
-    // defaultValue="2017-05-24T10:30"
-    console.log(admitdate)
-    console.log(dischargedate)
-
-    const classes = useStyles();
-    const [patient, setPatient] = React.useState()
-    const handleinput = (e) => {
-        if (e.target.name === "date-admit") {
-            setAdmitdate(e.target.value)
-            console.log(e.target.value)
-        }
-        if (e.target.name === "date-discharge") {
-            setDischargedate(e.target.value)
-            console.log(e.target.value, 'dischargedate')
-        }
-        setPatient({ ...patient, [e.target.name]: e.target.value })
-        // console.log(patient)
     }
 
-    
+    const [admitdate, setAdmitdate] = React.useState("");
+    const classes = useStyles();
+    const handleinput = (e) => {
+        setPatient({ ...patient, [e.target.name]: e.target.value })
+    }
+
+
 
 
     return (
         <>
-        <IPDNav/>
+            <IPDNav />
             <Container>
 
                 <Form>
 
-                <Typography className={classes.input} style={{ fontFamily: "Josefin Sans, sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
-                        FILE NO. 140
+                    <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                        FILE NO. {patient.fileNo}
                     </Typography>
                     <OneField >
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Sarthak Garg" size="small" label="Name" variant="outlined" disabled  />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="19" size="small" label="Age" type="number" variant="outlined" disabled />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="M" size="small" label="Sex" variant="outlined" disabled/>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic"  value={patient.name} InputLabelProps={{ shrink: true }} size="small" label="Name" variant="outlined" disabled />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.age} InputLabelProps={{ shrink: true }} size="small" label="Age" type="number" variant="outlined" disabled />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.sex} InputLabelProps={{ shrink: true }} size="small" label="Sex" variant="outlined" disabled />
                     </OneField>
-                    <Typography style={{ fontFamily: "Josefin Sans, sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                    <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         WARD
                     </Typography>
                     <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Address" size="small" label="Address" variant="outlined" disabled/>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Refund by" size="small" label="Refund by" variant="outlined" disabled/>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" defaultValue="Consultant" size="small" label="Consultant" variant="outlined" disabled/>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.address} InputLabelProps={{ shrink: true }} size="small" label="Address" variant="outlined" disabled />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.refundBy} InputLabelProps={{ shrink: true }} size="small" label="Refund by" variant="outlined" disabled />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" value={patient.consultant} InputLabelProps={{ shrink: true }} size="small" label="Consultant" variant="outlined" disabled />
 
                     </OneField>
-                    
+
                     <OneField>
                         {/* <Typography variant="h6" component="h2">Hello</Typography> */}
                         <TextField
@@ -164,7 +148,7 @@ export default function NewPatient(props) {
                             label="Date of admit"
                             type="datetime-local"
                             name="date-admit"
-                            value={admitdate}
+                            value={patient.dateAdmit}
                             className={classes.input}
                             onChange={handleinput}
                             InputLabelProps={{
@@ -178,22 +162,22 @@ export default function NewPatient(props) {
                             name="date-discharge"
                             type="datetime-local"
                             onChange={handleinput}
-                            value={dischargedate}
+                            value={patient.dateDischarge}
                             className={classes.input}
                             InputLabelProps={{
                                 shrink: true,
                             }}
                         />
                     </OneField>
-                        <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" disabled name="Mobile Number" type="number" size="small" label="Mobile Number" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" disabled name="Register Number" type="number" size="small" label="Register Number" variant="outlined" />
-
-                        </OneField>
                     <OneField>
-                    <NavLink className="navlinkstyle" to="/IPDForm">
-                        <Button  className={classes.buttonSubmit}  variant="contained" color="primary">Edit </Button>
-                    </NavLink>
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" disabled InputLabelProps={{ shrink: true }} value={patient.mobileNumber} size="small" label="Mobile Number" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" disabled InputLabelProps={{ shrink: true }} value={patient.fileNo} size="small" label="Register Number" variant="outlined" />
+
+                    </OneField>
+                    <OneField>
+                        <NavLink className="navlinkstyle" to="/IPDForm">
+                            <Button className={classes.buttonSubmit} variant="contained" color="primary">Edit </Button>
+                        </NavLink>
                     </OneField>
                 </Form>
             </Container>

@@ -62,7 +62,7 @@ export default function ButtonAppBar() {
       
         
       <List>
-        <Typography style={{fontFamily:"Josefin Sans, sans-serif", 
+        <Typography style={{fontFamily:"'Source Sans Pro', sans-serif", 
         fontWeight:"bolder",
         fontSize:"38px",
         display:"flex",
@@ -115,12 +115,12 @@ export default function ButtonAppBar() {
               <MenuIcon />
             </IconButton>
             <img style={{width:"40px"}} src="./Images/logo.png" />
-            <Typography style={{fontFamily:"Josefin Sans, sans-serif", fontWeight:"bolder", fontSize:"26px"}} variant="h6" className={classes.title}>
+            <Typography style={{fontFamily:"'Source Sans Pro', sans-serif", fontWeight:"bolder", fontSize:"26px"}} variant="h6" className={classes.title}>
               Cheeranjeevi
             </Typography>
             <NavLink className="navlinkstyle" to="/">
 
-              <Button style={{fontFamily:"Josefin Sans, sans-serif", fontWeight:"bolder", fontSize:"15px", color:"white"}} >Logout</Button>
+              <Button style={{fontFamily:"'Source Sans Pro', sans-serif", fontWeight:"bolder", fontSize:"15px", color:"white"}} >Logout</Button>
             </NavLink>
           </Toolbar>
         </AppBar>

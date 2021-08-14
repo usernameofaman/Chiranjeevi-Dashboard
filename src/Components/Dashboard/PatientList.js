@@ -11,7 +11,7 @@ export default function PatientList() {
     const [patients,setPatients] = React.useState([1,2])
     useEffect(() => {
         getDataForList();
-      });
+      }, []);
     const getDataForList = () => {
         if (patients[0]===1) {
           const userRef = firebase.database().ref("Patients");

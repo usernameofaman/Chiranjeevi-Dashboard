@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         margin: "30px 0px 10px 0px",
         background: "#0C6361",
-        fontFamily: "Josefin Sans, sans-serif",
+        fontFamily: "'Source Sans Pro', sans-serif",
         fontWeight: "bolder",
         fontSize: "11px",
         color: "white"
@@ -82,7 +82,7 @@ const Form = styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
-    justify-content:"center"
+    justify-content:center;
     border-radius: 5px;
     padding: 0 8% 0 0;
     margin-top: 10px;
@@ -91,56 +91,40 @@ const Form = styled.div`
     -ms-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
 `
-
 export default function NewPatient(props) {
-
-    
-
-
-
     const classes = useStyles();
     const handleinput = (e) => {
-     
-       
-       
     }
-
-    
-
-
     return (
         <>
-        <IPDNav/>
+            <IPDNav />
             <Container>
-
                 <Form>
-
-                    <Typography className={classes.input} style={{ fontFamily: "Josefin Sans, sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                    <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         Enter File Number
                     </Typography>
                     <OneField >
-                    <TextField
-                        onChange={handleinput}
-                        className={classes.input}
-                        id="input-with-icon-textfield"
-                        type="number"
-                        variant="outlined"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <AccountCircle />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                        <TextField
+                            onChange={handleinput}
+                            className={classes.input}
+                            id="input-with-icon-textfield"
+                            type="number"
+                            variant="outlined"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AccountCircle />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                     </OneField>
 
 
                     <OneField>
                         <NavLink className="navlinkstyle" to="/PatientDeatils">
-                        <Button  className={classes.buttonSubmit} variant="contained" color="primary">View Patient Details</Button>
+                            <Button className={classes.buttonSubmit} variant="contained" color="primary">View Patient Details</Button>
                         </NavLink >
                     </OneField>
                 </Form>

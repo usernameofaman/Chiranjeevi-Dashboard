@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         margin: "30px 0px 10px 0px",
         background: "#0C6361",
-        fontFamily: "Josefin Sans, sans-serif",
+        fontFamily: "'Source Sans Pro', sans-serif",
         fontWeight: "bolder",
         fontSize: "11px",
         color: "white"

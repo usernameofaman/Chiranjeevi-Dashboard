@@ -44,7 +44,7 @@ function IPDReciept() {
 
     return (
         <>
-            <Typography style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "25px", fontFamily: "Josefin Sans, sans-serif", fontSize: "35px", fontWeight: "600" }}>IPD Discharge Bill</Typography>
+            <Typography style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "25px", fontFamily: "'Source Sans Pro', sans-serif", fontSize: "35px", fontWeight: "600" }}>IPD Discharge Bill</Typography>
             
             <Container>
             <Card className={classes.card} variant="outlined">
