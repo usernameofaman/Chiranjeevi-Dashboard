@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import IPDForm from '../Forms/IPDForm'
 import ViewPatientDetails from "../ViewDetails/ViewPatientDetails"
+import Discharge from "../Discharge/Discharge"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,12 +72,9 @@ export default function IPD() {
                 <Button onClick={() => changeTabs(1)} className={classes.MainButton} variant="contained" >
                     View Patient Details
                 </Button>
-
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Discharge
-                    </Button>
-                </NavLink>
+                <Button onClick={() => changeTabs(2)}  className={classes.MainButton} variant="contained" >
+                    Discharge
+                </Button>
                 <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
                         View Discharge
@@ -110,16 +108,6 @@ export default function IPD() {
                 </NavLink>
                 <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
-                        Add Doctors
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Modify Doctors
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
                         Add Consultant
                     </Button>
                 </NavLink>
@@ -135,6 +123,9 @@ export default function IPD() {
                 <IPDForm />}
             {tabs === 1 &&
                 <ViewPatientDetails changeTabs={changeTabs} />}
+            {tabs === 2 &&
+                <Discharge/>}
+
         </>
     )
 }

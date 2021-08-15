@@ -58,20 +58,22 @@ export default function ButtonAppBar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      
-        
+
+
       <List>
-        <Typography style={{fontFamily:"'Source Sans Pro', sans-serif", 
-        fontWeight:"bolder",
-        fontSize:"38px",
-        display:"flex",
-        justifyContent: "center",
-        alignItems:"center"}}>
+        <Typography style={{
+          fontFamily: "'Source Sans Pro', sans-serif",
+          fontWeight: "bolder",
+          fontSize: "38px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
           Cheeranjeevi
         </Typography>
-        <Divider/>
+        <Divider />
         <NavLink className="navlinkstyle" to="/OPD">
-          <ListItem  button>
+          <ListItem button>
             <ListItemIcon><LocalHospitalIcon /></ListItemIcon>
             <ListItemText primary={'OPD'} />
           </ListItem>
@@ -90,7 +92,7 @@ export default function ButtonAppBar() {
         </NavLink>
       </List>
       <Divider />
-      
+
 
     </div>
   );
@@ -108,18 +110,18 @@ export default function ButtonAppBar() {
         ))}
       </div>
       <div className={classes.root}>
-        <AppBar style={{ background: '#0C6361',  }} position="static">
+        <AppBar style={{ background: '#0C6361', }} position="static">
           <Toolbar>
             <IconButton onClick={toggleDrawer('left', true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <img style={{width:"40px"}} src="./Images/logo.png" alt="logo"/>
-            <Typography style={{fontFamily:"'Source Sans Pro', sans-serif", fontWeight:"bolder", fontSize:"26px"}} variant="h6" className={classes.title}>
-              Cheeranjeevi
-            </Typography>
-            <NavLink className="navlinkstyle" to="/">
-
-              <Button style={{fontFamily:"'Source Sans Pro', sans-serif", fontWeight:"bolder", fontSize:"15px", color:"white"}} >Logout</Button>
+            <NavLink className="navlinkstyle" exact to="/Dashboard">
+              <Button style={{ background: "transparent", color: "white" }}>
+                <img style={{ width: "40px" }} src="./Images/logo.png" alt="logo" />
+                <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", fontWeight: "bolder", fontSize: "26px" }} variant="h6" className={classes.title}>
+                  Cheeranjeevi
+                </Typography>
+              </Button>
             </NavLink>
           </Toolbar>
         </AppBar>

@@ -76,21 +76,15 @@ const Form = styled.div`
     -ms-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
 `
 
 export default function NewPatient(props) {
 
     const [admitdate, setAdmitdate] = React.useState("")
-    const [dischargedate, setDischargedate] = React.useState("")
     useEffect(() => {
         if (admitdate === "") {
             let admitdate = Date.now();
             setAdmitdate(moment(admitdate).format("YYYY-MM-DDThh:mm"))
-        }
-        if (dischargedate === "") {
-            let dischargedate = Date.now();
-            setDischargedate(moment(dischargedate).format("YYYY-MM-DDThh:mm"))
         }
     })
 
@@ -100,24 +94,16 @@ export default function NewPatient(props) {
         Age: "",
         Sex: "",
         Address: "",
-        Refundby: "",
+        Referredby: "",
         Consultant: "",
         RegisterNumber: "",
         advance: "",
         room: "",
-        dateAdmit: "",
+        dateAdmit: admitdate,
         dateDischarge: "",
         MobileNumber: "",
     })
     const handleinput = (e) => {
-        if (e.target.name === "date-admit") {
-            setAdmitdate(e.target.value)
-            console.log(e.target.value)
-        }
-        if (e.target.name === "date-discharge") {
-            setDischargedate(e.target.value)
-            console.log(e.target.value, 'dischargedate')
-        }
         setPatient({ ...patient, [e.target.name]: e.target.value })
         console.log(patient)
     }
@@ -129,11 +115,11 @@ export default function NewPatient(props) {
             age: patient.Age,
             sex: patient.Sex,
             address: patient.Address,
-            refundBy: patient.Refundby,
+            referredBy: patient.Referredby,
             consultant: patient.Consultant,
             fileNo: patient.RegisterNumber,
             // advance:patient.advance,
-            // room: patient.room,
+            // ward: patient.ward,
             dateAdmit: patient.dateAdmit,
             dateDischarge: patient.dateDischarge,
             mobileNumber: patient.MobileNumber,
@@ -165,12 +151,13 @@ export default function NewPatient(props) {
                         </OneField>
                         <OneField>
                             <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Address" size="small" label="Address" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Refundby" size="small" label="Refund by" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Referredby" size="small" label="Referred by" variant="outlined" />
                             <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" size="small" label="Consultant" variant="outlined" />
                         </OneField>
-                        <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
-                            WARD
-                        </Typography>
+                        <OneField>
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="ward" size="small" label="Ward" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="advance" size="small" label="Advance" variant="outlined" />
+                        </OneField>
                         <OneField>
                             <TextField
                                 id="datetime-local"
@@ -180,18 +167,6 @@ export default function NewPatient(props) {
                                 value={admitdate}
                                 className={classes.input}
                                 onChange={handleinput}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <TextField
-                                id="datetime-local"
-                                label="Date of Discharge"
-                                name="dateDischarge"
-                                type="datetime-local"
-                                onChange={handleinput}
-                                value={dischargedate}
-                                className={classes.input}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -209,7 +184,7 @@ export default function NewPatient(props) {
             }
             {tab === 1 &&
                 <Container>
-                    <Typography style={{margin:"30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                    <Typography style={{ margin: "30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         Patient has been added successfully
                     </Typography>
                     <OneField>

@@ -5,11 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
 import 'date-fns';
-import { NavLink } from 'react-router-dom';
 import moment from 'moment';
 import { useEffect } from 'react'
-
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,14 +35,17 @@ const useStyles = makeStyles((theme) => ({
 
     },
     MainButton: {
-        width: 140,
-        height: 40,
+        width: 240,
+        height: 80,
         margin: "30px 0px 10px 0px",
         background: "#0C6361",
         fontFamily: "'Source Sans Pro', sans-serif",
         fontWeight: "bolder",
-        fontSize: "11px",
-        color: "white"
+        fontSize: "19px",
+        color: "white",
+        '&:hover': {
+            backgroundColor: '#238887',
+        },
     }
 }));
 
@@ -75,6 +75,8 @@ const Form = styled.div`
     width: 90%;
     position: relative;
     display:flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
     border-radius: 5px;
     padding: 0 8% 0 0;
@@ -84,7 +86,6 @@ const Form = styled.div`
     -ms-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
 `
 
 export default function NewPatient(props) {
@@ -122,40 +123,33 @@ export default function NewPatient(props) {
     return (
         <>
             <ButtonContainer>
-                <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained">
                         New Receipt
                     </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
+                    <Button className={classes.MainButton} variant="contained">
                         View Receipt
                     </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
                         Modify Receipt
                     </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
                         Add Items
                     </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
                         Add Doctor
                     </Button>
-                </NavLink>
             </ButtonContainer>
             <Container>
 
                 <Form>
                     <OneField>
-                        {/* <Typography variant="h6" component="h2">Hello</Typography> */}
                         <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Patient Name" size="small" label="Patient Name" variant="outlined" />
                         <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" variant="outlined" />
-                        <TextField
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consulting Doctor" size="small" label="Consulting Doctor" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Amount" size="small" label="Amount" type="number" variant="outlined" />
+                    </OneField>
+                    <OneField>
+                    <TextField
                             id="datetime-local"
                             label="Date of admit"
                             type="datetime-local"
@@ -166,8 +160,7 @@ export default function NewPatient(props) {
                                 shrink: true,
                             }}
                         />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consulting Doctor" size="small" label="Consulting Doctor" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Amount" size="small" label="Amount" type="number" variant="outlined" />
+                        
                     </OneField>
                     <OneField>
                         <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>

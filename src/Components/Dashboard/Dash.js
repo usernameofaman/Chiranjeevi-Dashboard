@@ -56,11 +56,11 @@ export default function Dashboard() {
                             IPD
                         </Button>
                     </NavLink>
-                    <NavLink className="navlinkstyle" to="/Discharge">
+                    {/* <NavLink className="navlinkstyle" to="/Discharge">
                         <Button className={classes.MainButton} variant="contained" >
                             Discharge
                         </Button>
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink className="navlinkstyle" to="/PatientsList">
                         <Button className={classes.MainButton} variant="contained" >
                             Patient List
@@ -69,6 +69,11 @@ export default function Dashboard() {
                     <NavLink className="navlinkstyle" to="/Lab">
                         <Button className={classes.MainButton} variant="contained" >
                             Lab
+                        </Button>
+                    </NavLink>
+                    <NavLink className="navlinkstyle" to="/Doctors">
+                        <Button className={classes.MainButton} variant="contained" >
+                            Doctors
                         </Button>
                     </NavLink>
                 </ButtonContainer>
