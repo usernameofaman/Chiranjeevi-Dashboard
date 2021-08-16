@@ -92,9 +92,7 @@ export default function NewPatient(props) {
     const [date, setDate] = React.useState("")
     useEffect(() => {
         if (date === "") {
-
             let date = Date.now();
-
             setDate(moment(date).format("YYYY-MM-DDThh:mm"))
         }
     })
@@ -108,14 +106,15 @@ export default function NewPatient(props) {
 
 
     const saveData = () => {
-        const patientRef = firebase.database().ref("Patients");
+        const patientRef = firebase.database().ref("PatientsOPD");
         const patientData = {
             name: patient.name,
-            fileNo: patient.fileNo,
-            advance: patient.advance,
-            room: patient.room,
+            age:patient.age,
+            doctor: patient.doctor,
+            amount: patient.amount,
+            date:date
         };
-
+        console.log(patientData)
         patientRef.push(patientData);
     }
 
@@ -143,10 +142,10 @@ export default function NewPatient(props) {
 
                 <Form>
                     <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Patient Name" size="small" label="Patient Name" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consulting Doctor" size="small" label="Consulting Doctor" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Amount" size="small" label="Amount" type="number" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="name" size="small" label="Patient Name" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="age" size="small" label="Age" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="doctor" size="small" label="Consulting Doctor" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="amount" size="small" label="Amount" type="number" variant="outlined" />
                     </OneField>
                     <OneField>
                     <TextField

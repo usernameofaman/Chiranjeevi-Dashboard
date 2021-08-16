@@ -13,7 +13,6 @@ export default function PatientList() {
     getDataForList();
   }, []);
   const getDataForList = () => {
-    if (patients[0] === 1) {
       const userRef = firebase.database().ref("Patients");
       userRef.on("value", async (snapshot) => {
         const users = snapshot.val();
@@ -23,7 +22,6 @@ export default function PatientList() {
         }
         await setPatients(userArray)
       })
-    }
   }
   return (
     <TableContainer>

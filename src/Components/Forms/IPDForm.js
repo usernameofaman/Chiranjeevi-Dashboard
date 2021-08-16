@@ -77,16 +77,36 @@ const Form = styled.div`
     -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 `
+const Select = styled.select`
+    width:190px;
+    border-radius: 5px;
+    height: 36px;
+    padding: 0px 10px 0px 10px;
+`
 
 export default function NewPatient(props) {
 
     const [admitdate, setAdmitdate] = React.useState("")
+    const [consultDoctors , setDoctors ] = React.useState([])
     useEffect(() => {
         if (admitdate === "") {
             let admitdate = Date.now();
             setAdmitdate(moment(admitdate).format("YYYY-MM-DDThh:mm"))
         }
-    })
+        getDataForList();
+    }, [])
+      const getDataForList = () => {
+          const userRef = firebase.database().ref("Doctors");
+          userRef.on("value", async (snapshot) => {
+            const users = snapshot.val();
+            const userArray = [];
+            for (let id in users) {
+                if(users[id].type==="consultant")
+                    userArray.push(users[id])
+            }
+            await setDoctors(userArray)
+          })
+      }
 
     const classes = useStyles();
     const [patient, setPatient] = React.useState({
@@ -105,7 +125,7 @@ export default function NewPatient(props) {
     })
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
-        console.log(patient)
+        console.log(patient, e.target.value)
     }
 
     const saveData = () => {
@@ -152,7 +172,12 @@ export default function NewPatient(props) {
                         <OneField>
                             <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Address" size="small" label="Address" variant="outlined" />
                             <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Referredby" size="small" label="Referred by" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" size="small" label="Consultant" variant="outlined" />
+                            <Select onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" >
+                                <option selected disabled>Consultant</option>
+                                {consultDoctors.map((doctor) => (
+                                    <option value={doctor.name}>{doctor.name}</option>
+                                ))}
+                            </Select>
                         </OneField>
                         <OneField>
                             <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="ward" size="small" label="Ward" variant="outlined" />
