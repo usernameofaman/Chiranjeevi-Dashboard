@@ -77,21 +77,6 @@ export default function IPD() {
                 </Button>
                 <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
-                        View Discharge
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Edit Discharge
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        New Reciept
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
                         View Reciept
                     </Button>
                 </NavLink>

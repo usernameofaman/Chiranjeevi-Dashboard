@@ -138,9 +138,9 @@ export default function NewPatient(props) {
             referredBy: patient.Referredby,
             consultant: patient.Consultant,
             fileNo: patient.RegisterNumber,
-            // advance:patient.advance,
-            // ward: patient.ward,
-            dateAdmit: patient.dateAdmit,
+            advance:parseInt(patient.advance),
+            ward: patient.ward,
+            dateAdmit: patient.dateAdmit === "" ? admitdate : patient.dateAdmit ,
             dateDischarge: patient.dateDischarge,
             mobileNumber: patient.MobileNumber,
         };
@@ -149,6 +149,7 @@ export default function NewPatient(props) {
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         });
+        // console.log(patientData)
         setTab(1)
     }
 
@@ -209,7 +210,7 @@ export default function NewPatient(props) {
             }
             {tab === 1 &&
                 <Container>
-                    <Typography style={{ margin: "30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                    <Typography style={{ margin:"30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         Patient has been added successfully
                     </Typography>
                     <OneField>

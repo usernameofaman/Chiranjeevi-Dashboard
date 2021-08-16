@@ -116,6 +116,7 @@ export default function NewPatient(props) {
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
+        setEditMode(false)
     }
 
 

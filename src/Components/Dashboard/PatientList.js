@@ -28,7 +28,7 @@ export default function PatientList() {
       <TableComponent.Table cellpadding="0" cellspacing="0">
         <TableComponent.TableHead style={{ background: "#0C6361" }}>
           <TableComponent.HeadColumn>Name</TableComponent.HeadColumn>
-          <TableComponent.HeadColumn>Room</TableComponent.HeadColumn>
+          <TableComponent.HeadColumn>Ward</TableComponent.HeadColumn>
           <TableComponent.HeadColumn>Advance</TableComponent.HeadColumn>
           <TableComponent.HeadColumn>File No</TableComponent.HeadColumn>
         </TableComponent.TableHead>
@@ -36,7 +36,7 @@ export default function PatientList() {
           {patients.map((patient) => (
             <TableComponent.BodyRow>
               <TableComponent.BodyColumn >{patient.name}</TableComponent.BodyColumn>
-              <TableComponent.BodyColumn >{patient.room}</TableComponent.BodyColumn>
+              <TableComponent.BodyColumn >{patient.ward}</TableComponent.BodyColumn>
               <TableComponent.BodyColumn >{patient.advance}</TableComponent.BodyColumn>
               <TableComponent.BodyColumn >{patient.fileNo}</TableComponent.BodyColumn>
             </TableComponent.BodyRow>

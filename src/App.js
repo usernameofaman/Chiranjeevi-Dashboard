@@ -8,6 +8,7 @@ import UnderConstruction from './Components/UnderConstruction/UnderConstruction'
 import Error from './Components/Error/Error'
 import IPD from './Components/Dashboard/IPD'
 import Doctors from './Components/Doctors/Doctors'
+import Inventory from './Components/Inventory/Inventory'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route exact path="/OPD" component={OPDForm} />
         <Route exact path="/IPD" component={IPD} />
         <Route exact path="/PatientsList" component={Patients} />
+        <Route exact path="/Inventory" component={Inventory} />
         <Route exact path="/NAN" component={UnderConstruction} />
         <Route exact path="*" component={Error} />        
 

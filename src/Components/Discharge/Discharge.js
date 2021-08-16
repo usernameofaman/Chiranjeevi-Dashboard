@@ -5,10 +5,12 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import RemoveIcon from '@material-ui/icons/Remove';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
 import firebase from '../utils/firebase';
 import PrintDischarge from './printDischarge'
 import { Button } from '@material-ui/core';
+import Toast from '../Common/snackbar'
 
 
 
@@ -21,12 +23,17 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     input: {
-        width: "100%",
+        width: "200px",
         minWidth: "100px",
         marginLeft: 40,
         marginTop: 10,
     },
     fabIcon: {
+        width: "40px",
+        height: "40px",
+    },
+    fabIconGet: {
+        marginTop: "10px",
         width: "40px",
         height: "40px",
     }
@@ -86,6 +93,7 @@ const TextHolder = styled.div`
 const HeaderInput = styled.div`
     width: 100%;
     display: flex;
+    justify-content: space-between;
 
 `
 const Logo = styled.img`
@@ -141,7 +149,34 @@ const AmountField = styled.div`
 
 export default function Discharge() {
     const classes = useStyles();
+
+    useEffect(() => {
+        getInventory()
+    }, []);
+
+    // Tabs
+
     const [tab , setTab ] = React.useState(0)
+    //Getting Patient Data
+    const [patient, setPatient] = React.useState({})
+    const [fileNo, setFileNo] = React.useState("")
+    const handleFileNo = (e) => {
+        setFileNo(e.target.value)
+    }
+    const [selectedId, setSelectedId] = React.useState([])
+    const handleInputEdit = (e) => {
+        setPatient({...patient,[e.target.name]:e.target.value})
+    }
+    const getPatientDetails = () => {
+        const userRef = firebase.database().ref("Patients");
+        var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
+        userQuery.once("value", function (snapshot) {
+            setSelectedId(Object.keys(snapshot.val()))
+            snapshot.forEach(function (child) {
+                setPatient(child.val())
+            });
+        });
+    }
     // Getting Inventory
     const [InventoryList, setInventory] = React.useState([])
     const getInventory = () => {
@@ -156,9 +191,6 @@ export default function Discharge() {
         })
     }
 
-    useEffect(() => {
-        getInventory()
-    }, []);
 
     // setting items State
 
@@ -168,26 +200,55 @@ export default function Discharge() {
         if (e === "add")
             setItems([...items, { name: "", amount: 0 }])
         if (e === "remove") {
+            if(items.length>1){
             let newState = [...items];
             newState.pop();
             setItems(newState);
+            }else Toast.apiFailureToast("Minimum one should exist")
         }
     }
     const handleInventoryData = (e, index) => {
         let amountValue = ""
         InventoryList.forEach((item) => {
-            setTotal(total + item.amount)
-            if (item.name === e.target.value)
+            if (item.name === e.target.value){
                 amountValue = item.amount;
+            }
         })
         let newState = [...items];
         newState[index].name = e.target.value;
         newState[index].amount = amountValue;
         setItems(newState);
+        calculateTotal()
+    }
+
+    //Calculate Total
+    const calculateTotal = () => {
+        let totalVal = 0
+        items.forEach((item) => {
+            totalVal += item.amount;
+        })
+        setDischargeData({...dischargeData,total:totalVal})
     }
 
     // getting Total Amount
-    const [total, setTotal] = React.useState(0)
+    const [dischargeData, setDischargeData] = React.useState({
+        total:0,
+        adjustment:0,
+        dateDischarge:"",
+        balance:0
+    });
+    const dischargeDataHandler = (e) => {
+        if(e.target.name==="adjustment"){
+            if(e.target.value==="")
+                setDischargeData({...dischargeData,[e.target.name]:0})
+            else {
+            let adjustment= parseInt(e.target.value);
+            setDischargeData({...dischargeData,[e.target.name]:adjustment})
+            }
+        } else
+        setDischargeData({...dischargeData,[e.target.name]:parseInt(e.target.value)})
+
+    }
 
     return (
         <>
@@ -210,13 +271,16 @@ export default function Discharge() {
                         </TextHolder>
                     </LogoAndHeading>
                     <HeaderInput>
-                        <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label="Reg. No." />
-                        <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label="Ward" />
-                        <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label="Patient Name" />
+                        <TextField onChange={handleFileNo} className={classes.input}   name="text" type="text" size="small" label="Reg. No." />
+                        <Fab onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
+                                <GetAppIcon />
+                            </Fab>
+                        <TextField className={classes.input}   name="text" type="text" size="small" label="Ward" InputLabelProps={{ shrink: true }}  value={patient.ward} disabled/>
+                        <TextField className={classes.input}   name="text" type="text" size="small" label="Patient Name" InputLabelProps={{ shrink: true }} value={patient.name} disabled/>
                     </HeaderInput>
                     <HeaderInput>
-                        <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label="Date of Admission" />
-                        <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label=" Date of Discharge" />
+                        <TextField className={classes.input} style={{width:'280px'}}   name="text" type="datetime-local" size="small" label="Date of Admission" InputLabelProps={{ shrink: true }} value={patient.dateAdmit} disabled/>
+                        <TextField className={classes.input} style={{width:'280px'}}   name="text" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }}/>
                     </HeaderInput>
                 </Section>
             </Form>
@@ -254,22 +318,23 @@ export default function Discharge() {
                 <MainForm>
                     <AmountCountainer style={{borderRight:"1px solid black"}}>
                         <AmountField>
-                            <TextField className={classes.input} value={total} size="small" disabled label="Total" />
+                            <TextField onChange={dischargeDataHandler} className={classes.input} value={dischargeData.total} size="small" disabled label="Total" />
                         </AmountField>
                         <AmountField>
-                            <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label="Advance" />
+                            <TextField className={classes.input}   name="text" type="text" size="small" label="Advance" InputLabelProps={{ shrink: true }} disabled value={patient.advance}/>
                         </AmountField>
                         <AmountField>
-                            <TextField className={classes.input} id="outlined-basic" name="text" type="text" size="small" label="Adjustment" />
+                            <TextField onChange={dischargeDataHandler} className={classes.input} name="adjustment" type="number" size="small" label="Adjustment" value={dischargeData.adjustment}/>
                         </AmountField>
                     </AmountCountainer>
                     <AmountCountainer style={{borderLeft:"1px solid black"}}>
                         <Typography variant="h4">
                             <b> Balance </b>
                         </Typography>
+                        {patient.advance && 
                         <Typography variant="h4">
-                            {total} Rs.
-                        </Typography>
+                            {dischargeData.total  - patient.advance - dischargeData.adjustment} Rs.
+                        </Typography>}
                     </AmountCountainer>
                 </MainForm>
             </Form>
