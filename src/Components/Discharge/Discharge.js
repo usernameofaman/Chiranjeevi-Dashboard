@@ -11,6 +11,7 @@ import firebase from '../utils/firebase';
 import PrintDischarge from './printDischarge'
 import { Button } from '@material-ui/core';
 import Toast from '../Common/snackbar'
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 
 
 
@@ -219,6 +220,7 @@ export default function Discharge() {
         newState[index].amount = amountValue;
         setItems(newState);
         calculateTotal()
+        console.log(items)
     }
 
     //Calculate Total
@@ -246,8 +248,8 @@ export default function Discharge() {
             setDischargeData({...dischargeData,[e.target.name]:adjustment})
             }
         } else
-        setDischargeData({...dischargeData,[e.target.name]:parseInt(e.target.value)})
-
+        setDischargeData({...dischargeData,[e.target.name]:e.target.value})
+        console.log(dischargeData)
     }
 
     return (
@@ -258,7 +260,7 @@ export default function Discharge() {
                 <Section>
                     <LogoAndHeading>
                         <LogoHolder>
-                            <Logo src="/images/Discharge.png" />
+                            <Logo src="Images/Discharge.png" />
                         </LogoHolder>
                         <TextHolder>
                             <Typography variant="h3">
@@ -272,15 +274,15 @@ export default function Discharge() {
                     </LogoAndHeading>
                     <HeaderInput>
                         <TextField onChange={handleFileNo} className={classes.input}   name="text" type="text" size="small" label="Reg. No." />
-                        <Fab onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
-                                <GetAppIcon />
+                        <Fab style={{ background: '#0C6361', }} onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
+                                <AutorenewIcon />
                             </Fab>
                         <TextField className={classes.input}   name="text" type="text" size="small" label="Ward" InputLabelProps={{ shrink: true }}  value={patient.ward} disabled/>
                         <TextField className={classes.input}   name="text" type="text" size="small" label="Patient Name" InputLabelProps={{ shrink: true }} value={patient.name} disabled/>
                     </HeaderInput>
                     <HeaderInput>
                         <TextField className={classes.input} style={{width:'280px'}}   name="text" type="datetime-local" size="small" label="Date of Admission" InputLabelProps={{ shrink: true }} value={patient.dateAdmit} disabled/>
-                        <TextField className={classes.input} style={{width:'280px'}}   name="text" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }}/>
+                        <TextField onChange={dischargeDataHandler} className={classes.input} style={{width:'280px'}}   name="dateDischarge" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }}/>
                     </HeaderInput>
                 </Section>
             </Form>
@@ -301,7 +303,7 @@ export default function Discharge() {
                             </ItemContainer>
                         ))}
                         <div style={{ display: 'flex', width: '100px', justifyContent: 'space-between' }}>
-                            <Fab onClick={() => changeItemsLength("add")} className={classes.fabIcon} name="add" color="primary" aria-label="add">
+                            <Fab style={{ background: '#0C6361', }} onClick={() => changeItemsLength("add")} className={classes.fabIcon} name="add" color="primary" aria-label="add">
                                 <AddIcon />
                             </Fab>
                             <Fab onClick={() => changeItemsLength("remove")} className={classes.fabIcon} name="remove" color="default" aria-label="add">
@@ -342,7 +344,7 @@ export default function Discharge() {
         </Container>
         : "" }
         {tab===1 ? 
-        <PrintDischarge/>
+        <PrintDischarge items={items} dischargeData={dischargeData}/>
         : "" }
         </>
     )

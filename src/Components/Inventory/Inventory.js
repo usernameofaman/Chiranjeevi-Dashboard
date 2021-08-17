@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Toast from '../Common/snackbar'
 import firebase from '../utils/firebase'
 import EditDoctor from './editInventory'
+import { parse } from 'date-fns';
 
 
 
@@ -99,22 +100,22 @@ const ButtonContainer = styled.div`
 export default function Doctors() {
     const classes = useStyles();
 
-    const [doctor, setDoctor] = React.useState({
+    const [inventory, setInventory] = React.useState({
         name: "",
-        type: "OPD"
+        amount: 0
     });
     const handleInput = (e) => {
-        setDoctor({ ...doctor, [e.target.name]: e.target.value })
-        console.log(doctor)
+        setInventory({ ...inventory, [e.target.name]: e.target.value })
+        // console.log(inventory)
     }
     const saveData = () => {
-        const doctorRef = firebase.database().ref("Doctors");
-        const doctorData = {
-            name: doctor.name,
-            type: doctor.type,
+        const inventoryRef = firebase.database().ref("Inventory");
+        const inventoryData = {
+            name: inventory.name,
+            amount: parseInt(inventory.amount),
         };
-        doctorRef.push(doctorData).then(() => {
-            Toast.apiSuccessToast("New doctor added")
+        inventoryRef.push(inventoryData).then(() => {
+            Toast.apiSuccessToast("Item Added")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         });
@@ -145,12 +146,8 @@ export default function Doctors() {
                         </Typography>
                         <OneField >
                             <TextField onChange={handleInput} className={classes.input} id="outlined-basic" name="name" size="small" label="Name" variant="outlined" />
-                            <Select onChange={handleInput} id="outlined-basic" name="type" size="small" label="Category" type="text" variant="outlined" >
-                                <option value="OPD">OPD</option>
-                                <option value="IPD">IPD</option>
-                                <option value="consultant">Consultant</option>
-                                <option value="referee">Referee</option>
-                            </Select>
+                            <TextField onChange={handleInput} className={classes.input} id="outlined-basic" name="amount" size="small" label="Amount" type="number" variant="outlined" />
+                            
                         </OneField>
                         <OneField>
                             <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Save</Button>

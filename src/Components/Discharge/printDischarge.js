@@ -80,22 +80,38 @@ const HorizontalLine = styled.div`
     background-color: black;
     margin-top: 10px;
 `
+const TextSection = styled.div`
+    padding: 45px;
+    width : 40%;
+   
+`
+const BillText = styled.div`
+height: 30px;
+border:1px solid black;
+ width:100%;
+ margin-top:-1px;
+display: flex;
+justify-content: center;
+align-items: center;   
+`
+
+
 
 class ComponentToPrint extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
 
     render() {
-        const { patient } = this.props;
+        const data = this.props.props;
         return (
             <Paper>
                 <Form>
                     <Section>
                         <LogoAndHeading>
                             <LogoHolder>
-                                <Logo src="/images/Discharge.png" />
+                                <Logo src="/Images/Discharge.png" />
                             </LogoHolder>
                             <TextHolder>
                                 <Typography variant="h3">
@@ -117,10 +133,76 @@ class ComponentToPrint extends React.Component {
                             <div style={{ display: 'flex' }}>Date of Discharge<Field>20/12/2019</Field></div>
                         </HeaderInput>
                     </Section>
-                    <HorizontalLine/>
-                    <Section>
+                    <HorizontalLine />
+                    <div style={{ display: "flex", height: "700px" }}>
+                        <Section  >
+                            <TextSection >
 
-                    </Section>
+                                <Typography   >Reg.</Typography>
+                                <Typography  >Room/GW</Typography>
+                                <Typography  >Doctor</Typography>
+                                <Typography  >Dr. Visit</Typography>
+                                <Typography  >Nursing</Typography>
+                                <Typography  >Sugar</Typography>
+                                <Typography  >ECG</Typography>
+                                <Typography  >X-Ray</Typography>
+                                <Typography  >Nebo</Typography>
+                                <Typography  >Suction</Typography>
+                                <Typography  >O2</Typography>
+                                <Typography  >Cardiac Monitor</Typography>
+                                <Typography  >Dressing</Typography>
+                                <Typography  >Blood Transfusion</Typography>
+                                <Typography  >R/T Feeding </Typography>
+                                <Typography  >Cathetrization</Typography>
+                                <Typography  >Enema</Typography>
+                                <Typography  >Others</Typography>
+                                <Typography  >Lab Investigation</Typography>
+                            </TextSection>
+
+                        </Section>
+                        <Section>
+                            <TextSection  >
+
+                                <Typography   >Reg.</Typography>
+                                <Typography  >Room/GW</Typography>
+                                <Typography  >Doctor</Typography>
+                                <Typography  >Dr. Visit</Typography>
+                                <Typography  >Nursing</Typography>
+                                <Typography  >Sugar</Typography>
+                                <Typography  >ECG</Typography>
+                                <Typography  >X-Ray</Typography>
+                                <Typography  >Nebo</Typography>
+                                <Typography  >Suction</Typography>
+                                <Typography  >O2</Typography>
+                                <Typography  >Cardiac Monitor</Typography>
+                                <Typography  >Dressing</Typography>
+                                <Typography  >Blood Transfusion</Typography>
+                                <Typography  >R/T Feeding </Typography>
+                                <Typography  >Cathetrization</Typography>
+                                <Typography  >Enema</Typography>
+                                <Typography  >Others</Typography>
+                                <Typography  >Lab Investigation</Typography>
+                            </TextSection>
+
+                        </Section>
+                    </div>
+                    <HorizontalLine />
+                    <div style={{ display: "flex", width: "50%", justifyContent: "flex-start", padding: "50px" }} >
+                        <TextSection style={{ padding: "0px" }}>
+
+                            < BillText >Total</ BillText>
+                            < BillText >Less</ BillText>
+                            < BillText >Paid</ BillText>
+                        </TextSection>
+                        <TextSection style={{ padding: "0px" ,  marginLeft: "1px"}}>
+
+                            < BillText >2000</ BillText>
+                            < BillText >1000</ BillText>
+                            < BillText >500</ BillText>
+                        </TextSection>
+                    </div>
+
+
                 </Form>
             </Paper>
         );
@@ -128,14 +210,19 @@ class ComponentToPrint extends React.Component {
 }
 
 class Example extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+
         return (
             <FlexContainer>
                 <ReactToPrint
                     trigger={() => <button style={{ marginBottom: "30px" }}>Print this out!</button>}
                     content={() => this.componentRef}
                 />
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} />
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} props={this.props} />
             </FlexContainer>
         );
     }
