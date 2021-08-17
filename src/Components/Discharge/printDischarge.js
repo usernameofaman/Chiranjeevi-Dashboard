@@ -104,7 +104,88 @@ class ComponentToPrint extends React.Component {
 
 
     render() {
-        const data = this.props.props;
+        const balance = 800;
+        const itemList = [
+            {
+            name:"Reg", 
+            amount:800
+            },
+            {
+            name:"Room/GW", 
+            amount:800
+            },
+            {
+            name:"Doctor", 
+            amount:800
+            },
+            {
+            name:"Dr. Visit", 
+            amount:800
+            },
+            {
+            name:"Nursing", 
+            amount:800
+            },
+            {
+            name:"Sugar", 
+            amount:800
+            },
+            {
+            name:"ECG", 
+            amount:800
+            },
+            {
+            name:"X-Ray", 
+            amount:800
+            },
+            {
+            name:"Nebo", 
+            amount:800
+            },
+            {
+            name:"Suction", 
+            amount:800
+            },
+            {
+            name:"O2", 
+            amount:800
+            },
+            {
+            name:"Cardiac Monitor", 
+            amount:800
+            },
+            {
+            name:"Dressing", 
+            amount:800
+            },
+            {
+            name:"Blood Transfusion", 
+            amount:800
+            },
+            {
+            name:"R/T Feeding ", 
+            amount:800
+            },
+            {
+            name:"Cathetrization ", 
+            amount:800
+            },
+            {
+            name:"Enema ", 
+            amount:800
+            },
+            {
+            name:"Others ", 
+            amount:800
+            },
+            {
+            name:"Lab Investigation ", 
+            amount:800
+            },
+            
+
+
+        ]
         return (
             <Paper>
                 <Form>
@@ -136,52 +217,23 @@ class ComponentToPrint extends React.Component {
                     <HorizontalLine />
                     <div style={{ display: "flex", height: "700px" }}>
                         <Section  >
+                            
                             <TextSection >
+                            {itemList.map((item)=> (
+                                <Typography   >{item.name}</Typography>
+                            ))}
 
-                                <Typography   >Reg.</Typography>
-                                <Typography  >Room/GW</Typography>
-                                <Typography  >Doctor</Typography>
-                                <Typography  >Dr. Visit</Typography>
-                                <Typography  >Nursing</Typography>
-                                <Typography  >Sugar</Typography>
-                                <Typography  >ECG</Typography>
-                                <Typography  >X-Ray</Typography>
-                                <Typography  >Nebo</Typography>
-                                <Typography  >Suction</Typography>
-                                <Typography  >O2</Typography>
-                                <Typography  >Cardiac Monitor</Typography>
-                                <Typography  >Dressing</Typography>
-                                <Typography  >Blood Transfusion</Typography>
-                                <Typography  >R/T Feeding </Typography>
-                                <Typography  >Cathetrization</Typography>
-                                <Typography  >Enema</Typography>
-                                <Typography  >Others</Typography>
-                                <Typography  >Lab Investigation</Typography>
+                             
                             </TextSection>
 
                         </Section>
                         <Section>
                             <TextSection  >
+                            {itemList.map((item)=> (
+                                <Typography   >{item.amount}</Typography>
+                            ))}
 
-                                <Typography   >Reg.</Typography>
-                                <Typography  >Room/GW</Typography>
-                                <Typography  >Doctor</Typography>
-                                <Typography  >Dr. Visit</Typography>
-                                <Typography  >Nursing</Typography>
-                                <Typography  >Sugar</Typography>
-                                <Typography  >ECG</Typography>
-                                <Typography  >X-Ray</Typography>
-                                <Typography  >Nebo</Typography>
-                                <Typography  >Suction</Typography>
-                                <Typography  >O2</Typography>
-                                <Typography  >Cardiac Monitor</Typography>
-                                <Typography  >Dressing</Typography>
-                                <Typography  >Blood Transfusion</Typography>
-                                <Typography  >R/T Feeding </Typography>
-                                <Typography  >Cathetrization</Typography>
-                                <Typography  >Enema</Typography>
-                                <Typography  >Others</Typography>
-                                <Typography  >Lab Investigation</Typography>
+                           
                             </TextSection>
 
                         </Section>
