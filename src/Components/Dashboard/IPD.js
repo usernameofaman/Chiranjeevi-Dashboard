@@ -5,7 +5,8 @@ import { Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import IPDForm from '../Forms/IPDForm'
 import ViewPatientDetails from "../ViewDetails/ViewPatientDetails"
-import Discharge from "../Discharge/Discharge"
+import Discharge from "../Discharge/Discharge";
+import IPDReciept from "../Reciepts/IPDReciept";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,11 +76,11 @@ export default function IPD() {
                 <Button onClick={() => changeTabs(2)}  className={classes.MainButton} variant="contained" >
                     Discharge
                 </Button>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
+                
+                    <Button onClick={() => changeTabs(3)}  className={classes.MainButton} variant="contained" >
                         View Reciept
                     </Button>
-                </NavLink>
+               
 
                 <NavLink className="navlinkstyle" to="/NAN">
                     <Button className={classes.MainButton} variant="contained" >
@@ -110,6 +111,8 @@ export default function IPD() {
                 <ViewPatientDetails changeTabs={changeTabs} />}
             {tabs === 2 &&
                 <Discharge/>}
+            {tabs === 3 &&
+                <IPDReciept/>}
 
         </>
     )

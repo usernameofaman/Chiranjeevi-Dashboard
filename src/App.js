@@ -27,7 +27,6 @@ function App() {
         <Route exact path="/PatientsList" component={Patients} />
         <Route exact path="/Inventory" component={Inventory} />
         <Route exact path="/NAN" component={UnderConstruction} />
-        <Route exact path="/Reciept" component={IPDReciept} />        
         <Route exact path="*" component={Error} />        
 
       </Switch>

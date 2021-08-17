@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+
 
 const Paper = styled.div`
     padding:10px;
     display: flex;
-    height: 11.7in;
-    width: 8.3in;
+    height: 6.7in;
+    width: 17in;
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -ms-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -17,6 +19,7 @@ const Section = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-top: ;
 `
 const LogoAndHeading = styled.div`
     display: flex;
@@ -43,6 +46,8 @@ const HeaderInput = styled.div`
     justify-content: space-between;
     padding: 10px 20px 10px 20px;
     font-size:18px;
+    margin-top: 25px;
+    
 
 `
 const Logo = styled.img`
@@ -54,34 +59,17 @@ width: 100%;
 justify-content: center;
 flex-direction: column;
 border: 2px solid #000000;
-margin-top: -2px;
+margin-top: 2px;
 `
-const Field = styled.div`
-    font-weight: 600;
-    padding: 0px 30px 0px 30px;
-    margin: 0px 20px 0px 20px;
-    border-bottom: 1px dotted black;
-`
+
 const HorizontalLine = styled.div`
     width: 100%;
     height: 2px;
     background-color: black;
     margin-top: 10px;
 `
-const TextSection = styled.div`
-    padding: 45px;
-    width : 40%;
-   
-`
-const BillText = styled.div`
-height: 30px;
-border:1px solid black;
- width:100%;
- margin-top:-1px;
-display: flex;
-justify-content: center;
-align-items: center;   
-`
+
+
 
 
 function IPDReciept() {
@@ -90,7 +78,7 @@ function IPDReciept() {
         <>
            <Paper>
                 <Form>
-                    <Section>
+                    <Section >
                         <LogoAndHeading>
                             <LogoHolder>
                                 <Logo src="/Images/Discharge.png" />
@@ -106,18 +94,28 @@ function IPDReciept() {
                                 
                             </TextHolder>
                         </LogoAndHeading>
-                        <HeaderInput>
-                            <div style={{ display: 'flex' }}>Reg. No : <Field>1509</Field></div>
-                            <div style={{ display: 'flex' }}>Ward: <Field>17 No</Field> </div>
-                            <div style={{ display: 'flex' }}>Pt name: <Field>Aman Sharma</Field></div>
-                        </HeaderInput>
-                        <HeaderInput>
-                            <div style={{ display: 'flex' }}>Date of Admission : <Field>15/12/2019</Field></div>
-                            <div style={{ display: 'flex' }}>Date of Discharge<Field>20/12/2019</Field></div>
-                        </HeaderInput>
                     </Section>
                     <HorizontalLine />
-                  
+                    <HeaderInput s> 
+                        <TextField  name="text" type="text" size="small" label="No." variant="outlined"/>
+                        <TextField  style={{marginRight:"4%"}} name="text" type="text" size="small" label="Date" variant="outlined"/>
+                    </HeaderInput>
+                   
+                    
+                    <HeaderInput>
+
+                    <input placeholder="Received with thanks from Mr." style={{borderRadius:"10px", padding:"10px", width:"50%", height:"40px", fontSize:"20px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    <input placeholder="The sum of Rupess" style={{borderRadius:"10px",padding:"10px",width:"30%", height:"40px", fontSize:"20px", marginRight:"15%"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    </HeaderInput>
+                    <HeaderInput>
+                    <input placeholder="For Hospitalijation/Pathological Investigations/OPD/X-Reay/ECG/Other" style={{borderRadius:"10px",padding:"10px",width:"675px", height:"40px", fontSize:"20px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    <input placeholder="Cheque No." style={{borderRadius:"10px",padding:"10px",width:"375px", height:"40px", fontSize:"20px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    <input placeholder="Cheque No." style={{borderRadius:"10px",padding:"10px",width:"275px", height:"40px", fontSize:"20px", marginRight:"100px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    </HeaderInput>
+                    <HeaderInput>
+                    <input placeholder="RS" style={{borderRadius:"10px",padding:"10px", width:"375px", height:"40px", fontSize:"20px", border:"2px solid"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    <Typography style={{marginRight:"10%", fontSize:"25px"}}>For Cheeranjeevi</Typography>
+                    </HeaderInput>
 
                 </Form>
             </Paper>
