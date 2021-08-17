@@ -110,7 +110,7 @@ export default function IPD() {
             {tabs === 1 &&
                 <ViewPatientDetails changeTabs={changeTabs} />}
             {tabs === 2 &&
-                <Discharge/>}
+                <Discharge changeTabs={changeTabs}/>}
             {tabs === 3 &&
                 <IPDReciept/>}
 

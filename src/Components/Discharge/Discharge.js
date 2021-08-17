@@ -8,7 +8,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
 import firebase from '../utils/firebase';
-import PrintDischarge from './printDischarge'
+import PrintDischarge from './printModule'
 import { Button } from '@material-ui/core';
 import Toast from '../Common/snackbar'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
@@ -21,6 +21,26 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             margin: theme.spacing(1),
             width: '25ch',
+        },
+    },
+    buttons:{
+        margin:"20px",
+        width:"120px",
+        height:"50px",
+        background: '#0C6361', 
+        color:"white",
+        '&:hover': {
+            backgroundColor: '#238887',
+        },
+    },
+    buttonCancel:{
+        margin:"20px",
+        width:"120px",
+        height:"50px",
+        background: 'white', 
+        color:"black",
+        '&:hover': {
+            backgroundColor: '#d8d8d8',
         },
     },
     input: {
@@ -148,7 +168,7 @@ const AmountField = styled.div`
     align-items: center;
 `
 
-export default function Discharge() {
+export default function Discharge(props) {
     const classes = useStyles();
 
     useEffect(() => {
@@ -157,7 +177,7 @@ export default function Discharge() {
 
     // Tabs
 
-    const [tab , setTab ] = React.useState(0)
+    const [tab, setTab] = React.useState(0)
     //Getting Patient Data
     const [patient, setPatient] = React.useState({})
     const [fileNo, setFileNo] = React.useState("")
@@ -165,9 +185,9 @@ export default function Discharge() {
         setFileNo(e.target.value)
     }
     const [selectedId, setSelectedId] = React.useState([])
-    const handleInputEdit = (e) => {
-        setPatient({...patient,[e.target.name]:e.target.value})
-    }
+    // const handleInputEdit = (e) => {
+    //     setPatient({...patient,[e.target.name]:e.target.value})
+    // }
     const getPatientDetails = () => {
         const userRef = firebase.database().ref("Patients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
@@ -201,17 +221,17 @@ export default function Discharge() {
         if (e === "add")
             setItems([...items, { name: "", amount: 0 }])
         if (e === "remove") {
-            if(items.length>1){
-            let newState = [...items];
-            newState.pop();
-            setItems(newState);
-            }else Toast.apiFailureToast("Minimum one should exist")
+            if (items.length > 1) {
+                let newState = [...items];
+                newState.pop();
+                setItems(newState);
+            } else Toast.apiFailureToast("Minimum one should exist")
         }
     }
     const handleInventoryData = (e, index) => {
         let amountValue = ""
         InventoryList.forEach((item) => {
-            if (item.name === e.target.value){
+            if (item.name === e.target.value) {
                 amountValue = item.amount;
             }
         })
@@ -229,123 +249,154 @@ export default function Discharge() {
         items.forEach((item) => {
             totalVal += item.amount;
         })
-        setDischargeData({...dischargeData,total:totalVal})
+        setDischargeData({ ...dischargeData, total: totalVal })
     }
 
     // getting Total Amount
     const [dischargeData, setDischargeData] = React.useState({
-        total:0,
-        adjustment:0,
-        dateDischarge:"",
-        balance:0
+        total: 0,
+        adjustment: "",
+        dateDischarge: "",
+        balance: 0
     });
     const dischargeDataHandler = (e) => {
-        if(e.target.name==="adjustment"){
-            if(e.target.value==="")
-                setDischargeData({...dischargeData,[e.target.name]:0})
-            else {
-            let adjustment= parseInt(e.target.value);
-            setDischargeData({...dischargeData,[e.target.name]:adjustment})
+        if (e.target.name === "adjustment") {
+            if (e.target.value === "") {
+                setDischargeData({ ...dischargeData, [e.target.name]: e.target.value })
+            } else {
+                let adjustment = parseInt(e.target.value);
+                setDischargeData({ ...dischargeData, [e.target.name]: adjustment })
             }
         } else
-        setDischargeData({...dischargeData,[e.target.name]:e.target.value})
-        console.log(dischargeData)
+            setDischargeData({ ...dischargeData, [e.target.name]: e.target.value })
+        // console.log(dischargeData)
+    }
+
+    const updatePatientDetails = async () => {
+        // Preparing Data
+        let balanceVal
+        if (dischargeData.adjustment === "")
+            balanceVal = dischargeData.total - patient.advance
+        else balanceVal = dischargeData.total - patient.advance - dischargeData.adjustment;
+        await setDischargeData({ ...dischargeData, balance: balanceVal })
+        const userRef = firebase.database().ref("Patients").child(selectedId[0]);
+        const patientData = {
+            ...patient,
+            discharge: {
+                adjustment: dischargeData.adjustment,
+                balance: balanceVal,
+                dateDischarge: dischargeData.dateDischarge,
+                total: dischargeData.total
+            },
+            inventory: items,
+        }
+        // console.log(patient)
+        await userRef.update(patientData).then(() => {
+            Toast.apiSuccessToast("Patient details updated")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
+        setTab(1);
     }
 
     return (
         <>
-        {tab===0 ? 
-        <Container>
-            <Form>
-                <Section>
-                    <LogoAndHeading>
-                        <LogoHolder>
-                            <Logo src="Images/Discharge.png" />
-                        </LogoHolder>
-                        <TextHolder>
-                            <Typography variant="h3">
-                                <b>CHIRANJEEVI HOSPITAL</b>
-                            </Typography>
-                            <Typography variant="h6">
-                                <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
-                                <b>TI : 250544, 251280</b>
-                            </Typography>
-                        </TextHolder>
-                    </LogoAndHeading>
-                    <HeaderInput>
-                        <TextField onChange={handleFileNo} className={classes.input}   name="text" type="text" size="small" label="Reg. No." />
-                        <Fab style={{ background: '#0C6361', }} onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
-                                <AutorenewIcon />
-                            </Fab>
-                        <TextField className={classes.input}   name="text" type="text" size="small" label="Ward" InputLabelProps={{ shrink: true }}  value={patient.ward} disabled/>
-                        <TextField className={classes.input}   name="text" type="text" size="small" label="Patient Name" InputLabelProps={{ shrink: true }} value={patient.name} disabled/>
-                    </HeaderInput>
-                    <HeaderInput>
-                        <TextField className={classes.input} style={{width:'280px'}}   name="text" type="datetime-local" size="small" label="Date of Admission" InputLabelProps={{ shrink: true }} value={patient.dateAdmit} disabled/>
-                        <TextField onChange={dischargeDataHandler} className={classes.input} style={{width:'280px'}}   name="dateDischarge" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }}/>
-                    </HeaderInput>
-                </Section>
-            </Form>
-            <Form>
-                <MainForm style={{ minHeight: "400px" }}>
-                    <MainFormSection>
-                        {items.map((item, index) => (
-                            <ItemContainer>
-                                <Select onChange={(e) => handleInventoryData(e, index)} >
-                                    {InventoryList.map((item, index) => (
-                                        <option value={item.name}>{item.name}</option>
-                                    ))}
-                                </Select>
-                                <ItemPrice>
-                                    {items[index].amount === 0 ? "" : items[index].amount}
-                                    {items[index].amount === 0 ? "" : "Rs"}
-                                </ItemPrice>
-                            </ItemContainer>
-                        ))}
-                        <div style={{ display: 'flex', width: '100px', justifyContent: 'space-between' }}>
-                            <Fab style={{ background: '#0C6361', }} onClick={() => changeItemsLength("add")} className={classes.fabIcon} name="add" color="primary" aria-label="add">
-                                <AddIcon />
-                            </Fab>
-                            <Fab onClick={() => changeItemsLength("remove")} className={classes.fabIcon} name="remove" color="default" aria-label="add">
-                                <RemoveIcon />
-                            </Fab>
-                        </div>
-                    </MainFormSection>
-                    <MainFormSection style={{ border: "none" }}>
-                        Remarks
-                    </MainFormSection>
-                </MainForm>
-            </Form>
-            <Form>
-                <MainForm>
-                    <AmountCountainer style={{borderRight:"1px solid black"}}>
-                        <AmountField>
-                            <TextField onChange={dischargeDataHandler} className={classes.input} value={dischargeData.total} size="small" disabled label="Total" />
-                        </AmountField>
-                        <AmountField>
-                            <TextField className={classes.input}   name="text" type="text" size="small" label="Advance" InputLabelProps={{ shrink: true }} disabled value={patient.advance}/>
-                        </AmountField>
-                        <AmountField>
-                            <TextField onChange={dischargeDataHandler} className={classes.input} name="adjustment" type="number" size="small" label="Adjustment" value={dischargeData.adjustment}/>
-                        </AmountField>
-                    </AmountCountainer>
-                    <AmountCountainer style={{borderLeft:"1px solid black"}}>
-                        <Typography variant="h4">
-                            <b> Balance </b>
-                        </Typography>
-                        {patient.advance && 
-                        <Typography variant="h4">
-                            {dischargeData.total  - patient.advance - dischargeData.adjustment} Rs.
-                        </Typography>}
-                    </AmountCountainer>
-                </MainForm>
-            </Form>
-            <Button onClick={() => setTab(1)} variant="outlined"> Save</Button>
-        </Container>
-        : "" }
-        {tab===1 ? 
-        <PrintDischarge items={items} dischargeData={dischargeData}/>
-        : "" }
+            {tab === 0 ?
+                <Container>
+                    <Form>
+                        <Section>
+                            <LogoAndHeading>
+                                <LogoHolder>
+                                    <Logo src="Images/Discharge.png" />
+                                </LogoHolder>
+                                <TextHolder>
+                                    <Typography variant="h3">
+                                        <b>CHIRANJEEVI HOSPITAL</b>
+                                    </Typography>
+                                    <Typography variant="h6">
+                                        <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
+                                        <b>TI : 250544, 251280</b>
+                                    </Typography>
+                                </TextHolder>
+                            </LogoAndHeading>
+                            <HeaderInput>
+                                <TextField onChange={handleFileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." />
+                                <Fab style={{ background: '#0C6361', }} onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
+                                    <AutorenewIcon />
+                                </Fab>
+                                <TextField className={classes.input} name="text" type="text" size="small" label="Ward" InputLabelProps={{ shrink: true }} value={patient.ward} disabled />
+                                <TextField className={classes.input} name="text" type="text" size="small" label="Patient Name" InputLabelProps={{ shrink: true }} value={patient.name} disabled />
+                            </HeaderInput>
+                            <HeaderInput>
+                                <TextField className={classes.input} style={{ width: '280px' }} name="text" type="datetime-local" size="small" label="Date of Admission" InputLabelProps={{ shrink: true }} value={patient.dateAdmit} disabled />
+                                <TextField onChange={dischargeDataHandler} className={classes.input} style={{ width: '280px' }} name="dateDischarge" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }} />
+                            </HeaderInput>
+                        </Section>
+                    </Form>
+                    <Form>
+                        <MainForm >
+                            <MainFormSection>
+                                {items.map((item, index) => (
+                                    <ItemContainer>
+                                        <Select onChange={(e) => handleInventoryData(e, index)} >
+                                            {InventoryList.map((item, index) => (
+                                                <option value={item.name}>{item.name}</option>
+                                            ))}
+                                        </Select>
+                                        <ItemPrice>
+                                            {items[index].amount === 0 ? "" : items[index].amount}
+                                            {items[index].amount === 0 ? "" : "Rs"}
+                                        </ItemPrice>
+                                    </ItemContainer>
+                                ))}
+                                <div style={{ display: 'flex', width: '100px', justifyContent: 'space-between' }}>
+                                    <Fab style={{ background: '#0C6361', }} onClick={() => changeItemsLength("add")} className={classes.fabIcon} name="add" color="primary" aria-label="add">
+                                        <AddIcon />
+                                    </Fab>
+                                    <Fab onClick={() => changeItemsLength("remove")} className={classes.fabIcon} name="remove" color="default" aria-label="add">
+                                        <RemoveIcon />
+                                    </Fab>
+                                </div>
+                            </MainFormSection>
+                            <MainFormSection style={{ border: "none" }}>
+                                Remarks
+                            </MainFormSection>
+                        </MainForm>
+                    </Form>
+                    <Form>
+                        <MainForm>
+                            <AmountCountainer style={{ borderRight: "1px solid black" }}>
+                                <AmountField>
+                                    <TextField onChange={dischargeDataHandler} className={classes.input} value={dischargeData.total} size="small" disabled label="Total" />
+                                </AmountField>
+                                <AmountField>
+                                    <TextField className={classes.input} name="text" type="text" size="small" label="Advance" InputLabelProps={{ shrink: true }} disabled value={patient.advance} />
+                                </AmountField>
+                                <AmountField>
+                                    <TextField onChange={dischargeDataHandler} className={classes.input} name="adjustment" type="number" size="small" label="Adjustment" value={dischargeData.adjustment} />
+                                </AmountField>
+                            </AmountCountainer>
+                            <AmountCountainer style={{ borderLeft: "1px solid black" }}>
+                                <Typography variant="h4">
+                                    <b> Balance </b>
+                                </Typography>
+                                {patient.advance &&
+                                    <Typography variant="h4">
+                                        {dischargeData.adjustment === "" ? dischargeData.total - patient.advance :
+                                            dischargeData.total - patient.advance - dischargeData.adjustment} Rs.
+                                    </Typography>}
+                            </AmountCountainer>
+                        </MainForm>
+                    </Form>
+                    <div style={{ display: "flex" }}>
+                        <Button className={classes.buttons} onClick={updatePatientDetails} variant="outlined"> Save </Button>
+                        <Button className={classes.buttonCancel} onClick={() => props.changeTabs(0)} variant="outlined"> Cancel </Button>
+                    </div>
+                </Container>
+                : ""}
+            {tab === 1 ?
+                <PrintDischarge fileNo={fileNo} />
+                : ""}
         </>
     )
 }

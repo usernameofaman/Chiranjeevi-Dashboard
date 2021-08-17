@@ -19,7 +19,7 @@ const Section = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: ;
+    /* margin-top: ; */
 `
 const LogoAndHeading = styled.div`
     display: flex;
