@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import IPDForm from '../Forms/IPDForm'
 import ViewPatientDetails from "../ViewDetails/ViewPatientDetails"
 import Discharge from "../Discharge/Discharge";
-import IPDReciept from "../Reciepts/IPDReciept";
+import IPDPrintFrame from "../Reciepts/printModule";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +112,7 @@ export default function IPD() {
             {tabs === 2 &&
                 <Discharge changeTabs={changeTabs}/>}
             {tabs === 3 &&
-                <IPDReciept/>}
+                <IPDPrintFrame/>}
 
         </>
     )

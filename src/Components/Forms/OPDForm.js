@@ -131,12 +131,6 @@ export default function NewPatient(props) {
                     <Button className={classes.MainButton} variant="contained" >
                         Modify Receipt
                     </Button>
-                    <Button className={classes.MainButton} variant="contained" >
-                        Add Items
-                    </Button>
-                    <Button className={classes.MainButton} variant="contained" >
-                        Add Doctor
-                    </Button>
             </ButtonContainer>
             <Container>
 

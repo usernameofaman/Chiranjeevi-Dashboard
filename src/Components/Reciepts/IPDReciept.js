@@ -118,6 +118,9 @@ const ButtonContainer = styled.div`
     width:100vw;
     padding: 30px;
     justify-content: center;
+    @media print{
+        display:none;
+    }
 `
 
 
@@ -171,6 +174,8 @@ function IPDReciept() {
         })
     }
 
+    const [printMode , setPrintMode ] = React.useState();
+
     return (
         <>
             <Container>
@@ -202,37 +207,37 @@ function IPDReciept() {
                             <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={receipt.date} variant="outlined" />
                         </HeaderInput>
                         <HeaderInput>
-                            <div>Received with thanks from {patient.sex === "M" ? "Mr" : "Mrs"} </div>
+                            <div style={{paddingBottom:"6px"}}>Received with thanks from {patient.sex === "M" ? "Mr" : "Mrs"} </div>
                             <Value>
-                                <TextField className={classes.inputReceipt} name="name" type="text" size="small" label="Name" value={patient.name} InputLabelProps={{ shrink: true }} disabled />
+                                <TextField className={classes.inputReceipt} name="name" type="text" size="small" label={!printMode &&"Name"} value={patient.name} InputLabelProps={{ shrink: patient.name ? true : false }} disabled />
                             </Value>
                         </HeaderInput>
                         <HeaderInput>
-                            <div>The sum of Rupees </div>
+                            <div style={{paddingBottom:"6px"}}>The sum of Rupees </div>
                             <Value>
                                 <TextField className={classes.inputReceipt} name="amountInWords" type="text" size="small" label="Amount In Words" value={receipt.amountInWords} InputLabelProps={{ shrink: receipt.amountInWords === "" ? false : true }} disabled />
                             </Value>
                         </HeaderInput>
                         <HeaderInput style={{ fontSize: "15px" }}>
 
-                            <div>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG Other </div>
+                            <div style={{paddingBottom:"6px"}}>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG Other </div>
                             <Value>
                                 <TextField onChange={handleInputData} className={classes.inputReceipt} name="other" type="text" size="small" label="Amount" />
                             </Value>
                         </HeaderInput>
                         <HeaderInput>
-                            <div>Cheque No.</div>
+                            <div style={{paddingBottom:"6px"}}>Cheque No.</div>
                             <Value>
                                 <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeNo" type="text" size="small" label="Check No." />
                             </Value>
 
-                            <div>Dated</div>
+                            <div style={{paddingBottom:"6px"}}>Dated</div>
                             <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} />
+                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} InputLabelProps={{ shrink: true }}/>
                             </Value>
                         </HeaderInput>
                         <HeaderInput>
-                            <div><b>Amount</b></div>
+                            <div style={{paddingBottom:"6px"}}><b>Amount</b></div>
                             <Value style={{ flexGrow: "0" }}>
                                 <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" />
                             </Value>
