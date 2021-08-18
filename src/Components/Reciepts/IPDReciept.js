@@ -3,12 +3,24 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
+const Container = styled.div`
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding:10px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+`
 
+const TelePhone = styled.img`
+    width:18px;
+    height:18px;
+`
 const Paper = styled.div`
     padding:10px;
     display: flex;
-    height: 6.7in;
-    width: 17in;
+    height: 5in;
+    width: 8.3in;
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     -ms-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -43,11 +55,9 @@ const TextHolder = styled.div`
 const HeaderInput = styled.div`
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    padding: 10px 20px 10px 20px;
+    padding: 5px 20px 5px 20px;
     font-size:18px;
-    margin-top: 25px;
-    
+    margin-top: 10px;
 
 `
 const Logo = styled.img`
@@ -68,7 +78,9 @@ const HorizontalLine = styled.div`
     background-color: black;
     margin-top: 10px;
 `
+const Value = styled.div`
 
+`
 
 
 
@@ -76,6 +88,7 @@ function IPDReciept() {
 
     return (
         <>
+        <Container>
            <Paper>
                 <Form>
                     <Section >
@@ -89,36 +102,33 @@ function IPDReciept() {
                                 </Typography>
                                 <Typography variant="h6">
                                     <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
-                                    <b>TI : 250544, 251280</b>
+                                    <b><TelePhone src="/Images/telephone.png"/> : 250544, 251280</b>
                                 </Typography>
                                 
                             </TextHolder>
                         </LogoAndHeading>
                     </Section>
                     <HorizontalLine />
-                    <HeaderInput s> 
+                    <HeaderInput> 
                         <TextField  name="text" type="text" size="small" label="No." variant="outlined"/>
                         <TextField  style={{marginRight:"4%"}} name="text" type="text" size="small" label="Date" variant="outlined"/>
                     </HeaderInput>
-                   
-                    
                     <HeaderInput>
-
-                    <input placeholder="Received with thanks from Mr." style={{borderRadius:"10px", padding:"10px", width:"50%", height:"40px", fontSize:"20px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
-                    <input placeholder="The sum of Rupess" style={{borderRadius:"10px",padding:"10px",width:"30%", height:"40px", fontSize:"20px", marginRight:"15%"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                        Received with thanks from Mr <Value>Aman Sharma</Value>
                     </HeaderInput>
                     <HeaderInput>
-                    <input placeholder="For Hospitalijation/Pathological Investigations/OPD/X-Reay/ECG/Other" style={{borderRadius:"10px",padding:"10px",width:"675px", height:"40px", fontSize:"20px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
-                    <input placeholder="Cheque No." style={{borderRadius:"10px",padding:"10px",width:"375px", height:"40px", fontSize:"20px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
-                    <input placeholder="Cheque No." style={{borderRadius:"10px",padding:"10px",width:"275px", height:"40px", fontSize:"20px", marginRight:"100px"}}name="text" type="text" variant="outlined" label="Received with thanks " />
+                    The sum of Rupees <Value> Ten Thousand Four Hundred </Value>
                     </HeaderInput>
                     <HeaderInput>
-                    <input placeholder="RS" style={{borderRadius:"10px",padding:"10px", width:"375px", height:"40px", fontSize:"20px", border:"2px solid"}}name="text" type="text" variant="outlined" label="Received with thanks " />
-                    <Typography style={{marginRight:"10%", fontSize:"25px"}}>For Cheeranjeevi</Typography>
+                        For Hospitalization / Pathalogical Investigation / OPD / X-Ray/ECG Other
+                    </HeaderInput>
+                    <HeaderInput>
+                        Cheque No. <Value> </Value> Dated <Value>  </Value>
                     </HeaderInput>
 
                 </Form>
             </Paper>
+            </Container>
 
         </>
     )

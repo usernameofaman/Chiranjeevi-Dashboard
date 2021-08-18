@@ -14,7 +14,10 @@ import Toast from '../Common/snackbar'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 
 
-
+const TelePhone = styled.img`
+    width:18px;
+    height:18px;
+`
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -315,7 +318,7 @@ export default function Discharge(props) {
                                     </Typography>
                                     <Typography variant="h6">
                                         <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
-                                        <b>TI : 250544, 251280</b>
+                                        <b><TelePhone src="/Images/telephone.png"/> : 250544, 251280</b>
                                     </Typography>
                                 </TextHolder>
                             </LogoAndHeading>
