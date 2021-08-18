@@ -145,8 +145,8 @@ export default function Doctors() {
                             Add Inventory
                         </Typography>
                         <OneField >
-                            <TextField onChange={handleInput} className={classes.input} id="outlined-basic" name="name" size="small" label="Name" variant="outlined" />
-                            <TextField onChange={handleInput} className={classes.input} id="outlined-basic" name="amount" size="small" label="Amount" type="number" variant="outlined" />
+                            <TextField onChange={handleInput} className={classes.input}  name="name" size="small" label="Name" variant="outlined" />
+                            <TextField onChange={handleInput} className={classes.input}  name="amount" size="small" label="Amount" type="number" variant="outlined" />
                             
                         </OneField>
                         <OneField>

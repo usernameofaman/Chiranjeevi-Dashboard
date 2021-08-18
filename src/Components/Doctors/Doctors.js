@@ -144,8 +144,8 @@ export default function Doctors() {
                             Add Doctor
                         </Typography>
                         <OneField >
-                            <TextField onChange={handleInput} className={classes.input} id="outlined-basic" name="name" size="small" label="Name" variant="outlined" />
-                            <Select onChange={handleInput} id="outlined-basic" name="type" size="small" label="Category" type="text" variant="outlined" >
+                            <TextField onChange={handleInput} className={classes.input}  name="name" size="small" label="Name" variant="outlined" />
+                            <Select onChange={handleInput}  name="type" size="small" label="Category" type="text" variant="outlined" >
                                 <option value="OPD">OPD</option>
                                 <option value="IPD">IPD</option>
                                 <option value="consultant">Consultant</option>

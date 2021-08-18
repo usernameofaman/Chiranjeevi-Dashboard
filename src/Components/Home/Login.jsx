@@ -73,8 +73,8 @@ export default function Login() {
     <Container>
       {/* <Loader/> */}
       <form className={classes.login} noValidate autoComplete="off">
-        <TextField onChange={takingUserInput} name="username" id="outlined-basic" label="Username" variant="outlined" />
-        <TextField onChange={takingUserInput} name="password" id="outlined-basic" type="password" label="Password" variant="outlined" />
+        <TextField onChange={takingUserInput} name="username"  label="Username" variant="outlined" />
+        <TextField onChange={takingUserInput} name="password"  type="password" label="Password" variant="outlined" />
         <Button onClick={CreateUser} className={classes.btn} variant="contained" color="primary">Login</Button>
       </form>
     </Container>

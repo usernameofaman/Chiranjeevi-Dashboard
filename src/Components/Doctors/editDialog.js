@@ -40,8 +40,8 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">Edit Doctor</DialogTitle>
         <DialogContent>
           <OneField >
-            <TextField onChange={handleInput} className={classes.input} value={doctor.name} id="outlined-basic" name="name" size="small" label="Name" variant="outlined" />
-            <Select onChange={handleInput} className={classes.input} value={doctor.type} id="outlined-basic" name="type" size="small" label="Category" type="text" variant="outlined" >
+            <TextField onChange={handleInput} className={classes.input} value={doctor.name}  name="name" size="small" label="Name" variant="outlined" />
+            <Select onChange={handleInput} className={classes.input} value={doctor.type}  name="type" size="small" label="Category" type="text" variant="outlined" >
               <option value="OPD">OPD</option>
               <option value="IPD">IPD</option>
               <option value="consultant">Consultant</option>

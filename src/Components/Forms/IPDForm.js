@@ -166,14 +166,14 @@ export default function NewPatient(props) {
                             ADD NEW PATIENTS
                         </Typography>
                         <OneField >
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Name" size="small" label="Name" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Age" size="small" label="Age" type="number" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Sex" size="small" label="Sex" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="Name" size="small" label="Name" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="Age" size="small" label="Age" type="number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="Sex" size="small" label="Sex" variant="outlined" />
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Address" size="small" label="Address" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="Referredby" size="small" label="Referred by" variant="outlined" />
-                            <Select onChange={handleinput} className={classes.input} id="outlined-basic" name="Consultant" >
+                            <TextField onChange={handleinput} className={classes.input}  name="Address" size="small" label="Address" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="Referredby" size="small" label="Referred by" variant="outlined" />
+                            <Select onChange={handleinput} className={classes.input}  name="Consultant" >
                                 <option selected disabled>Consultant</option>
                                 {consultDoctors.map((doctor) => (
                                     <option value={doctor.name}>{doctor.name}</option>
@@ -181,8 +181,8 @@ export default function NewPatient(props) {
                             </Select>
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="ward" size="small" label="Ward" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="advance" size="small" label="Advance" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="ward" size="small" label="Ward" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="advance" size="small" label="Advance" variant="outlined" />
                         </OneField>
                         <OneField>
                             <TextField
@@ -199,8 +199,8 @@ export default function NewPatient(props) {
                             />
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="RegisterNumber" type="number" size="small" label="Register Number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input}  name="RegisterNumber" type="number" size="small" label="Register Number" variant="outlined" />
                         </OneField>
                         <OneField>
                             <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>

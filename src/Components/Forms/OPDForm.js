@@ -142,10 +142,10 @@ export default function NewPatient(props) {
 
                 <Form>
                     <OneField>
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="name" size="small" label="Patient Name" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="age" size="small" label="Age" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="doctor" size="small" label="Consulting Doctor" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input} id="outlined-basic" name="amount" size="small" label="Amount" type="number" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input}  name="name" size="small" label="Patient Name" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input}  name="age" size="small" label="Age" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input}  name="doctor" size="small" label="Consulting Doctor" variant="outlined" />
+                        <TextField onChange={handleinput} className={classes.input}  name="amount" size="small" label="Amount" type="number" variant="outlined" />
                     </OneField>
                     <OneField>
                     <TextField

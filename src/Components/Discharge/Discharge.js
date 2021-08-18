@@ -176,8 +176,8 @@ export default function Discharge(props) {
 
     useEffect(() => {
         getInventory()
+        
     }, []);
-
     // Tabs
 
     const [tab, setTab] = React.useState(0)
@@ -188,9 +188,6 @@ export default function Discharge(props) {
         setFileNo(e.target.value)
     }
     const [selectedId, setSelectedId] = React.useState([])
-    // const handleInputEdit = (e) => {
-    //     setPatient({...patient,[e.target.name]:e.target.value})
-    // }
     const getPatientDetails = () => {
         const userRef = firebase.database().ref("Patients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
@@ -262,6 +259,12 @@ export default function Discharge(props) {
         dateDischarge: "",
         balance: 0
     });
+
+    if(patient.discharge && dischargeData.total===0){
+        setDischargeData(patient.discharge)
+        setItems(patient.inventory)
+    }
+
     const dischargeDataHandler = (e) => {
         if (e.target.name === "adjustment") {
             if (e.target.value === "") {
@@ -341,7 +344,7 @@ export default function Discharge(props) {
                             <MainFormSection>
                                 {items.map((item, index) => (
                                     <ItemContainer>
-                                        <Select onChange={(e) => handleInventoryData(e, index)} >
+                                        <Select onChange={(e) => handleInventoryData(e, index)} value={item.name} >
                                             {InventoryList.map((item, index) => (
                                                 <option value={item.name}>{item.name}</option>
                                             ))}

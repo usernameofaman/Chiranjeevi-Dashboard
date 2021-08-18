@@ -159,17 +159,17 @@ export default function NewPatient(props) {
                         FILE NO. {patient.fileNo}
                     </Typography>
                     <OneField >
-                        <TextField className={classes.input} id="outlined-basic"  value={patient.name} InputLabelProps={{ shrink: true }} size="small" label="Name" variant="outlined" disabled />
-                        <TextField className={classes.input} id="outlined-basic" value={patient.age} InputLabelProps={{ shrink: true }} size="small" label="Age" type="number" variant="outlined" disabled />
-                        <TextField className={classes.input} id="outlined-basic" value={patient.sex} InputLabelProps={{ shrink: true }} size="small" label="Sex" variant="outlined" disabled />
+                        <TextField className={classes.input}   value={patient.name} InputLabelProps={{ shrink: true }} size="small" label="Name" variant="outlined" disabled />
+                        <TextField className={classes.input}  value={patient.age} InputLabelProps={{ shrink: true }} size="small" label="Age" type="number" variant="outlined" disabled />
+                        <TextField className={classes.input}  value={patient.sex} InputLabelProps={{ shrink: true }} size="small" label="Sex" variant="outlined" disabled />
                     </OneField>
                     <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         WARD
                     </Typography>
                     <OneField>
-                        <TextField className={classes.input} id="outlined-basic" value={patient.address} InputLabelProps={{ shrink: true }} size="small" label="Address" variant="outlined" disabled />
-                        <TextField className={classes.input} id="outlined-basic" value={patient.refundBy} InputLabelProps={{ shrink: true }} size="small" label="Refund by" variant="outlined" disabled />
-                        <TextField className={classes.input} id="outlined-basic" value={patient.consultant} InputLabelProps={{ shrink: true }} size="small" label="Consultant" variant="outlined" disabled />
+                        <TextField className={classes.input}  value={patient.address} InputLabelProps={{ shrink: true }} size="small" label="Address" variant="outlined" disabled />
+                        <TextField className={classes.input}  value={patient.refundBy} InputLabelProps={{ shrink: true }} size="small" label="Refund by" variant="outlined" disabled />
+                        <TextField className={classes.input}  value={patient.consultant} InputLabelProps={{ shrink: true }} size="small" label="Consultant" variant="outlined" disabled />
 
                     </OneField>
 
@@ -199,8 +199,8 @@ export default function NewPatient(props) {
                         />
                     </OneField>
                     <OneField>
-                        <TextField className={classes.input} id="outlined-basic" disabled InputLabelProps={{ shrink: true }} value={patient.mobileNumber} size="small" label="Mobile Number" variant="outlined" />
-                        <TextField className={classes.input} id="outlined-basic" disabled InputLabelProps={{ shrink: true }} value={patient.fileNo} size="small" label="Register Number" variant="outlined" />
+                        <TextField className={classes.input}  disabled InputLabelProps={{ shrink: true }} value={patient.mobileNumber} size="small" label="Mobile Number" variant="outlined" />
+                        <TextField className={classes.input}  disabled InputLabelProps={{ shrink: true }} value={patient.fileNo} size="small" label="Register Number" variant="outlined" />
 
                     </OneField>
                     <OneField>
@@ -218,17 +218,17 @@ export default function NewPatient(props) {
                         FILE NO. {patient.fileNo}
                     </Typography>
                     <OneField >
-                        <TextField name="name" onChange={handleInputEdit} className={classes.input} id="outlined-basic"  value={patient.name} InputLabelProps={{ shrink: true }} size="small" label="Name" variant="outlined"  />
-                        <TextField name="age" onChange={handleInputEdit} className={classes.input} id="outlined-basic" value={patient.age} InputLabelProps={{ shrink: true }} size="small" label="Age" type="number" variant="outlined"  />
-                        <TextField name="sex" onChange={handleInputEdit} className={classes.input} id="outlined-basic" value={patient.sex} InputLabelProps={{ shrink: true }} size="small" label="Sex" variant="outlined"  />
+                        <TextField name="name" onChange={handleInputEdit} className={classes.input}   value={patient.name} InputLabelProps={{ shrink: true }} size="small" label="Name" variant="outlined"  />
+                        <TextField name="age" onChange={handleInputEdit} className={classes.input}  value={patient.age} InputLabelProps={{ shrink: true }} size="small" label="Age" type="number" variant="outlined"  />
+                        <TextField name="sex" onChange={handleInputEdit} className={classes.input}  value={patient.sex} InputLabelProps={{ shrink: true }} size="small" label="Sex" variant="outlined"  />
                     </OneField>
                     <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         WARD
                     </Typography>
                     <OneField>
-                        <TextField name="address" onChange={handleInputEdit} className={classes.input} id="outlined-basic" value={patient.address} InputLabelProps={{ shrink: true }} size="small" label="Address" variant="outlined"  />
-                        <TextField name="refundBy" onChange={handleInputEdit} className={classes.input} id="outlined-basic" value={patient.refundBy} InputLabelProps={{ shrink: true }} size="small" label="Refund by" variant="outlined"  />
-                        <TextField name="consultant" onChange={handleInputEdit} className={classes.input} id="outlined-basic" value={patient.consultant} InputLabelProps={{ shrink: true }} size="small" label="Consultant" variant="outlined"  />
+                        <TextField name="address" onChange={handleInputEdit} className={classes.input}  value={patient.address} InputLabelProps={{ shrink: true }} size="small" label="Address" variant="outlined"  />
+                        <TextField name="refundBy" onChange={handleInputEdit} className={classes.input}  value={patient.refundBy} InputLabelProps={{ shrink: true }} size="small" label="Refund by" variant="outlined"  />
+                        <TextField name="consultant" onChange={handleInputEdit} className={classes.input}  value={patient.consultant} InputLabelProps={{ shrink: true }} size="small" label="Consultant" variant="outlined"  />
 
                     </OneField>
 
@@ -262,8 +262,8 @@ export default function NewPatient(props) {
                         />
                     </OneField>
                     <OneField>
-                        <TextField name="mobileNumber" onChange={handleInputEdit} className={classes.input} id="outlined-basic" InputLabelProps={{ shrink: true }} value={patient.mobileNumber} size="small" label="Mobile Number" variant="outlined" />
-                        <TextField name="fileNo" onChange={handleInputEdit} className={classes.input} id="outlined-basic" InputLabelProps={{ shrink: true }} value={patient.fileNo} size="small" label="Register Number" variant="outlined" />
+                        <TextField name="mobileNumber" onChange={handleInputEdit} className={classes.input}  InputLabelProps={{ shrink: true }} value={patient.mobileNumber} size="small" label="Mobile Number" variant="outlined" />
+                        <TextField name="fileNo" onChange={handleInputEdit} className={classes.input}  InputLabelProps={{ shrink: true }} value={patient.fileNo} size="small" label="Register Number" variant="outlined" />
 
                     </OneField>
                     <OneField>
