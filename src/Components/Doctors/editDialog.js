@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 
 export default function FormDialog(props) {
   const classes = useStyles();
-  const { handleClose, open, doctor ,handleInput } = props;
+  const { handleClose, open, doctor ,handleInput, updateDoctorDetails } = props;
 
   return (
     <div>
@@ -53,7 +53,7 @@ export default function FormDialog(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={updateDoctorDetails} color="primary">
             Save
           </Button>
         </DialogActions>

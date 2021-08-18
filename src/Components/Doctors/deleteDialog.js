@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function FormDialog(props) {
-    const { handleClose, open, doctor } = props;
+    const { handleClose, open, doctor , deleteDoctor} = props;
 
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -21,7 +21,7 @@ export default function FormDialog(props) {
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button style={{ background: "#ff4444", color:"white"}} onClick={handleClose} color="primary">
+                <Button onClick={deleteDoctor} style={{ background: "#ff4444", color:"white"}} color="primary">
                     Delete
                 </Button>
             </DialogActions>

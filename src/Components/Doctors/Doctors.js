@@ -162,7 +162,7 @@ export default function Doctors() {
             {tab === 1 &&
                 <Container>
                     <Typography style={{ margin: "30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
-                        Patient has been added successfully
+                        Doctor has been added successfully
                     </Typography>
                     <OneField>
                         <Button onClick={() => setTab(0)} className={classes.buttonSubmit} variant="contained" color="primary">Add More</Button>

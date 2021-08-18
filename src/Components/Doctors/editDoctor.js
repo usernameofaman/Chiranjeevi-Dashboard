@@ -8,6 +8,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import EditDialog from './editDialog'
 import DeleteDialog from './deleteDialog'
+import firebaseFunctions from '../utils/firebaseFunctions';
+import Toast from '../Common/snackbar'
 
 const useStyles = makeStyles((theme) => ({
     buttonSubmit: {
@@ -55,42 +57,64 @@ export default function EditDoctor() {
     const classes = useStyles();
     const [doctors, setDoctors] = React.useState([]);
     useEffect(() => {
-        const doctorRef = firebase.database().ref('Doctors');
-        doctorRef.on('value', (snap) => {
-            const doctorData = snap.val();
-            const doctorList = [];
-            for (let id in doctorData) {
-                doctorList.push({ id, ...doctorData[id] })
-            }
-            setDoctors(doctorList)
-            console.log(doctorList)
-        });
-
+        getDoctorList()
     }, []);
+
+    const getDoctorList =async () => {
+        const response = await firebaseFunctions.getData("Doctors");
+        setDoctors(response)
+    }
 
     // setDialog Open/Close
     const [openDialog, setOpenDialog] = React.useState(false);
-    const handleDialogOpen = (doctor) => {
-        setSelectedDoctor(doctor)
+    const handleDialogOpen = async (doctor) => {
+        const response = await firebaseFunctions.getOneData("Doctors","name",doctor.name)
+        setSelectedDoctor(response.data)
+        setSelectedDoctorId(response.selectedId)
         setOpenDialog(true);
     };
     const handleDialogClose = () => {
         setOpenDialog(false);
     };
     const [deleteDialog, setDeleteDialog] = React.useState(false);
-    const handleDeleteOpen = (doctor) => {
-        setSelectedDoctor(doctor)
+    const handleDeleteOpen = async (doctor) => {
+        const response = await firebaseFunctions.getOneData("Doctors","name",doctor.name)
+        setSelectedDoctorId(response.selectedId)
+        setSelectedDoctor(response.data)
         setDeleteDialog(true);
     };
     const handleDeleteClose = () => {
         setDeleteDialog(false);
     };
 
-    // Delete Logic Starts Here
     const [selectedDoctor , setSelectedDoctor] = React.useState("");
+    const [selectedDoctorId , setSelectedDoctorId] = React.useState("");
     const editDoctorInput = (e) => {
         setSelectedDoctor({ ...selectedDoctor, [e.target.name]: e.target.value })
-        console.log(selectedDoctor)
+    }
+    // Delete Logic Starts Here
+
+    // Edit Logic Starts Here
+    const updateDoctorDetails = () => {
+        const userRef = firebase.database().ref("Doctors").child(selectedDoctorId[0]);
+        userRef.update(selectedDoctor).then(() => {
+            Toast.apiSuccessToast("Doctor details updated")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
+        getDoctorList()
+        handleDialogClose()
+    }
+    const deleteDoctor = () => {
+        console.log("HERE")
+        const userRef = firebase.database().ref("Doctors").child(selectedDoctorId[0]);
+        userRef.remove().then(() => {
+            Toast.apiSuccessToast("Doctor details updated")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
+        getDoctorList()
+        handleDeleteClose()
     }
 
     return (
@@ -124,8 +148,8 @@ export default function EditDoctor() {
         </Container>
 
         {/* Dialog Boxes Render */}
-            <EditDialog handleClose={handleDialogClose} handleInput={editDoctorInput} open={openDialog} doctor={selectedDoctor}/>
-            <DeleteDialog handleClose={handleDeleteClose} open={deleteDialog} doctor={selectedDoctor}/>
+            <EditDialog handleClose={handleDialogClose} handleInput={editDoctorInput} open={openDialog} doctor={selectedDoctor} updateDoctorDetails={updateDoctorDetails}/>
+            <DeleteDialog handleClose={handleDeleteClose} deleteDoctor={deleteDoctor} open={deleteDialog} doctor={selectedDoctor}/>
         </>
     )
 }
