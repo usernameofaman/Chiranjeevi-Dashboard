@@ -13,8 +13,9 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { NavLink } from 'react-router-dom';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,27 +58,42 @@ export default function ButtonAppBar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+
+
       <List>
+        <Typography style={{
+          fontFamily: "'Source Sans Pro', sans-serif",
+          fontWeight: "bolder",
+          fontSize: "38px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+          Cheeranjeevi
+        </Typography>
+        <Divider />
         <NavLink className="navlinkstyle" to="/OPD">
           <ListItem button>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemIcon><LocalHospitalIcon /></ListItemIcon>
             <ListItemText primary={'OPD'} />
           </ListItem>
         </NavLink>
         <NavLink className="navlinkstyle" to="/IPD">
           <ListItem button>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemIcon><LocalHospitalIcon /></ListItemIcon>
             <ListItemText primary={'IPD'} />
           </ListItem>
         </NavLink>
         <NavLink className="navlinkstyle" to="/Dashboard">
           <ListItem button>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemIcon><DashboardIcon /></ListItemIcon>
             <ListItemText primary={'Dashboard'} />
           </ListItem>
         </NavLink>
       </List>
       <Divider />
+
+
     </div>
   );
 
@@ -94,17 +110,18 @@ export default function ButtonAppBar() {
         ))}
       </div>
       <div className={classes.root}>
-        <AppBar style={{ background: '#B27B90' }} position="static">
+        <AppBar style={{ background: '#0C6361', }} position="static">
           <Toolbar>
             <IconButton onClick={toggleDrawer('left', true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Cheeranjeevi
-            </Typography>
-            <NavLink className="navlinkstyle" to="/">
-
-              <Button color="inherit">Logout</Button>
+            <NavLink className="navlinkstyle" exact to="/Dashboard">
+              <Button style={{ background: "transparent", color: "white" }}>
+                <img style={{ width: "40px" }} src="./Images/logo.png" alt="logo" />
+                <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", fontWeight: "bolder", fontSize: "26px" }} variant="h6" className={classes.title}>
+                  Cheeranjeevi
+                </Typography>
+              </Button>
             </NavLink>
           </Toolbar>
         </AppBar>

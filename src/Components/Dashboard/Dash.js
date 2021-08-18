@@ -17,6 +17,14 @@ const useStyles = makeStyles((theme) => ({
         width: 250,
         height: 100,
         margin: "10px 0px 10px 0px",
+        background: "#0C6361",
+        fontFamily:"'Source Sans Pro', sans-serif", 
+        fontWeight:600,
+        fontSize:"24px",
+        color:"white",
+        '&:hover': {
+            backgroundColor: '#238887',
+        },
     }
 }));
 
@@ -37,35 +45,38 @@ export default function Dashboard() {
     return (
         <>
             <Container>
-
                 <ButtonContainer>
                     <NavLink className="navlinkstyle" to="/OPD">
-                        <Button className={classes.MainButton} variant="contained" style={{ background: "#B27B90" }}>
+                        <Button className={classes.MainButton} variant="contained">
                             OPD
                         </Button>
                     </NavLink>
                     <NavLink className="navlinkstyle" to="/IPD">
-                        <Button className={classes.MainButton} variant="contained" color="primary">
+                        <Button className={classes.MainButton} variant="contained" >
                             IPD
                         </Button>
                     </NavLink>
-                    <NavLink className="navlinkstyle" to="/Discharge">
-                        <Button className={classes.MainButton} variant="contained" color="secondary">
-                            Discharge
+                    <NavLink className="navlinkstyle" to="/Inventory">
+                        <Button className={classes.MainButton} variant="contained" >
+                            Inventory
                         </Button>
                     </NavLink>
                     <NavLink className="navlinkstyle" to="/PatientsList">
-                        <Button className={classes.MainButton} variant="contained" color="primary">
+                        <Button className={classes.MainButton} variant="contained" >
                             Patient List
                         </Button>
                     </NavLink>
                     <NavLink className="navlinkstyle" to="/Lab">
-                        <Button className={classes.MainButton} variant="contained" color="primary">
+                        <Button className={classes.MainButton} variant="contained" >
                             Lab
                         </Button>
                     </NavLink>
+                    <NavLink className="navlinkstyle" to="/Doctors">
+                        <Button className={classes.MainButton} variant="contained" >
+                            Doctors
+                        </Button>
+                    </NavLink>
                 </ButtonContainer>
-
             </Container>
             <PatientList/>
         </>

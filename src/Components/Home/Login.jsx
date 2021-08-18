@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
-import Loader from '../Common/loader'
 import firebase from '../utils/firebase'
 import { history } from "../utils/history";
 
@@ -17,7 +16,14 @@ const useStyles = makeStyles((theme) => ({
     height: '200px'
   },
   btn: {
-    width: '100%',
+    width: "100%",
+      background: "#0C6361",
+      '&:hover': {
+          backgroundColor: '#0C6361',
+          boxShadow: 'none',
+      },
+ 
+    
   }
 }));
 
