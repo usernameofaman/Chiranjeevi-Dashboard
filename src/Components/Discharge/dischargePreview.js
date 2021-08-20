@@ -111,7 +111,7 @@ export default function DischargePreview(props) {
 
     const getPatientDetails = () => {
 
-        const userRef = firebase.database().ref("Patients");
+        const userRef = firebase.database().ref("ActivePatients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(props.fileNo);
         userQuery.once("value", function (snapshot) {
             // setSelectedId(Object.keys(snapshot.val()))

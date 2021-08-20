@@ -1,12 +1,13 @@
-import React from 'react'
 import styled from 'styled-components'
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
 import 'date-fns';
 import moment from 'moment';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import Toast from '../Common/snackbar'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,26 +51,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Container = styled.div`
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding:10px 10px 10px 10px;
-    display: flex;
-    flex-direction: column;
-`
+
 const OneField = styled.div`
     padding:10px;
     display: flex;
     flex-wrap: wrap;
 `
 
-const ButtonContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
-    justify-content: space-evenly;
-`
+
 
 const Form = styled.div`
     width: 90%;
@@ -93,12 +82,12 @@ export default function NewPatient(props) {
     useEffect(() => {
         if (date === "") {
             let date = Date.now();
-            setDate(moment(date).format("YYYY-MM-DDThh:mm"))
+            setDate(moment(date).format("YYYY-MM-DDTHH:mm"))
         }
     })
   
     const classes = useStyles();
-    const [patient, setPatient] = React.useState()
+    const [patient, setPatient] = React.useState({type:"OPD"})
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
         console.log(patient)
@@ -106,33 +95,28 @@ export default function NewPatient(props) {
 
 
     const saveData = () => {
-        const patientRef = firebase.database().ref("PatientsOPD");
+        console.log(patient)
+        const patientRef = firebase.database().ref("ActivePatients");
         const patientData = {
             name: patient.name,
             age:patient.age,
             doctor: patient.doctor,
             amount: patient.amount,
-            date:date
+            date:date,
+            type:patient.type,
         };
         console.log(patientData)
-        patientRef.push(patientData);
+        patientRef.push(patientData).then(() => {
+            Toast.apiSuccessToast("Patient details Added")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        });
     }
 
 
     return (
         <>
-            <ButtonContainer>
-                    <Button className={classes.MainButton} variant="contained">
-                        New Receipt
-                    </Button>
-                    <Button className={classes.MainButton} variant="contained">
-                        View Receipt
-                    </Button>
-                    <Button className={classes.MainButton} variant="contained" >
-                        Modify Receipt
-                    </Button>
-            </ButtonContainer>
-            <Container>
+       
 
                 <Form>
                     <OneField>
@@ -159,7 +143,6 @@ export default function NewPatient(props) {
                         <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
                     </OneField>
                 </Form>
-            </Container>
         </>
     )
 }

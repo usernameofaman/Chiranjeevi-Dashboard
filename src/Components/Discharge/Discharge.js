@@ -189,7 +189,13 @@ export default function Discharge(props) {
     }
     const [selectedId, setSelectedId] = React.useState([])
     const getPatientDetails = () => {
-        const userRef = firebase.database().ref("Patients");
+        setDischargeData({
+            total: 0,
+            adjustment: "",
+            dateDischarge: "",
+            balance: 0
+        })
+        const userRef = firebase.database().ref("ActivePatients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
         userQuery.once("value", function (snapshot) {
             setSelectedId(Object.keys(snapshot.val()))
@@ -285,7 +291,7 @@ export default function Discharge(props) {
             balanceVal = dischargeData.total - patient.advance
         else balanceVal = dischargeData.total - patient.advance - dischargeData.adjustment;
         await setDischargeData({ ...dischargeData, balance: balanceVal })
-        const userRef = firebase.database().ref("Patients").child(selectedId[0]);
+        const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
         const patientData = {
             ...patient,
             discharge: {

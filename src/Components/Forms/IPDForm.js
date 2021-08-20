@@ -91,7 +91,7 @@ export default function NewPatient(props) {
     useEffect(() => {
         if (admitdate === "") {
             let admitdate = Date.now();
-            setAdmitdate(moment(admitdate).format("YYYY-MM-DDThh:mm"))
+            setAdmitdate(moment(admitdate).format("YYYY-MM-DDTHH:mm"))
         }
         getDataForList();
     }, [])
@@ -122,6 +122,7 @@ export default function NewPatient(props) {
         dateAdmit: admitdate,
         dateDischarge: "",
         MobileNumber: "",
+        type:"IPD",
     })
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
@@ -129,7 +130,7 @@ export default function NewPatient(props) {
     }
 
     const saveData = () => {
-        const patientRef = firebase.database().ref("Patients");
+        const patientRef = firebase.database().ref("ActivePatients");
         const patientData = {
             name: patient.Name,
             age: patient.Age,
@@ -143,6 +144,7 @@ export default function NewPatient(props) {
             dateAdmit: patient.dateAdmit === "" ? admitdate : patient.dateAdmit ,
             dateDischarge: patient.dateDischarge,
             mobileNumber: patient.MobileNumber,
+            type:patient.type,
         };
         patientRef.push(patientData).then(() => {
             Toast.apiSuccessToast("New patient added")

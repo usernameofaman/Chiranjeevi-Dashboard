@@ -112,7 +112,7 @@ export default function IPD() {
             {tabs === 2 &&
                 <Discharge changeTabs={changeTabs}/>}
             {tabs === 3 &&
-                <IPDPrintFrame/>}
+                <IPDPrintFrame mode="IPD"/>}
 
         </>
     )

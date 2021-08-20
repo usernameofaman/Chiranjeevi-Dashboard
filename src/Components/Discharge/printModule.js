@@ -19,7 +19,7 @@ class ComponentToPrint extends React.Component {
 render(){
     return (
         <>
-        <Discharge fileNo={this.props.fileNo}/>
+        <Discharge fileNo={this.props.fileNo} patient={this.props.patient}/>
         </>
     )
 }
@@ -38,7 +38,7 @@ class Example extends React.Component {
                     trigger={() => <button style={{ marginBottom: "30px" }}>Print this out!</button>}
                     content={() => this.componentRef}
                 />
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} fileNo={this.props.fileNo} />
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} fileNo={this.props.fileNo} patient={this.props.patient}/>
             </FlexContainer>
         );
     }

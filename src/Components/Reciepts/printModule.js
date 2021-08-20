@@ -2,6 +2,7 @@ import React from "react";
 import ReactToPrint from "react-to-print";
 import styled from 'styled-components'
 import Receipt from './IPDReciept'
+import OPDReceipt from './OPDReciept'
 
 const FlexContainer = styled.div`
     display: flex;
@@ -22,9 +23,13 @@ class ComponentToPrint extends React.Component {
         super(props);
     }
 render(){
+    console.log(this.props.mode)
     return (
         <>
-        <Receipt/>
+        {this.props.mode==="IPD" ?
+        <Receipt/> :
+        <OPDReceipt/>
+         }
         </>
     )
 }
@@ -37,9 +42,10 @@ class Example extends React.Component {
     }
 
     render() {
+        console.log(this.props.mode)
         return (
             <FlexContainer>
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} />
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode}/>
                 <ReactToPrint
                     trigger={() => <ButtonPrint>Print</ButtonPrint>}
                     content={() => this.componentRef}

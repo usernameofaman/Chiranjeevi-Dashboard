@@ -125,7 +125,7 @@ const ButtonContainer = styled.div`
 
 
 
-function IPDReciept() {
+function OPDReciept(props) {
     const classes = useStyles();
     useEffect(() => {
         if (receipt.date === "") {
@@ -134,6 +134,9 @@ function IPDReciept() {
                 ...receipt,
                 date: moment(date).format("YYYY-MM-DDTHH:mm")
             })
+        }
+        if(props.patient){
+            setPatient(props.patient)
         }
     })
 
@@ -151,7 +154,7 @@ function IPDReciept() {
     }
 
     const [receipt, setReceipt] = React.useState({
-        serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: "",type:"IPD"
+        serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: ""
     })
     const handleInputData = (e) => {
         setReceipt({ ...receipt, [e.target.name]: e.target.value });
@@ -166,7 +169,7 @@ function IPDReciept() {
             ...patient,receipt:receipt
         }
         console.log(patientData,selectedId[0])
-        const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
+        const userRef = firebase.database().ref("PatientsOPD").child(selectedId[0]);
         userRef.update(patientData).then(() => {
             Toast.apiSuccessToast("Patient details updated")
         }).catch(() => {
@@ -179,10 +182,6 @@ function IPDReciept() {
     return (
         <>
             <Container>
-                <ButtonContainer>
-                    <TextField onChange={(e) => setFileNo(e.target.value)} value={fileNo} className={classes.fileInput} type="number" />
-                    <Button onClick={fetchData} className={classes.button}> Fetch </Button>
-                </ButtonContainer>
                 <Paper>
                     <Form>
                         <Section >
@@ -203,7 +202,7 @@ function IPDReciept() {
                         </Section>
                         <HorizontalLine />
                         <HeaderInput style={{ justifyContent: "space-between" }}>
-                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" InputLabelProps={{ shrink: true }} disabled />
+                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" InputLabelProps={{ shrink: true }} disabled/>
                             <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={receipt.date} variant="outlined" />
                         </HeaderInput>
                         <HeaderInput>
@@ -253,4 +252,4 @@ function IPDReciept() {
         </>
     )
 }
-export default IPDReciept;
+export default OPDReciept;
