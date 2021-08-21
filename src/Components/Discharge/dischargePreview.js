@@ -104,29 +104,20 @@ export default function DischargePreview(props) {
 
     useEffect(() => {
         getPatientDetails()
-
     }, []);
     const [patient, setPatient] = React.useState("")
     const [itemList, setItemList] = React.useState([])
 
     const getPatientDetails = () => {
-
         const userRef = firebase.database().ref("ActivePatients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(props.fileNo);
         userQuery.once("value", function (snapshot) {
-            // setSelectedId(Object.keys(snapshot.val()))
             snapshot.forEach(function (child) {
                 setPatient(child.val())
                 setItemList(child.val().inventory)
             });
         });
     }
-
-    // const testing = () => {
-    //     console.log(patient.inventory, itemList)
-        
-
-    // }
 
     return (
         <Paper>
@@ -152,8 +143,8 @@ export default function DischargePreview(props) {
                         <div style={{ display: 'flex' }}>Pt name: <Field>{patient.name}</Field></div>
                     </HeaderInput>
                     <HeaderInput>
-                        <div style={{ display: 'flex' }}>Date of Admission : <Field>{moment(patient?.dateAdmit).format("DD-MM-YYYY  HH:MM")}</Field></div>
-                        <div style={{ display: 'flex' }}>Date of Discharge<Field>{moment(patient?.discharge?.dateDischarge).format("DD-MM-YYYY HH:MM")}</Field></div>
+                        <div style={{ display: 'flex' }}>Date of Admission : <Field>{moment(patient?.dateAdmit).format("DD-MM-YYYY HH:mm")}</Field></div>
+                        <div style={{ display: 'flex' }}>Date of Discharge<Field>{moment(patient?.discharge?.dateDischarge).format("YYYY-MM-DD HH:mm")}</Field></div>
                     </HeaderInput>
                 </Section>
                 <HorizontalLine />

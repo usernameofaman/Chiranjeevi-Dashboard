@@ -129,7 +129,6 @@ const ButtonContainer = styled.div`
 
 function IPDReciept() {
     const classes = useStyles();
-    const [serialNo , setSerialNo] = React.useState();
     useEffect(() => {
         if (receipt.date === "") {
             let date = Date.now();
@@ -139,11 +138,11 @@ function IPDReciept() {
             })
         }
         getSerialNo();
-    })
+    },[])
 
     const getSerialNo = () => {
         FirebaseFunction.getData("Utilities").then((res) => {
-            setSerialNo(res[0].serialNo+1)
+            setReceipt({...receipt,serialNo:res[0].serialNo+1})
         });
     }
 
@@ -158,32 +157,41 @@ function IPDReciept() {
             setSelectedId(res.selectedId)
         }
     }
+    const handleFileNo = (e) => {
+        if(e.target.value==="") setFileNo("")
+        else  setFileNo(e.target.value)
+    }
 
     const [receipt, setReceipt] = React.useState({
         serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: "",type:"IPD"
     })
-    const handleInputData = (e) => {
-        setReceipt({ ...receipt, [e.target.name]: e.target.value });
+    const handleInputData = (e) => {        
         if (e.target.name === "amount" && !isNaN(e.target.value)) {
             let response = FirebaseFunction.toTitleCase(FirebaseFunction.inWords(e.target.value));
-            setReceipt({ ...receipt, amountInWords: response });
+            let parsedAmount = parseInt(e.target.value)
+            setReceipt({ ...receipt,[e.target.name]: parsedAmount, amountInWords: response });
+        }else{
+            setReceipt({ ...receipt, [e.target.name]: e.target.value });
         }
     }
 
     const SaveReceipt = () => {
+        if(!patient.name){
+            Toast.apiFailureToast("Please Add Patient")
+            return
+        }
         let newReciept = [];
         if(patient.receipt){
-            newReciept = receipt;
+            newReciept = patient.receipt;
+            newReciept.push(receipt);
         }else{
             newReciept.push(receipt)
         }
-        // let updatedAdvance = patient.advance + receipt.amount;
-        console.log(patient.advance,receipt.amount,receipt)
-        return
+        let updatedAdvance = patient.advance + receipt.amount;
         let patientData = {
             ...patient,
             receipt:newReciept,
-            // advance:updatedAdvance,
+            advance:updatedAdvance,
         }
         console.log(patientData,selectedId[0])
         const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
@@ -201,7 +209,7 @@ function IPDReciept() {
         <>
             <Container>
                 <ButtonContainer>
-                    <TextField onChange={(e) => setFileNo(e.target.value)} value={fileNo} className={classes.fileInput} type="number" />
+                    <TextField onChange={handleFileNo} value={fileNo} className={classes.fileInput} type="number" />
                     <Button onClick={fetchData} className={classes.button}> Fetch </Button>
                 </ButtonContainer>
                 <Paper>
@@ -224,7 +232,7 @@ function IPDReciept() {
                         </Section>
                         <HorizontalLine />
                         <HeaderInput style={{ justifyContent: "space-between" }}>
-                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" value={serialNo} InputLabelProps={{ shrink: true }} disabled />
+                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" value={receipt.serialNo} InputLabelProps={{ shrink: true }} disabled />
                             <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={receipt.date} variant="outlined" />
                         </HeaderInput>
                         <HeaderInput>

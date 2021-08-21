@@ -5,13 +5,13 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import RemoveIcon from '@material-ui/icons/Remove';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
 import firebase from '../utils/firebase';
 import PrintDischarge from './printModule'
 import { Button } from '@material-ui/core';
 import Toast from '../Common/snackbar'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
+import moment from 'moment';
 
 
 const TelePhone = styled.img`
@@ -187,20 +187,25 @@ export default function Discharge(props) {
     //Getting Patient Data
     const [patient, setPatient] = React.useState({})
     const [fileNo, setFileNo] = React.useState("")
-    const handleFileNo = (e) => {
-        setFileNo(e.target.value)
-    }
     const [selectedId, setSelectedId] = React.useState([])
+
+    const handleFileNo = (e) => {
+        if(e.target.value==="") setFileNo("")
+        else  setFileNo(parseInt(e.target.value))
+    }
+
     const getPatientDetails = () => {
-        setDischargeData({
-            total: 0,
-            adjustment: "",
-            dateDischarge: "",
-            balance: 0
-        })
+        // setDischargeData({
+        //     total: 0,
+        //     adjustment: "",
+        //     dateDischarge: "",
+        //     balance: 0,
+        // })
+
         const userRef = firebase.database().ref("ActivePatients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
         userQuery.once("value", function (snapshot) {
+            if(snapshot.val())
             setSelectedId(Object.keys(snapshot.val()))
             snapshot.forEach(function (child) {
                 setPatient(child.val());
@@ -265,7 +270,7 @@ export default function Discharge(props) {
     const [dischargeData, setDischargeData] = React.useState({
         total: 0,
         adjustment: "",
-        dateDischarge: "",
+        dateDischarge: moment(Date.now()).format("YYYY-MM-DDTHH:mm"),
         balance: 0
     });
 
@@ -284,7 +289,6 @@ export default function Discharge(props) {
             }
         } else
             setDischargeData({ ...dischargeData, [e.target.name]: e.target.value })
-        // console.log(dischargeData)
     }
 
     const updatePatientDetails = async () => {
@@ -300,24 +304,28 @@ export default function Discharge(props) {
             discharge: {
                 adjustment: dischargeData.adjustment,
                 balance: balanceVal,
-                dateDischarge: dischargeData.dateDischarge,
+                dateDischarge: dischargeData.dateDischarge || moment(Date.now()).format("YYYY-MM-DDTHH:mm"),
                 total: dischargeData.total
             },
             inventory: items,
-        }
-        // console.log(patient)
-        await userRef.update(patientData).then(() => {
+        }     
+        userRef.update(patientData).then(() => {
             Toast.apiSuccessToast("Patient details updated")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
-        setTab(1);
+        setTab(1);   
     }
 
     return (
         <>
             {tab === 0 ?
                 <Container>
+                    <div style={{ display: "flex" }}>
+                        <Button className={classes.buttons} onClick={updatePatientDetails} variant="outlined"> Save </Button>
+                        {props.patient ? <Button className={classes.buttonCancel} onClick={() => props.backToDashboard()} variant="outlined"> Cancel </Button> :
+                        <Button className={classes.buttonCancel} onClick={() => props.changeTabs(0)} variant="outlined"> Cancel </Button> }
+                    </div>
                     <Form>
                         <Section>
                             <LogoAndHeading>
@@ -335,7 +343,7 @@ export default function Discharge(props) {
                                 </TextHolder>
                             </LogoAndHeading>
                             <HeaderInput>
-                                <TextField onChange={handleFileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." value={patient.fileNo} InputLabelProps={{ shrink: true }}/>
+                                <TextField onChange={handleFileNo} value={fileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." value={fileNo} InputLabelProps={{ shrink: true }}/>
                                 <Fab style={{ background: '#0C6361', }} onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
                                     <AutorenewIcon />
                                 </Fab>
@@ -344,7 +352,7 @@ export default function Discharge(props) {
                             </HeaderInput>
                             <HeaderInput>
                                 <TextField className={classes.input} style={{ width: '280px' }} name="text" type="datetime-local" size="small" label="Date of Admission" InputLabelProps={{ shrink: true }} value={patient.dateAdmit} disabled />
-                                <TextField onChange={dischargeDataHandler} className={classes.input} style={{ width: '280px' }} name="dateDischarge" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }} />
+                                <TextField onChange={dischargeDataHandler} className={classes.input} style={{ width: '280px' }} name="dateDischarge" type="datetime-local" size="small" label=" Date of Discharge" InputLabelProps={{ shrink: true }} value={dischargeData.dateDischarge} />
                             </HeaderInput>
                         </Section>
                     </Form>
@@ -354,6 +362,7 @@ export default function Discharge(props) {
                                 {items.map((item, index) => (
                                     <ItemContainer>
                                         <Select onChange={(e) => handleInventoryData(e, index)} value={item.name} >
+                                            <option selected disabled value="">Select</option>
                                             {InventoryList.map((item, index) => (
                                                 <option value={item.name}>{item.name}</option>
                                             ))}
@@ -403,10 +412,7 @@ export default function Discharge(props) {
                             </AmountCountainer>
                         </MainForm>
                     </Form>
-                    <div style={{ display: "flex" }}>
-                        <Button className={classes.buttons} onClick={updatePatientDetails} variant="outlined"> Save </Button>
-                        <Button className={classes.buttonCancel} onClick={() => props.changeTabs(0)} variant="outlined"> Cancel </Button>
-                    </div>
+                    
                 </Container>
                 : ""}
             {tab === 1 ?

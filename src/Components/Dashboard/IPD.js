@@ -7,6 +7,7 @@ import IPDForm from '../Forms/IPDForm'
 import ViewPatientDetails from "../ViewDetails/ViewPatientDetails"
 import Discharge from "../Discharge/Discharge";
 import IPDPrintFrame from "../Reciepts/printModule";
+import ViewReceipt from '../ViewDetails/viewIPDReceipt'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,13 +36,13 @@ const useStyles = makeStyles((theme) => ({
 
     },
     MainButton: {
-        width: 140,
-        height: 80,
+        width: 220,
+        height: 100,
         margin: "30px 0px 10px 0px",
         background: "#0C6361",
         fontFamily: "'Source Sans Pro', sans-serif",
         fontWeight: "bolder",
-        fontSize: "11px",
+        fontSize: "18px",
         color: "white",
         '&:hover': {
             backgroundColor: '#238887',
@@ -73,35 +74,16 @@ export default function IPD() {
                 <Button onClick={() => changeTabs(1)} className={classes.MainButton} variant="contained" >
                     View Patient Details
                 </Button>
-                <Button onClick={() => changeTabs(2)}  className={classes.MainButton} variant="contained" >
+                <Button onClick={() => changeTabs(2)} className={classes.MainButton} variant="contained" >
                     Discharge
                 </Button>
-                
-                    <Button onClick={() => changeTabs(3)}  className={classes.MainButton} variant="contained" >
-                        View Reciept
-                    </Button>
-               
 
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Add Particulars
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Modify Particulars
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Add Consultant
-                    </Button>
-                </NavLink>
-                <NavLink className="navlinkstyle" to="/NAN">
-                    <Button className={classes.MainButton} variant="contained" >
-                        Modify Consultant
-                    </Button>
-                </NavLink>
+                <Button onClick={() => changeTabs(3)} className={classes.MainButton} variant="contained" >
+                    New Reciept
+                </Button>
+                <Button onClick={() => changeTabs(4)} className={classes.MainButton} variant="contained" >
+                    View Reciept
+                </Button>
             </ButtonContainer>
 
             {/* Here is the code for Tabs */}
@@ -110,10 +92,11 @@ export default function IPD() {
             {tabs === 1 &&
                 <ViewPatientDetails changeTabs={changeTabs} />}
             {tabs === 2 &&
-                <Discharge changeTabs={changeTabs}/>}
+                <Discharge changeTabs={changeTabs} />}
             {tabs === 3 &&
-                <IPDPrintFrame mode="IPD"/>}
-
+                <IPDPrintFrame mode="IPD" />}
+            {tabs === 4 && 
+             <ViewReceipt/>}
         </>
     )
 }

@@ -40,7 +40,10 @@ export default function PatientList(props) {
   }
 
   const [view, setView] = React.useState(0);
-  const [selectedPatient, setSelectedPatient] = React.useState("")
+  const [selectedPatient, setSelectedPatient] = React.useState("");
+  const backToDashboard = () => {
+    setView(0)
+  }
   const printReceipt = (patient) => {
     setSelectedPatient(patient);
     setView(1);
@@ -100,9 +103,9 @@ export default function PatientList(props) {
           </TableContainer>
         </>}
       {view === 1 &&
-        <Receipt mode="OPD" patient={selectedPatient} />}
+        <Receipt mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
       {view === 2 &&
-        <Discharge mode="OPD" patient={selectedPatient} />}
+        <Discharge mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
     </>
   )
 }
