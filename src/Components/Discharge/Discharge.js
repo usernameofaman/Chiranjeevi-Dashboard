@@ -175,8 +175,11 @@ export default function Discharge(props) {
     const classes = useStyles();
 
     useEffect(() => {
+        if(props.patient){
+        setPatient(props.patient)
+        setSelectedId([props.patient.id])
+        setFileNo(props.patient.fileNo)}
         getInventory()
-        
     }, []);
     // Tabs
 
@@ -200,7 +203,7 @@ export default function Discharge(props) {
         userQuery.once("value", function (snapshot) {
             setSelectedId(Object.keys(snapshot.val()))
             snapshot.forEach(function (child) {
-                setPatient(child.val())
+                setPatient(child.val());
             });
         });
     }
@@ -332,7 +335,7 @@ export default function Discharge(props) {
                                 </TextHolder>
                             </LogoAndHeading>
                             <HeaderInput>
-                                <TextField onChange={handleFileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." />
+                                <TextField onChange={handleFileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." value={patient.fileNo} InputLabelProps={{ shrink: true }}/>
                                 <Fab style={{ background: '#0C6361', }} onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
                                     <AutorenewIcon />
                                 </Fab>

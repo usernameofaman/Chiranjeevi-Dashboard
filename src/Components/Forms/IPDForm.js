@@ -7,6 +7,7 @@ import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
 import moment from 'moment';
 import Toast from '../Common/snackbar'
+import firebaseFunctions from '../utils/firebaseFunctions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,29 +88,46 @@ const Select = styled.select`
 export default function NewPatient(props) {
 
     const [admitdate, setAdmitdate] = React.useState("")
-    const [consultDoctors , setDoctors ] = React.useState([])
+    const [consultDoctors, setDoctors] = React.useState([])
+    const [referrer, setReferrer] = React.useState([])
     useEffect(() => {
         if (admitdate === "") {
             let admitdate = Date.now();
             setAdmitdate(moment(admitdate).format("YYYY-MM-DDTHH:mm"))
         }
         getDataForList();
+        getFileNo();
     }, [])
-      const getDataForList = () => {
-          const userRef = firebase.database().ref("Doctors");
-          userRef.on("value", async (snapshot) => {
+    const getDataForList = () => {
+        const userRef = firebase.database().ref("Doctors");
+        userRef.on("value", async (snapshot) => {
             const users = snapshot.val();
-            const userArray = [];
+            const consultant = [];
+            const referrer = [];
             for (let id in users) {
-                if(users[id].type==="consultant")
-                    userArray.push(users[id])
+                if (users[id].type === "consultant")
+                    consultant.push(users[id])
+                if (users[id].type === "referrer")
+                    referrer.push(users[id])
             }
-            await setDoctors(userArray)
-          })
-      }
+            await setDoctors(consultant)
+            await setReferrer(referrer)
+        })
+    }
+
+    const getFileNo = () => {
+        const fileNoRef = firebase.database().ref("Utilities");
+        fileNoRef.on("value", async (snapshot) => {
+            const data = snapshot.val();
+            for (let id in data) {
+                setPatient({ ...patient, RegisterNumber: data[id].fileNo });
+            }
+        })
+    }
 
     const classes = useStyles();
     const [patient, setPatient] = React.useState({
+        RegisterNumber: "",
         Name: "",
         Age: "",
         Sex: "",
@@ -122,11 +140,10 @@ export default function NewPatient(props) {
         dateAdmit: admitdate,
         dateDischarge: "",
         MobileNumber: "",
-        type:"IPD",
+        type: "IPD",
     })
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
-        console.log(patient, e.target.value)
     }
 
     const saveData = () => {
@@ -139,20 +156,20 @@ export default function NewPatient(props) {
             referredBy: patient.Referredby,
             consultant: patient.Consultant,
             fileNo: patient.RegisterNumber,
-            advance:parseInt(patient.advance),
+            advance: parseInt(patient.advance),
             ward: patient.ward,
-            dateAdmit: patient.dateAdmit === "" ? admitdate : patient.dateAdmit ,
+            dateAdmit: patient.dateAdmit === "" ? admitdate : patient.dateAdmit,
             dateDischarge: patient.dateDischarge,
             mobileNumber: patient.MobileNumber,
-            type:patient.type,
+            type: patient.type,
         };
         patientRef.push(patientData).then(() => {
-            Toast.apiSuccessToast("New patient added")
+            Toast.apiSuccessToast("New patient added");
+            firebaseFunctions.increaseFileNo()
+            setTab(1)
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         });
-        // console.log(patientData)
-        setTab(1)
     }
 
     const [tab, setTab] = React.useState(0)
@@ -168,14 +185,27 @@ export default function NewPatient(props) {
                             ADD NEW PATIENTS
                         </Typography>
                         <OneField >
-                            <TextField onChange={handleinput} className={classes.input}  name="Name" size="small" label="Name" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input}  name="Age" size="small" label="Age" type="number" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input}  name="Sex" size="small" label="Sex" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="Name" size="small" label="Name" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="Age" size="small" label="Age" type="number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="Address" size="small" label="Address" variant="outlined" />
+
+                        </OneField>
+                        <OneField >
+                            <TextField onChange={handleinput} className={classes.input} name="RegisterNumber" type="number" size="small" label="Register Number" variant="outlined" value={patient.RegisterNumber} InputLabelProps={{ shrink: true }} disabled />
+                            <Select onChange={handleinput} className={classes.input} name="Sex" label="Sex"  >
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                                <option value="O">Other</option>
+                            </Select>   
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input}  name="Address" size="small" label="Address" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input}  name="Referredby" size="small" label="Referred by" variant="outlined" />
-                            <Select onChange={handleinput} className={classes.input}  name="Consultant" >
+                            <Select onChange={handleinput} className={classes.input} name="Referredby" >
+                                <option selected disabled>Referrer</option>
+                                {referrer.map((doctor) => (
+                                    <option value={doctor.name}>{doctor.name}</option>
+                                ))}
+                            </Select>
+                            <Select onChange={handleinput} className={classes.input} name="Consultant" >
                                 <option selected disabled>Consultant</option>
                                 {consultDoctors.map((doctor) => (
                                     <option value={doctor.name}>{doctor.name}</option>
@@ -183,8 +213,8 @@ export default function NewPatient(props) {
                             </Select>
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input}  name="ward" size="small" label="Ward" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input}  name="advance" size="small" label="Advance" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="ward" size="small" label="Ward" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="advance" size="small" label="Advance" variant="outlined" />
                         </OneField>
                         <OneField>
                             <TextField
@@ -201,8 +231,7 @@ export default function NewPatient(props) {
                             />
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input}  name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input}  name="RegisterNumber" type="number" size="small" label="Register Number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
                         </OneField>
                         <OneField>
                             <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
@@ -212,7 +241,7 @@ export default function NewPatient(props) {
             }
             {tab === 1 &&
                 <Container>
-                    <Typography style={{ margin:"30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                    <Typography style={{ margin: "30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                         Patient has been added successfully
                     </Typography>
                     <OneField>

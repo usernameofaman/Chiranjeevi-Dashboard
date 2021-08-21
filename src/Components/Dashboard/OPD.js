@@ -60,7 +60,7 @@ export default function OPD() {
             </ButtonContainer>
             <Container>
                 {tabs===0 &&
-                <PatientList/>
+                <PatientList OPDOnly/>
                 }
                 {tabs===1 &&
                 <OPDForm/> }

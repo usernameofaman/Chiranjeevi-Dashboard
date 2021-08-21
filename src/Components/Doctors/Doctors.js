@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Toast from '../Common/snackbar'
 import firebase from '../utils/firebase'
 import EditDoctor from './editDoctor'
-
+import Loader from '../Common/loader'
 
 
 const OneField = styled.div`
@@ -107,18 +107,22 @@ export default function Doctors() {
         setDoctor({ ...doctor, [e.target.name]: e.target.value })
         console.log(doctor)
     }
+    const [showLoader , setLoader ] = React.useState(false)
     const saveData = () => {
         const doctorRef = firebase.database().ref("Doctors");
         const doctorData = {
             name: doctor.name,
             type: doctor.type,
         };
+        setLoader(true)
         doctorRef.push(doctorData).then(() => {
             Toast.apiSuccessToast("New doctor added")
+            setLoader(false)
+            setTab(1)
         }).catch(() => {
+            console.log("NONE")
             Toast.apiFailureToast("Server Error")
         });
-        setTab(1)
     }
     const [tab, setTab] = React.useState(2)
 
@@ -140,6 +144,7 @@ export default function Doctors() {
             {tab === 0 &&
                 <Container>
                     <Form>
+                        {showLoader && <Loader/>}
                         <Typography className={classes.input} style={{ fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
                             Add Doctor
                         </Typography>
@@ -149,12 +154,16 @@ export default function Doctors() {
                                 <option value="OPD">OPD</option>
                                 <option value="IPD">IPD</option>
                                 <option value="consultant">Consultant</option>
-                                <option value="referee">Referee</option>
+                                <option value="referrer">Referrer</option>
                             </Select>
                         </OneField>
                         <OneField>
-                            <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Save</Button>
+                            <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary" disabled={showLoader ? true : false}>Save</Button>
                         </OneField>
+                        {showLoader &&
+                        <OneField style={{textAlign:"justify", width:"50%"}}>
+                            This process does not take more than 5 seconds. If it is taking longer, There might be a server error. Please check in Doctors List, if not added, refresh the page and try again.
+                        </OneField>}
                     </Form>
                 </Container>}
 

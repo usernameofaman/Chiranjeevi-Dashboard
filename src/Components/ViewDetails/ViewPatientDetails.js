@@ -98,7 +98,7 @@ export default function NewPatient(props) {
     }
     const getPatientDetails = () => {
         setEditMode(false)
-        const userRef = firebase.database().ref("Patients");
+        const userRef = firebase.database().ref("ActivePatients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
         userQuery.once("value", function (snapshot) {
             setSelectedId(Object.keys(snapshot.val()))
@@ -109,7 +109,7 @@ export default function NewPatient(props) {
     }
     const updatePatientDetails = () => {
         // console.log("HEre")
-        const userRef = firebase.database().ref("Patients").child(selectedId[0]);
+        const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
         userRef.update(patient).then(() => {
             Toast.apiSuccessToast("Patient details updated")
         }).catch(() => {

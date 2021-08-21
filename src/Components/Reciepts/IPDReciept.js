@@ -8,6 +8,8 @@ import moment from 'moment';
 import Toast from '../Common/snackbar'
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase';
+import Loader from '../Common/loader'
+
 
 const useStyles = makeStyles(() => ({
     inputReceipt: {
@@ -127,6 +129,7 @@ const ButtonContainer = styled.div`
 
 function IPDReciept() {
     const classes = useStyles();
+    const [serialNo , setSerialNo] = React.useState();
     useEffect(() => {
         if (receipt.date === "") {
             let date = Date.now();
@@ -135,14 +138,20 @@ function IPDReciept() {
                 date: moment(date).format("YYYY-MM-DDTHH:mm")
             })
         }
+        getSerialNo();
     })
+
+    const getSerialNo = () => {
+        FirebaseFunction.getData("Utilities").then((res) => {
+            setSerialNo(res[0].serialNo+1)
+        });
+    }
 
     const [fileNo, setFileNo] = React.useState();
     const [patient, setPatient] = React.useState("");
     const [selectedId, setSelectedId] = React.useState();
     const fetchData = () => {
-        const res = FirebaseFunction.getOneData("Patients", "fileNo", fileNo);
-        console.log(res)
+        const res = FirebaseFunction.getOneData("ActivePatients", "fileNo", fileNo);
         if (res.selectedId === "") Toast.apiFailureToast("Does not exist")
         else {
             setPatient(res.data)
@@ -162,8 +171,19 @@ function IPDReciept() {
     }
 
     const SaveReceipt = () => {
+        let newReciept = [];
+        if(patient.receipt){
+            newReciept = receipt;
+        }else{
+            newReciept.push(receipt)
+        }
+        // let updatedAdvance = patient.advance + receipt.amount;
+        console.log(patient.advance,receipt.amount,receipt)
+        return
         let patientData = {
-            ...patient,receipt:receipt
+            ...patient,
+            receipt:newReciept,
+            // advance:updatedAdvance,
         }
         console.log(patientData,selectedId[0])
         const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
@@ -172,6 +192,7 @@ function IPDReciept() {
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
+        FirebaseFunction.increaseSerial()
     }
 
     const [printMode , setPrintMode ] = React.useState();
@@ -203,7 +224,7 @@ function IPDReciept() {
                         </Section>
                         <HorizontalLine />
                         <HeaderInput style={{ justifyContent: "space-between" }}>
-                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" InputLabelProps={{ shrink: true }} disabled />
+                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" value={serialNo} InputLabelProps={{ shrink: true }} disabled />
                             <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={receipt.date} variant="outlined" />
                         </HeaderInput>
                         <HeaderInput>

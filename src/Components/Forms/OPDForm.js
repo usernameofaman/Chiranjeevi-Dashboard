@@ -76,18 +76,39 @@ const Form = styled.div`
     -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 `
+const Select = styled.select`
+    width:190px;
+    border-radius: 5px;
+    height: 36px;
+    padding: 0px 10px 0px 10px;
+`
 
 export default function NewPatient(props) {
     const [date, setDate] = React.useState("")
+    const [consultDoctors , setDoctors ] = React.useState([])
     useEffect(() => {
         if (date === "") {
             let date = Date.now();
             setDate(moment(date).format("YYYY-MM-DDTHH:mm"))
         }
+        getDataForList();
     })
-  
+
+    const getDataForList = () => {
+        const userRef = firebase.database().ref("Doctors");
+        userRef.on("value", async (snapshot) => {
+          const users = snapshot.val();
+          const userArray = [];
+          for (let id in users) {
+              if(users[id].type==="consultant")
+                  userArray.push(users[id])
+          }
+          await setDoctors(userArray)
+        })
+    }
+
     const classes = useStyles();
-    const [patient, setPatient] = React.useState({type:"OPD"})
+    const [patient, setPatient] = React.useState({ type: "OPD" })
     const handleinput = (e) => {
         setPatient({ ...patient, [e.target.name]: e.target.value })
         console.log(patient)
@@ -99,11 +120,11 @@ export default function NewPatient(props) {
         const patientRef = firebase.database().ref("ActivePatients");
         const patientData = {
             name: patient.name,
-            age:patient.age,
+            age: patient.age,
             doctor: patient.doctor,
             amount: patient.amount,
-            date:date,
-            type:patient.type,
+            date: date,
+            type: patient.type,
         };
         console.log(patientData)
         patientRef.push(patientData).then(() => {
@@ -116,33 +137,38 @@ export default function NewPatient(props) {
 
     return (
         <>
-       
 
-                <Form>
-                    <OneField>
-                        <TextField onChange={handleinput} className={classes.input}  name="name" size="small" label="Patient Name" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input}  name="age" size="small" label="Age" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input}  name="doctor" size="small" label="Consulting Doctor" variant="outlined" />
-                        <TextField onChange={handleinput} className={classes.input}  name="amount" size="small" label="Amount" type="number" variant="outlined" />
-                    </OneField>
-                    <OneField>
+
+            <Form>
+                <OneField>
+                    <TextField onChange={handleinput} className={classes.input} name="name" size="small" label="Patient Name" variant="outlined" />
+                    <TextField onChange={handleinput} className={classes.input} name="age" size="small" label="Age" variant="outlined" />
+                    <Select onChange={handleinput} className={classes.input} name="Consultant" >
+                        <option selected disabled>Consultant</option>
+                        {consultDoctors.map((doctor) => (
+                            <option value={doctor.name}>{doctor.name}</option>
+                        ))}
+                    </Select>
+                    <TextField onChange={handleinput} className={classes.input} name="amount" size="small" label="Amount" type="number" variant="outlined" />
+                </OneField>
+                <OneField>
                     <TextField
-                            id="datetime-local"
-                            label="Date of admit"
-                            type="datetime-local"
-                            value={date}
-                            className={classes.input}
-                            onChange={handleinput}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        
-                    </OneField>
-                    <OneField>
-                        <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
-                    </OneField>
-                </Form>
+                        id="datetime-local"
+                        label="Date of admit"
+                        type="datetime-local"
+                        value={date}
+                        className={classes.input}
+                        onChange={handleinput}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+
+                </OneField>
+                <OneField>
+                    <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
+                </OneField>
+            </Form>
         </>
     )
 }

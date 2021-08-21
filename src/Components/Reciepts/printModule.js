@@ -27,8 +27,8 @@ render(){
     return (
         <>
         {this.props.mode==="IPD" ?
-        <Receipt/> :
-        <OPDReceipt/>
+        <Receipt patient={this.props.patient}/> :
+        <OPDReceipt patient={this.props.patient}/>
          }
         </>
     )
@@ -42,10 +42,10 @@ class Example extends React.Component {
     }
 
     render() {
-        console.log(this.props.mode)
+        console.log(this.props.patient)
         return (
             <FlexContainer>
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode}/>
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient}/>
                 <ReactToPrint
                     trigger={() => <ButtonPrint>Print</ButtonPrint>}
                     content={() => this.componentRef}

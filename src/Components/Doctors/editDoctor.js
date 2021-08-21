@@ -109,7 +109,7 @@ export default function EditDoctor() {
         console.log("HERE")
         const userRef = firebase.database().ref("Doctors").child(selectedDoctorId[0]);
         userRef.remove().then(() => {
-            Toast.apiSuccessToast("Doctor details updated")
+            Toast.apiSuccessToast("Doctor Deleted")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
