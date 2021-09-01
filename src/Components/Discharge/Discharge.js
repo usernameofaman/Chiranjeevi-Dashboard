@@ -26,22 +26,22 @@ const useStyles = makeStyles((theme) => ({
             width: '25ch',
         },
     },
-    buttons:{
-        margin:"20px",
-        width:"120px",
-        height:"50px",
-        background: '#0C6361', 
-        color:"white",
+    buttons: {
+        margin: "20px",
+        width: "120px",
+        height: "50px",
+        background: '#0C6361',
+        color: "white",
         '&:hover': {
             backgroundColor: '#238887',
         },
     },
-    buttonCancel:{
-        margin:"20px",
-        width:"120px",
-        height:"50px",
-        background: 'white', 
-        color:"black",
+    buttonCancel: {
+        margin: "20px",
+        width: "120px",
+        height: "50px",
+        background: 'white',
+        color: "black",
         '&:hover': {
             backgroundColor: '#d8d8d8',
         },
@@ -125,15 +125,15 @@ const Logo = styled.img`
     height: 80px;
     `
 const MainForm = styled.div`
-        width: 100%;
-        display: flex;
+    width: 100%;
+    display: flex;
 `
 const MainFormSection = styled.div`
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        border-right: 2px solid black;
-        padding: 10px 10px 10px 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid black;
+    padding: 10px 10px 10px 20px;
 `
 
 const Select = styled.select`
@@ -175,10 +175,11 @@ export default function Discharge(props) {
     const classes = useStyles();
 
     useEffect(() => {
-        if(props.patient){
-        setPatient(props.patient)
-        setSelectedId([props.patient.id])
-        setFileNo(props.patient.fileNo)}
+        if (props.patient) {
+            setPatient(props.patient)
+            setSelectedId([props.patient.id])
+            setFileNo(props.patient.fileNo)
+        }
         getInventory()
     }, []);
     // Tabs
@@ -190,8 +191,8 @@ export default function Discharge(props) {
     const [selectedId, setSelectedId] = React.useState([])
 
     const handleFileNo = (e) => {
-        if(e.target.value==="") setFileNo("")
-        else  setFileNo(parseInt(e.target.value))
+        if (e.target.value === "") setFileNo("")
+        else setFileNo(parseInt(e.target.value))
     }
 
     const getPatientDetails = () => {
@@ -205,8 +206,8 @@ export default function Discharge(props) {
         const userRef = firebase.database().ref("ActivePatients");
         var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
         userQuery.once("value", function (snapshot) {
-            if(snapshot.val())
-            setSelectedId(Object.keys(snapshot.val()))
+            if (snapshot.val())
+                setSelectedId(Object.keys(snapshot.val()))
             snapshot.forEach(function (child) {
                 setPatient(child.val());
             });
@@ -274,7 +275,7 @@ export default function Discharge(props) {
         balance: 0
     });
 
-    if(patient.discharge && dischargeData.total===0){
+    if (patient.discharge && dischargeData.total === 0) {
         setDischargeData(patient.discharge)
         setItems(patient.inventory)
     }
@@ -308,13 +309,42 @@ export default function Discharge(props) {
                 total: dischargeData.total
             },
             inventory: items,
-        }     
+        }
         userRef.update(patientData).then(() => {
             Toast.apiSuccessToast("Patient details updated")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
-        setTab(1);   
+        setTab(1);
+    }
+
+    const dischargePatient = () => {
+        let balanceVal
+        if (dischargeData.adjustment === "")
+            balanceVal = dischargeData.total - patient.advance
+        const patientData = {
+            ...patient,
+            discharge: {
+                adjustment: dischargeData.adjustment,
+                balance: balanceVal,
+                dateDischarge: dischargeData.dateDischarge || moment(Date.now()).format("YYYY-MM-DDTHH:mm"),
+                total: dischargeData.total
+            },
+            inventory: items,
+        }
+        console.log(patientData)
+        const patientRef = firebase.database().ref("PatientsIPD");
+        patientRef.push(patientData).then(() => {
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        });
+        const userRef = firebase.database().ref("ActivePatients").child(patient.id);
+        userRef.remove().then(() => {
+            Toast.apiSuccessToast("Patient details updated")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
+        setTab(1);
     }
 
     return (
@@ -323,8 +353,9 @@ export default function Discharge(props) {
                 <Container>
                     <div style={{ display: "flex" }}>
                         <Button className={classes.buttons} onClick={updatePatientDetails} variant="outlined"> Save </Button>
+                        <Button className={classes.buttons} onClick={dischargePatient} variant="outlined"> Discharge </Button>
                         {props.patient ? <Button className={classes.buttonCancel} onClick={() => props.backToDashboard()} variant="outlined"> Cancel </Button> :
-                        <Button className={classes.buttonCancel} onClick={() => props.changeTabs(0)} variant="outlined"> Cancel </Button> }
+                            <Button className={classes.buttonCancel} onClick={() => props.changeTabs(0)} variant="outlined"> Cancel </Button>}
                     </div>
                     <Form>
                         <Section>
@@ -338,12 +369,12 @@ export default function Discharge(props) {
                                     </Typography>
                                     <Typography variant="h6">
                                         <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
-                                        <b><TelePhone src="/Images/telephone.png"/> : 250544, 251280</b>
+                                        <b><TelePhone src="/Images/telephone.png" /> : 250544, 251280</b>
                                     </Typography>
                                 </TextHolder>
                             </LogoAndHeading>
                             <HeaderInput>
-                                <TextField onChange={handleFileNo} value={fileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." value={fileNo} InputLabelProps={{ shrink: true }}/>
+                                <TextField onChange={handleFileNo} value={fileNo} className={classes.input} name="text" type="text" size="small" label="Reg. No." value={fileNo} InputLabelProps={{ shrink: true }} />
                                 <Fab style={{ background: '#0C6361', }} onClick={getPatientDetails} className={classes.fabIconGet} name="add" color="primary" aria-label="add">
                                     <AutorenewIcon />
                                 </Fab>
@@ -412,7 +443,7 @@ export default function Discharge(props) {
                             </AmountCountainer>
                         </MainForm>
                     </Form>
-                    
+
                 </Container>
                 : ""}
             {tab === 1 ?

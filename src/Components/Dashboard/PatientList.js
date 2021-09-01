@@ -47,12 +47,10 @@ export default function PatientList(props) {
   const printReceipt = (patient) => {
     setSelectedPatient(patient);
     setView(1);
-
   }
   const dischargePatient = (patient) => {
     setSelectedPatient(patient);
     setView(2);
-
   }
   return (
     <>
@@ -66,6 +64,7 @@ export default function PatientList(props) {
                 <TableComponent.HeadColumn>Ward</TableComponent.HeadColumn>
                 <TableComponent.HeadColumn>Advance</TableComponent.HeadColumn>
                 <TableComponent.HeadColumn>File No</TableComponent.HeadColumn>
+                <TableComponent.HeadColumn>Receipt</TableComponent.HeadColumn>
                 <TableComponent.HeadColumn>Status</TableComponent.HeadColumn>
               </TableComponent.TableHead>
               <TableComponent.TableBody>
@@ -75,6 +74,7 @@ export default function PatientList(props) {
                     <TableComponent.BodyColumn >{patient.ward}</TableComponent.BodyColumn>
                     <TableComponent.BodyColumn >{patient.advance}</TableComponent.BodyColumn>
                     <TableComponent.BodyColumn >{patient.fileNo}</TableComponent.BodyColumn>
+                    <TableComponent.BodyColumn onClick={() => printReceipt(patient)} ><Button style={{ background: "#0c6361", color: "white" }}>Receipt</Button></TableComponent.BodyColumn>
                     <TableComponent.BodyColumn onClick={() => dischargePatient(patient)}><Button style={{ background: "#0c6361", color: "white" }}>Discharge</Button></TableComponent.BodyColumn>
                   </TableComponent.BodyRow>
                 ))}

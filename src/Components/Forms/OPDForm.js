@@ -121,7 +121,7 @@ export default function NewPatient(props) {
         const patientData = {
             name: patient.name,
             age: patient.age,
-            doctor: patient.doctor,
+            doctor: patient.consultant,
             amount: patient.amount,
             date: date,
             type: patient.type,
@@ -143,7 +143,7 @@ export default function NewPatient(props) {
                 <OneField>
                     <TextField onChange={handleinput} className={classes.input} name="name" size="small" label="Patient Name" variant="outlined" />
                     <TextField onChange={handleinput} className={classes.input} name="age" size="small" label="Age" variant="outlined" />
-                    <Select onChange={handleinput} className={classes.input} name="Consultant" >
+                    <Select onChange={handleinput} className={classes.input} name="consultant" >
                         <option selected disabled>Consultant</option>
                         {consultDoctors.map((doctor) => (
                             <option value={doctor.name}>{doctor.name}</option>

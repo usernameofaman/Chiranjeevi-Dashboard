@@ -171,11 +171,13 @@ export default function DischargePreview(props) {
                     <TextSection style={{ padding: "0px" }}>
                         <BillText >Total </BillText>
                         <BillText >{patient.discharge?.adjustment && "Adjustnemt"}</BillText>
+                        <BillText >Remaining </BillText>
                         <BillText >Paid </BillText>
                     </TextSection>
                     <TextSection style={{ padding: "0px", marginLeft: "1px" }}>
                         <BillText >{patient.discharge?.total} </BillText>
                         <BillText >{patient.discharge?.adjustment}  </BillText>
+                        <BillText >{patient.discharge?.total- patient.discharge?.adjustment - patient.advance} </BillText>
                         <BillText >500  </BillText>
                     </TextSection>
                 </div>

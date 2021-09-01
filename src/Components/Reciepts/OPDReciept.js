@@ -62,7 +62,6 @@ const LogoAndHeading = styled.div`
     display: flex;
     width: 100%;
 `
-
 const LogoHolder = styled.div`
     width: 20%;
     display: flex;
@@ -97,7 +96,6 @@ const Form = styled.div`
     border: 2px solid #000000;
     margin-top: 2px;
 `
-
 const HorizontalLine = styled.div`
     width: 100%;
     height: 2px;
@@ -123,9 +121,8 @@ const ButtonContainer = styled.div`
     }
 `
 
-
-
 function OPDReciept(props) {
+    console.log(props)
     const classes = useStyles();
     useEffect(() => {
         if (receipt.date === "") {
@@ -135,10 +132,18 @@ function OPDReciept(props) {
                 date: moment(date).format("YYYY-MM-DDTHH:mm")
             })
         }
-        if(props.patient){
+        if (props.patient) {
             setPatient(props.patient)
         }
-    })
+        getSerialNo();
+    }, []);
+
+    const getSerialNo = () => {
+        FirebaseFunction.getData("Utilities").then((res) => {
+            console.log(res)
+            setReceipt({ ...receipt, serialNo: res[0].serialNo + 1 })
+        });
+    }
 
     const [fileNo, setFileNo] = React.useState();
     const [patient, setPatient] = React.useState("");
@@ -148,6 +153,7 @@ function OPDReciept(props) {
         console.log(res)
         if (res.selectedId === "") Toast.apiFailureToast("Does not exist")
         else {
+            console.log(res.data, res.selectedId, "HERE")
             setPatient(res.data)
             setSelectedId(res.selectedId)
         }
@@ -166,18 +172,23 @@ function OPDReciept(props) {
 
     const SaveReceipt = () => {
         let patientData = {
-            ...patient,receipt:receipt
+            ...patient, receipt: receipt
         }
-        console.log(patientData,selectedId[0])
-        const userRef = firebase.database().ref("PatientsOPD").child(selectedId[0]);
-        userRef.update(patientData).then(() => {
+        const patientRef = firebase.database().ref("PatientsOPD");
+        patientRef.push(patientData).then(() => {
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        });
+        console.log("Remove")
+        const userRef = firebase.database().ref("ActivePatients").child(patient.id);
+        userRef.remove().then(() => {
             Toast.apiSuccessToast("Patient details updated")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
     }
 
-    const [printMode , setPrintMode ] = React.useState();
+    const [printMode, setPrintMode] = React.useState();
 
     return (
         <>
@@ -202,41 +213,41 @@ function OPDReciept(props) {
                         </Section>
                         <HorizontalLine />
                         <HeaderInput style={{ justifyContent: "space-between" }}>
-                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" InputLabelProps={{ shrink: true }} disabled/>
+                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" InputLabelProps={{ shrink: true }} value={receipt.serialNo} disabled />
                             <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={receipt.date} variant="outlined" />
                         </HeaderInput>
                         <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}>Received with thanks from {patient.sex === "M" ? "Mr" : "Mrs"} </div>
+                            <div style={{ paddingBottom: "6px" }}>Received with thanks from {patient.sex === "M" ? "Mr" : "Mrs"} </div>
                             <Value>
-                                <TextField className={classes.inputReceipt} name="name" type="text" size="small" label={!printMode &&"Name"} value={patient.name} InputLabelProps={{ shrink: patient.name ? true : false }} disabled />
+                                <TextField className={classes.inputReceipt} name="name" type="text" size="small" label={!printMode && "Name"} value={patient.name} InputLabelProps={{ shrink: patient.name ? true : false }} disabled />
                             </Value>
                         </HeaderInput>
                         <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}>The sum of Rupees </div>
+                            <div style={{ paddingBottom: "6px" }}>The sum of Rupees </div>
                             <Value>
                                 <TextField className={classes.inputReceipt} name="amountInWords" type="text" size="small" label="Amount In Words" value={receipt.amountInWords} InputLabelProps={{ shrink: receipt.amountInWords === "" ? false : true }} disabled />
                             </Value>
                         </HeaderInput>
                         <HeaderInput style={{ fontSize: "15px" }}>
 
-                            <div style={{paddingBottom:"6px"}}>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG Other </div>
+                            <div style={{ paddingBottom: "6px" }}>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG Other </div>
                             <Value>
                                 <TextField onChange={handleInputData} className={classes.inputReceipt} name="other" type="text" size="small" label="Amount" />
                             </Value>
                         </HeaderInput>
                         <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}>Cheque No.</div>
+                            <div style={{ paddingBottom: "6px" }}>Cheque No.</div>
                             <Value>
                                 <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeNo" type="text" size="small" label="Check No." />
                             </Value>
 
-                            <div style={{paddingBottom:"6px"}}>Dated</div>
+                            <div style={{ paddingBottom: "6px" }}>Dated</div>
                             <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} InputLabelProps={{ shrink: true }}/>
+                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} InputLabelProps={{ shrink: true }} />
                             </Value>
                         </HeaderInput>
                         <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}><b>Amount</b></div>
+                            <div style={{ paddingBottom: "6px" }}><b>Amount</b></div>
                             <Value style={{ flexGrow: "0" }}>
                                 <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" />
                             </Value>

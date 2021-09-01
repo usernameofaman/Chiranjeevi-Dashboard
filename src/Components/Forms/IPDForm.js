@@ -162,6 +162,7 @@ export default function NewPatient(props) {
             dateDischarge: patient.dateDischarge,
             mobileNumber: patient.MobileNumber,
             type: patient.type,
+            isDischarged:false,
         };
         patientRef.push(patientData).then(() => {
             Toast.apiSuccessToast("New patient added");
@@ -214,7 +215,7 @@ export default function NewPatient(props) {
                         </OneField>
                         <OneField>
                             <TextField onChange={handleinput} className={classes.input} name="ward" size="small" label="Ward" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} name="advance" size="small" label="Advance" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} type="number" name="advance" size="small" label="Advance" variant="outlined" />
                         </OneField>
                         <OneField>
                             <TextField
