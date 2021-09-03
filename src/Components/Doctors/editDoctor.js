@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 ));
 
 
+
 const Container = styled.div`
     justify-content: center;
     align-items: center;
@@ -68,7 +69,7 @@ export default function EditDoctor() {
     // setDialog Open/Close
     const [openDialog, setOpenDialog] = React.useState(false);
     const handleDialogOpen = async (doctor) => {
-        const response = await firebaseFunctions.getOneData("Doctors","name",doctor.name)
+        const response = await getOneData("Doctors","name",doctor.name)
         setSelectedDoctor(response.data)
         setSelectedDoctorId(response.selectedId)
         setOpenDialog(true);
@@ -78,7 +79,8 @@ export default function EditDoctor() {
     };
     const [deleteDialog, setDeleteDialog] = React.useState(false);
     const handleDeleteOpen = async (doctor) => {
-        const response = await firebaseFunctions.getOneData("Doctors","name",doctor.name)
+        console.log(doctor.name)
+        const response = await getOneData("Doctors","name",doctor.name)
         setSelectedDoctorId(response.selectedId)
         setSelectedDoctor(response.data)
         setDeleteDialog(true);
@@ -92,7 +94,6 @@ export default function EditDoctor() {
     const editDoctorInput = (e) => {
         setSelectedDoctor({ ...selectedDoctor, [e.target.name]: e.target.value })
     }
-    // Delete Logic Starts Here
 
     // Edit Logic Starts Here
     const updateDoctorDetails = () => {
@@ -105,6 +106,7 @@ export default function EditDoctor() {
         getDoctorList()
         handleDialogClose()
     }
+    // Delete Logic Starts Here
     const deleteDoctor = () => {
         console.log("HERE")
         const userRef = firebase.database().ref("Doctors").child(selectedDoctorId[0]);
@@ -131,7 +133,7 @@ export default function EditDoctor() {
                         {doctors.map((doctor) => (
                             <TableComponent.BodyRow>
                                 <TableComponent.BodyColumn >{doctor.name}</TableComponent.BodyColumn>
-                                <TableComponent.BodyColumn >{doctor.type}</TableComponent.BodyColumn>
+                                <TableComponent.BodyColumn ><div className="capitalize">{doctor.type}</div></TableComponent.BodyColumn>
                                 <TableComponent.BodyColumn >
                                     <Button onClick={() => handleDialogOpen(doctor)} className={classes.buttonSubmit} variant="contained" color="primary">
                                             <DeleteIcon/>
@@ -152,4 +154,22 @@ export default function EditDoctor() {
             <DeleteDialog handleClose={handleDeleteClose} deleteDoctor={deleteDoctor} open={deleteDialog} doctor={selectedDoctor}/>
         </>
     )
+}
+
+
+function getOneData(db, order, id) {
+    let selectedId = "";
+    let data = "";
+    const userRef = firebase.database().ref(db);
+    var userQuery = userRef.orderByChild(order).equalTo(id);
+    userQuery.once("value", function (snapshot) {
+        if (snapshot.val()) { selectedId = Object.keys(snapshot.val()); }
+        snapshot.forEach(function (child) {
+            data = child.val()
+            console.log(child.val())
+        });
+    });
+    return {
+        selectedId, data
+    }
 }

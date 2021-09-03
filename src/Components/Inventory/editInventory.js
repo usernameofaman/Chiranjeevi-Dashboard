@@ -8,6 +8,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import EditDialog from './editDialog'
 import DeleteDialog from './deleteDialog'
+import Toast from '../Common/snackbar'
+
 
 const useStyles = makeStyles((theme) => ({
     buttonSubmit: {
@@ -34,6 +36,7 @@ const Container = styled.div`
 
 const TableContainer = styled.div`
     padding-left: 40px;
+    max-width:1200px;
 `
 const Form = styled.div`
     width: 90%;
@@ -55,6 +58,11 @@ export default function EditInventory() {
     const classes = useStyles();
     const [ inventorys, setInventorys] = React.useState([]);
     useEffect(() => {
+        getInventoryList()
+
+    }, []);
+
+    const getInventoryList = async () => {
         const  inventoryRef = firebase.database().ref('Inventory');
          inventoryRef.on('value', (snap) => {
             const  inventoryData = snap.val();
@@ -65,13 +73,16 @@ export default function EditInventory() {
             setInventorys( inventoryList)
             console.log( inventoryList)
         });
-
-    }, []);
-
+    }
+    const [selectedInventoryId , setSelectedInventoryId] = React.useState("");
     // setDialog Open/Close
     const [openDialog, setOpenDialog] = React.useState(false);
-    const handleDialogOpen = ( inventory) => {
-        setSelectedInventory( inventory)
+    const handleDialogOpen = async( inventory) => {
+        const response = await getOneData("Inventory","name",inventory.name)
+        setSelectedInventory(response.data)
+        setSelectedInventoryId(response.selectedId)
+        setOpenDialog(true);
+        // setSelectedInventory( inventory)
         setOpenDialog(true);
     };
     const handleDialogClose = () => {
@@ -86,11 +97,33 @@ export default function EditInventory() {
         setDeleteDialog(false);
     };
 
-    // Delete Logic Starts Here
     const [selectedInventory , setSelectedInventory] = React.useState("");
     const editInventoryInput = (e) => {
         setSelectedInventory({ ...selectedInventory, [e.target.name]: e.target.value })
         console.log(selectedInventory)
+    }
+
+    //Update Logic
+    const updateInventoryDetails = () => {
+        const userRef = firebase.database().ref("Inventory").child(selectedInventoryId[0]);
+        userRef.update(selectedInventory).then(() => {
+            Toast.apiSuccessToast("Inventory details updated")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
+        getInventoryList()
+        handleDialogClose()
+    }
+    // Delete Logic Starts Here
+    const deleteInventory = () => {
+        const userRef = firebase.database().ref("Inventory").child(selectedInventoryId[0]);
+        userRef.remove().then(() => {
+            Toast.apiSuccessToast("Inventory Deleted")
+        }).catch(() => {
+            Toast.apiFailureToast("Server Error")
+        })
+        getInventoryList()
+        handleDeleteClose()
     }
 
     return (
@@ -101,6 +134,8 @@ export default function EditInventory() {
                     <TableComponent.TableHead style={{ background: "#0C6361" }}>
                         <TableComponent.HeadColumn>Name</TableComponent.HeadColumn>
                         <TableComponent.HeadColumn>Amount</TableComponent.HeadColumn>
+                        <TableComponent.HeadColumn>Unit</TableComponent.HeadColumn>
+                        <TableComponent.HeadColumn>Type</TableComponent.HeadColumn>
                         <TableComponent.HeadColumn>Options</TableComponent.HeadColumn>
                     </TableComponent.TableHead>
                     <TableComponent.TableBody>
@@ -108,6 +143,8 @@ export default function EditInventory() {
                             <TableComponent.BodyRow>
                                 <TableComponent.BodyColumn >{ inventory.name}</TableComponent.BodyColumn>
                                 <TableComponent.BodyColumn >{ inventory.amount}</TableComponent.BodyColumn>
+                                <TableComponent.BodyColumn >{ inventory.unit}</TableComponent.BodyColumn>
+                                <TableComponent.BodyColumn >{ inventory.type==="LAB" ? "Lab" : "Hospital" }</TableComponent.BodyColumn>
                                 <TableComponent.BodyColumn >
                                     <Button onClick={() => handleDialogOpen( inventory)} className={classes.buttonSubmit} variant="contained" color="primary">
                                             <DeleteIcon/>
@@ -124,8 +161,24 @@ export default function EditInventory() {
         </Container>
 
         {/* Dialog Boxes Render */}
-            <EditDialog handleClose={handleDialogClose} handleInput={editInventoryInput} open={openDialog}  inventory={selectedInventory}/>
-            <DeleteDialog handleClose={handleDeleteClose} open={deleteDialog}  inventory={selectedInventory}/>
+            <EditDialog handleClose={handleDialogClose} handleInput={editInventoryInput} open={openDialog}  inventory={selectedInventory} updateInventory = {updateInventoryDetails}/>
+            <DeleteDialog handleClose={handleDeleteClose} open={deleteDialog} deleteInventory={deleteInventory}  inventory={selectedInventory}/>
         </>
     )
+}
+function getOneData(db, order, id) {
+    let selectedId = "";
+    let data = "";
+    const userRef = firebase.database().ref(db);
+    var userQuery = userRef.orderByChild(order).equalTo(id);
+    userQuery.once("value", function (snapshot) {
+        if (snapshot.val()) { selectedId = Object.keys(snapshot.val()); }
+        snapshot.forEach(function (child) {
+            data = child.val()
+            console.log(child.val())
+        });
+    });
+    return {
+        selectedId, data
+    }
 }

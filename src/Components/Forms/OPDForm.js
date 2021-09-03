@@ -8,6 +8,8 @@ import 'date-fns';
 import moment from 'moment';
 import { useEffect } from 'react';
 import Toast from '../Common/snackbar'
+import Typography from '@material-ui/core/Typography';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +52,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
+const Container = styled.div`
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    // padding: 30px 30px 30px 30px;
+    display: flex;
+    flex-direction: column;
+`
 
 const OneField = styled.div`
     padding:10px;
@@ -84,15 +93,12 @@ const Select = styled.select`
 `
 
 export default function NewPatient(props) {
-    const [date, setDate] = React.useState("")
+    const [tab, setTab] = React.useState(0)
     const [consultDoctors , setDoctors ] = React.useState([])
+    const [patient, setPatient] = React.useState({ type: "OPD" ,amount:0, date:moment(Date.now()).format("YYYY-MM-DDTHH:mm")})
     useEffect(() => {
-        if (date === "") {
-            let date = Date.now();
-            setDate(moment(date).format("YYYY-MM-DDTHH:mm"))
-        }
         getDataForList();
-    })
+    },[])
 
     const getDataForList = () => {
         const userRef = firebase.database().ref("Doctors");
@@ -108,8 +114,11 @@ export default function NewPatient(props) {
     }
 
     const classes = useStyles();
-    const [patient, setPatient] = React.useState({ type: "OPD" })
     const handleinput = (e) => {
+        console.log(e.target.value.length)
+        if(e.target.name==="age" && e.target.value.length>3){
+        return;
+        }else
         setPatient({ ...patient, [e.target.name]: e.target.value })
         console.log(patient)
     }
@@ -117,13 +126,15 @@ export default function NewPatient(props) {
 
     const saveData = () => {
         console.log(patient)
+        if(!patient.name) Toast.apiFailureToast("Enter Valid Patient Name")
+        if(!patient.age) Toast.apiFailureToast("Enter Valid Patient Name")
         const patientRef = firebase.database().ref("ActivePatients");
         const patientData = {
             name: patient.name,
             age: patient.age,
             doctor: patient.consultant,
             amount: patient.amount,
-            date: date,
+            date: patient.date,
             type: patient.type,
         };
         console.log(patientData)
@@ -132,17 +143,18 @@ export default function NewPatient(props) {
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         });
+        setTab(1)
     }
 
 
     return (
         <>
 
-
+{tab === 0 &&
             <Form>
                 <OneField>
                     <TextField onChange={handleinput} className={classes.input} name="name" size="small" label="Patient Name" variant="outlined" />
-                    <TextField onChange={handleinput} className={classes.input} name="age" size="small" label="Age" variant="outlined" />
+                    <TextField onChange={handleinput} className={classes.input} name="age" type="number" size="small" label="Age" variant="outlined" value={patient.age}/>
                     <Select onChange={handleinput} className={classes.input} name="consultant" >
                         <option selected disabled>Consultant</option>
                         {consultDoctors.map((doctor) => (
@@ -156,7 +168,8 @@ export default function NewPatient(props) {
                         id="datetime-local"
                         label="Date of admit"
                         type="datetime-local"
-                        value={date}
+                        name="date"
+                        value={patient.date}
                         className={classes.input}
                         onChange={handleinput}
                         InputLabelProps={{
@@ -168,7 +181,17 @@ export default function NewPatient(props) {
                 <OneField>
                     <Button onClick={saveData} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>
                 </OneField>
-            </Form>
+            </Form>}
+            {tab === 1 &&
+                <Container>
+                    <Typography style={{ margin: "30px 0px 30px 0px", fontFamily: "'Source Sans Pro', sans-serif", color: "black", fontWeight: "600", fontSize: "25px", justifyContent: "center", display: "flex", alignItems: "center" }}>
+                        Patient has been added successfully
+                    </Typography>
+                    <OneField>
+                        <Button onClick={() => setTab(0)} className={classes.buttonSubmit} variant="contained" color="primary">Add More</Button>
+                    </OneField>
+                </Container>
+            }
         </>
     )
 }

@@ -32,3 +32,7 @@ html {
   --color-primary: rebeccapurple;
   --gutter: 16px;
 }
+
+.capitalize{
+    text-transform: capitalize;
+}

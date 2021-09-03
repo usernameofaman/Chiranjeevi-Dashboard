@@ -12,27 +12,32 @@ import styled from 'styled-components';
 const OneField = styled.div`
     padding:10px;
     width:100%;
+    min-width: 500px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     flex-wrap: wrap;
 `
+// 
 const Select = styled.select`
-    width: 180px;
-    margin-right:30px;
+    width: 100%;
+    height:40px;
     border: 1px solid #b7b2b2;
     border-radius: 5px;
     padding-left: 7px;
+    margin-top: 10px;
 `
 
 const useStyles = makeStyles(() => ({
   input: {
-      marginTop: 10,
+    marginTop: 10,
+    width:"100%"
   }
 }));
 
 export default function FormDialog(props) {
   const classes = useStyles();
-  const { handleClose, open, inventory ,handleInput } = props;
+  const { handleClose, open, inventory, handleInput } = props;
 
   return (
     <div>
@@ -40,12 +45,16 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">Edit Inventory</DialogTitle>
         <DialogContent>
           <OneField >
-            <TextField onChange={handleInput} className={classes.input} value={inventory.name}  name="name" size="small" label="Name" variant="outlined" />
-            <Select onChange={handleInput} className={classes.input} value={inventory.type}  name="type" size="small" label="Category" type="text" variant="outlined" >
-              <option value="OPD">OPD</option>
-              <option value="IPD">IPD</option>
-              <option value="consultant">Consultant</option>
-              <option value="referee">Referee</option>
+            <TextField onChange={handleInput} className={classes.input} value={inventory.name} name="name" size="small" label="Name" variant="outlined" />
+            <div style={{ position: "relative", width: "100%" }}>
+              <p style={{ position: "absolute", right: "10px", top: "3px" }}>Rs</p>
+              <TextField onChange={handleInput} className={classes.input} value={inventory.amount} name="amount" size="small" label="Amount" type="number" variant="outlined" />
+            </div>
+            <TextField onChange={handleInput} className={classes.input} value={inventory.unit} name="unit" size="small" label="Unit" type="text" variant="outlined" />
+            <Select name="type" value={inventory.type} onChange={handleInput} >
+              <option selected disabled value="">Select</option>
+              <option value="LAB">Lab Inventory</option>
+              <option value="HOSPITAL">Hospital Inventory</option>
             </Select>
           </OneField>
         </DialogContent>
@@ -53,7 +62,7 @@ export default function FormDialog(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={props.updateInventory} color="primary">
             Save
           </Button>
         </DialogActions>

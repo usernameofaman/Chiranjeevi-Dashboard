@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     buttonSubmit: {
-        width:"100%",
+        width: "100%",
         background: "#0C6361",
         '&:hover': {
             backgroundColor: '#238887',
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     input: {
-        width:"100%",
+        width: "100%",
         margin: "10px 0px 10px 0px",
     },
     MainButton: {
@@ -106,13 +106,15 @@ export default function Doctors() {
     });
     const handleInput = (e) => {
         setInventory({ ...inventory, [e.target.name]: e.target.value })
-        // console.log(inventory)
+        console.log(inventory)
     }
     const saveData = () => {
         const inventoryRef = firebase.database().ref("Inventory");
         const inventoryData = {
             name: inventory.name,
             amount: parseInt(inventory.amount),
+            type:inventory.type,
+            unit: inventory.unit
         };
         inventoryRef.push(inventoryData).then(() => {
             Toast.apiSuccessToast("Item Added")
@@ -145,9 +147,19 @@ export default function Doctors() {
                             Add Inventory
                         </Typography>
                         <OneField >
-                            <TextField onChange={handleInput} className={classes.input}  name="name" size="small" label="Name" variant="outlined" />
-                            <TextField onChange={handleInput} className={classes.input}  name="amount" size="small" label="Amount" type="number" variant="outlined" />
-                            
+                            <TextField onChange={handleInput} className={classes.input} name="name" size="small" label="Name" variant="outlined" />
+                            <div style={{ position: "relative", width:"100%" }}>
+                                <p style={{position:"absolute", right:"10px", bottom:"5px"}}>Rs</p>
+                                <TextField onChange={handleInput} className={classes.input} name="amount" size="small" label="Amount" type="number" variant="outlined" />
+
+                            </div>
+                            <TextField onChange={handleInput} className={classes.input} name="unit" size="small" label="Unit" type="text" variant="outlined" />
+                            <Select name="type" onChange={handleInput} >
+                                <option selected disabled value="">Select</option>
+                                <option value="LAB">Lab Inventory</option>
+                                <option value="HOSPITAL">Hospital Inventory</option>
+                            </Select>
+
                         </OneField>
                         <OneField>
                             <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Save</Button>

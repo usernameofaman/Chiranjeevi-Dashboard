@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import Receipt from '../Reciepts/printModule'
 import Discharge from '../Discharge/Discharge'
-import { Streetview } from '@material-ui/icons';
 
 const TableContainer = styled.div`
     padding-left: 40px;

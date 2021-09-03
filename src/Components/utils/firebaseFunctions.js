@@ -135,7 +135,7 @@ async function increaseSerial() {
         serialNo: serialNo + 1,
     }
     await serialRef.update(newSerial).then(() => {
-        Toast.apiSuccessToast("SerialNo Updated")
+        console.log("Sr. No Updated")
     }).catch(() => {
         Toast.apiFailureToast("Server Error")
     })

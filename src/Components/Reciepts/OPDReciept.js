@@ -124,6 +124,7 @@ const ButtonContainer = styled.div`
 function OPDReciept(props) {
     console.log(props)
     const classes = useStyles();
+    const [locked, setLocked] = React.useState(false)
     useEffect(() => {
         if (receipt.date === "") {
             let date = Date.now();
@@ -160,7 +161,7 @@ function OPDReciept(props) {
     }
 
     const [receipt, setReceipt] = React.useState({
-        serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: ""
+        serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: moment(Date.now()).format("YYYY-MM-DDTHH:mm")
     })
     const handleInputData = (e) => {
         setReceipt({ ...receipt, [e.target.name]: e.target.value });
@@ -186,6 +187,8 @@ function OPDReciept(props) {
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
+        FirebaseFunction.increaseSerial()
+        setLocked(true)
     }
 
     const [printMode, setPrintMode] = React.useState();
@@ -249,14 +252,14 @@ function OPDReciept(props) {
                         <HeaderInput>
                             <div style={{ paddingBottom: "6px" }}><b>Amount</b></div>
                             <Value style={{ flexGrow: "0" }}>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" />
+                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" disabled={locked ? true : false}/>
                             </Value>
                         </HeaderInput>
 
                     </Form>
                 </Paper>
                 <ButtonContainer>
-                    <Button onClick={SaveReceipt} className={classes.button}> Save </Button>
+                    <Button onClick={SaveReceipt} className={classes.button} disabled={locked ? true : false}> Save </Button>
                 </ButtonContainer>
             </Container>
 
