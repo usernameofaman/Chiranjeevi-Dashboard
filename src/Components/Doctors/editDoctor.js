@@ -79,7 +79,7 @@ export default function EditDoctor() {
     };
     const [deleteDialog, setDeleteDialog] = React.useState(false);
     const handleDeleteOpen = async (doctor) => {
-        console.log(doctor.name)
+        //console.log(doctor.name)
         const response = await getOneData("Doctors","name",doctor.name)
         setSelectedDoctorId(response.selectedId)
         setSelectedDoctor(response.data)
@@ -108,7 +108,7 @@ export default function EditDoctor() {
     }
     // Delete Logic Starts Here
     const deleteDoctor = () => {
-        console.log("HERE")
+        //console.log("HERE")
         const userRef = firebase.database().ref("Doctors").child(selectedDoctorId[0]);
         userRef.remove().then(() => {
             Toast.apiSuccessToast("Doctor Deleted")
@@ -166,7 +166,7 @@ function getOneData(db, order, id) {
         if (snapshot.val()) { selectedId = Object.keys(snapshot.val()); }
         snapshot.forEach(function (child) {
             data = child.val()
-            console.log(child.val())
+            //console.log(child.val())
         });
     });
     return {

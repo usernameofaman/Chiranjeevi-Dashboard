@@ -23,7 +23,7 @@ class ComponentToPrint extends React.Component {
         super(props);
     }
 render(){
-    console.log(this.props.mode)
+    //console.log(this.props.mode)
     return (
         <>
         {this.props.mode==="IPD" ?
@@ -42,7 +42,7 @@ class Example extends React.Component {
     }
 
     render() {
-        console.log(this.props.patient)
+        //console.log(this.props.patient)
         return (
             <FlexContainer>
                 <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient}/>

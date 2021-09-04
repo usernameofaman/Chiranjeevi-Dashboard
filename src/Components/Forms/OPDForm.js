@@ -115,17 +115,17 @@ export default function NewPatient(props) {
 
     const classes = useStyles();
     const handleinput = (e) => {
-        console.log(e.target.value.length)
+        //console.log(e.target.value.length)
         if(e.target.name==="age" && e.target.value.length>3){
         return;
         }else
         setPatient({ ...patient, [e.target.name]: e.target.value })
-        console.log(patient)
+        //console.log(patient)
     }
 
 
     const saveData = () => {
-        console.log(patient)
+        //console.log(patient)
         if(!patient.name) Toast.apiFailureToast("Enter Valid Patient Name")
         if(!patient.age) Toast.apiFailureToast("Enter Valid Patient Name")
         const patientRef = firebase.database().ref("ActivePatients");
@@ -137,7 +137,7 @@ export default function NewPatient(props) {
             date: patient.date,
             type: patient.type,
         };
-        console.log(patientData)
+        //console.log(patientData)
         patientRef.push(patientData).then(() => {
             Toast.apiSuccessToast("Patient details Added")
         }).catch(() => {

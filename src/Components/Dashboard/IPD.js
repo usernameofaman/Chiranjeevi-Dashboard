@@ -47,6 +47,19 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: '#238887',
         },
+    },
+    MainButtonDischarge: {
+        width: 220,
+        height: 100,
+        margin: "30px 0px 10px 0px",
+        background: "#0C6361",
+        fontFamily: "'Source Sans Pro', sans-serif",
+        fontWeight: "bolder",
+        fontSize: "18px",
+        color: "white",
+        '&:hover': {
+            backgroundColor: '#f44336',
+        },
     }
 }));
 
@@ -74,15 +87,15 @@ export default function IPD() {
                 <Button onClick={() => changeTabs(1)} className={classes.MainButton} variant="contained" >
                     View Patient Details
                 </Button>
-                <Button onClick={() => changeTabs(2)} className={classes.MainButton} variant="contained" >
-                    Discharge
-                </Button>
 
                 <Button onClick={() => changeTabs(3)} className={classes.MainButton} variant="contained" >
                     New Reciept
                 </Button>
                 <Button onClick={() => changeTabs(4)} className={classes.MainButton} variant="contained" >
                     View Reciept
+                </Button>
+                <Button onClick={() => changeTabs(2)} className={classes.MainButtonDischarge} variant="contained" >
+                    Discharge
                 </Button>
             </ButtonContainer>
 

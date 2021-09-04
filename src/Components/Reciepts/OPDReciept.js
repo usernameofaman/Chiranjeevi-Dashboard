@@ -122,7 +122,7 @@ const ButtonContainer = styled.div`
 `
 
 function OPDReciept(props) {
-    console.log(props)
+    //console.log(props)
     const classes = useStyles();
     const [locked, setLocked] = React.useState(false)
     useEffect(() => {
@@ -139,9 +139,9 @@ function OPDReciept(props) {
         getSerialNo();
     }, []);
 
-    const getSerialNo = () => {
-        FirebaseFunction.getData("Utilities").then((res) => {
-            console.log(res)
+    const getSerialNo =async () => {
+        await FirebaseFunction.getData("Utilities").then((res) => {
+            //console.log(res)
             setReceipt({ ...receipt, serialNo: res[0].serialNo + 1 })
         });
     }
@@ -151,10 +151,10 @@ function OPDReciept(props) {
     const [selectedId, setSelectedId] = React.useState();
     const fetchData = () => {
         const res = FirebaseFunction.getOneData("Patients", "fileNo", fileNo);
-        console.log(res)
+        //console.log(res)
         if (res.selectedId === "") Toast.apiFailureToast("Does not exist")
         else {
-            console.log(res.data, res.selectedId, "HERE")
+            //console.log(res.data, res.selectedId, "HERE")
             setPatient(res.data)
             setSelectedId(res.selectedId)
         }
@@ -180,7 +180,7 @@ function OPDReciept(props) {
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         });
-        console.log("Remove")
+        //console.log("Remove")
         const userRef = firebase.database().ref("ActivePatients").child(patient.id);
         userRef.remove().then(() => {
             Toast.apiSuccessToast("Patient details updated")
@@ -232,22 +232,9 @@ function OPDReciept(props) {
                             </Value>
                         </HeaderInput>
                         <HeaderInput style={{ fontSize: "15px" }}>
-
                             <div style={{ paddingBottom: "6px" }}>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG Other </div>
-                            <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="other" type="text" size="small" label="Amount" />
-                            </Value>
                         </HeaderInput>
-                        <HeaderInput>
-                            <div style={{ paddingBottom: "6px" }}>Cheque No.</div>
-                            <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeNo" type="text" size="small" label="Check No." />
-                            </Value>
-
-                            <div style={{ paddingBottom: "6px" }}>Dated</div>
-                            <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} InputLabelProps={{ shrink: true }} />
-                            </Value>
+                        <HeaderInput style={{height:"20px"}}>
                         </HeaderInput>
                         <HeaderInput>
                             <div style={{ paddingBottom: "6px" }}><b>Amount</b></div>

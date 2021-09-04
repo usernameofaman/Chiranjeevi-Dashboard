@@ -9,6 +9,7 @@ import Toast from '../Common/snackbar'
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase';
 import Loader from '../Common/loader'
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 const useStyles = makeStyles(() => ({
@@ -63,6 +64,17 @@ const Section = styled.div`
 const LogoAndHeading = styled.div`
     display: flex;
     width: 100%;
+`
+const ViewBox = styled.div`
+    display:flex;
+    width:100%;
+    justify-content: center;
+`
+const Navigator = styled.div`
+    display:flex;
+    flex-direction: column;
+    min-width: 200px;
+    padding: 20px;
 `
 
 const LogoHolder = styled.div`
@@ -127,7 +139,9 @@ const ButtonContainer = styled.div`
 
 
 
-function IPDReciept() {
+function IPDReciept(props) {
+    const [locked, setLocked] = React.useState(false)
+    const [chequePay, setChequePay] = React.useState(false)
     const classes = useStyles();
     useEffect(() => {
         if (receipt.date === "") {
@@ -137,12 +151,16 @@ function IPDReciept() {
                 date: moment(date).format("YYYY-MM-DDTHH:mm")
             })
         }
+        if (props.patient) {
+            setPatient(props.patient)
+        }
         getSerialNo();
-    },[])
+    }, [])
 
-    const getSerialNo = () => {
-        FirebaseFunction.getData("Utilities").then((res) => {
-            setReceipt({...receipt,serialNo:res[0].serialNo+1})
+
+    const getSerialNo = async () => {
+        await FirebaseFunction.getData("Utilities").then((res) => {
+            setReceipt({ ...receipt, serialNo: res[0].serialNo + 1 })
         });
     }
 
@@ -158,53 +176,54 @@ function IPDReciept() {
         }
     }
     const handleFileNo = (e) => {
-        if(e.target.value==="") setFileNo("")
-        else  setFileNo(e.target.value)
+        if (e.target.value === "") setFileNo("")
+        else setFileNo(e.target.value)
     }
 
     const [receipt, setReceipt] = React.useState({
-        serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: "",type:"IPD"
+        serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: moment(Date.now()).format("YYYY-MM-DDTHH:mm"), type: "IPD"
     })
-    const handleInputData = (e) => {        
+    const handleInputData = (e) => {
         if (e.target.name === "amount" && !isNaN(e.target.value)) {
             let response = FirebaseFunction.toTitleCase(FirebaseFunction.inWords(e.target.value));
             let parsedAmount = parseInt(e.target.value)
-            setReceipt({ ...receipt,[e.target.name]: parsedAmount, amountInWords: response });
-        }else{
+            setReceipt({ ...receipt, [e.target.name]: parsedAmount, amountInWords: response });
+        } else {
             setReceipt({ ...receipt, [e.target.name]: e.target.value });
         }
     }
 
     const SaveReceipt = () => {
-        if(!patient.name){
+        ////console.log(patient)
+        if (!patient.name) {
             Toast.apiFailureToast("Please Add Patient")
             return
         }
         let newReciept = [];
-        if(patient.receipt){
+        if (patient.receipt) {
             newReciept = patient.receipt;
             newReciept.push(receipt);
-        }else{
+        } else {
             newReciept.push(receipt)
         }
         let updatedAdvance = patient.advance + receipt.amount;
         let patientData = {
             ...patient,
-            receipt:newReciept,
-            advance:updatedAdvance,
+            receipt: newReciept,
+            advance: updatedAdvance,
         }
-        console.log(patientData,selectedId[0])
-        const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
+        const userRef = firebase.database().ref("ActivePatients").child(patient.id);
         userRef.update(patientData).then(() => {
             Toast.apiSuccessToast("Patient details updated")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
-        FirebaseFunction.increaseSerial()
+        FirebaseFunction.increaseSerial();
+        setLocked(true);
     }
 
-    const [printMode , setPrintMode ] = React.useState();
-
+    const [printMode, setPrintMode] = React.useState();
+    console.log(chequePay)
     return (
         <>
             <Container>
@@ -212,70 +231,86 @@ function IPDReciept() {
                     <TextField onChange={handleFileNo} value={fileNo} className={classes.fileInput} type="number" />
                     <Button onClick={fetchData} className={classes.button}> Fetch </Button>
                 </ButtonContainer>
-                <Paper>
-                    <Form>
-                        <Section >
-                            <LogoAndHeading>
-                                <LogoHolder>
-                                    <Logo src="/Images/Discharge.png" />
-                                </LogoHolder>
-                                <TextHolder>
-                                    <Typography variant="h3">
-                                        <b>CHIRANJEEVI HOSPITAL</b>
-                                    </Typography>
-                                    <Typography variant="h6">
-                                        <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
-                                        <b><TelePhone src="/Images/telephone.png" /> : 250544, 251280</b>
-                                    </Typography>
-                                </TextHolder>
-                            </LogoAndHeading>
-                        </Section>
-                        <HorizontalLine />
-                        <HeaderInput style={{ justifyContent: "space-between" }}>
-                            <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" value={receipt.serialNo} InputLabelProps={{ shrink: true }} disabled />
-                            <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={receipt.date} variant="outlined" />
-                        </HeaderInput>
-                        <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}>Received with thanks from {patient.sex === "M" ? "Mr" : "Mrs"} </div>
-                            <Value>
-                                <TextField className={classes.inputReceipt} name="name" type="text" size="small" label={!printMode &&"Name"} value={patient.name} InputLabelProps={{ shrink: patient.name ? true : false }} disabled />
-                            </Value>
-                        </HeaderInput>
-                        <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}>The sum of Rupees </div>
-                            <Value>
-                                <TextField className={classes.inputReceipt} name="amountInWords" type="text" size="small" label="Amount In Words" value={receipt.amountInWords} InputLabelProps={{ shrink: receipt.amountInWords === "" ? false : true }} disabled />
-                            </Value>
-                        </HeaderInput>
-                        <HeaderInput style={{ fontSize: "15px" }}>
+                <ViewBox>
+                    <Navigator>
+                        <div style={{display:"flex"}}>
+                            <p>Payment by cheque ?</p>
+                            <Checkbox
+                                onChange={() => setChequePay(!chequePay)}
+                                value={chequePay}
+                                color="primary"
+                                inputProps={{ 'aria-label': 'secondary checkbox' }}
+                            />
+                        </div>
 
-                            <div style={{paddingBottom:"6px"}}>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG Other </div>
-                            <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="other" type="text" size="small" label="Amount" />
-                            </Value>
-                        </HeaderInput>
-                        <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}>Cheque No.</div>
-                            <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeNo" type="text" size="small" label="Check No." />
-                            </Value>
+                    </Navigator>
+                    <Paper>
+                        <Form>
+                            <Section >
+                                <LogoAndHeading>
+                                    <LogoHolder>
+                                        <Logo src="/Images/Discharge.png" />
+                                    </LogoHolder>
+                                    <TextHolder>
+                                        <Typography variant="h3">
+                                            <b>CHIRANJEEVI HOSPITAL</b>
+                                        </Typography>
+                                        <Typography variant="h6">
+                                            <b>Virat Sagar Parisar,Oppo. SATI College, NH-86,Vidisha (M.P.)</b><br />
+                                            <b><TelePhone src="/Images/telephone.png" /> : 250544, 251280</b>
+                                        </Typography>
+                                    </TextHolder>
+                                </LogoAndHeading>
+                            </Section>
+                            <HorizontalLine />
+                            <HeaderInput style={{ justifyContent: "space-between" }}>
+                                <TextField onChange={handleInputData} name="serialNo" type="text" size="small" label="No." variant="outlined" value={receipt.serialNo} InputLabelProps={{ shrink: true }} disabled />
+                                <TextField onChange={handleInputData} style={{ marginRight: "4%" }} name="date" type="datetime-local" InputLabelProps={{ shrink: true }} size="small" label="Date" value={moment(Date.now()).format("YYYY-MM-DDTHH:mm")} variant="outlined" />
+                            </HeaderInput>
+                            <HeaderInput>
+                                <div style={{ paddingBottom: "6px" }}>Received with thanks from {patient.sex === "M" ? "Mr" : "Mrs"} </div>
+                                <Value>
+                                    <TextField className={classes.inputReceipt} name="name" type="text" size="small" label={!printMode && "Name"} value={patient.name} InputLabelProps={{ shrink: patient.name ? true : false }} disabled />
+                                </Value>
+                            </HeaderInput>
+                            <HeaderInput>
+                                <div style={{ paddingBottom: "6px" }}>The sum of Rupees </div>
+                                <Value>
+                                    <TextField className={classes.inputReceipt} name="amountInWords" type="text" size="small" label="Amount In Words" value={receipt.amountInWords} InputLabelProps={{ shrink: receipt.amountInWords === "" ? false : true }} disabled />
+                                </Value>
+                            </HeaderInput>
+                            <HeaderInput style={{ fontSize: "15px" }}>
 
-                            <div style={{paddingBottom:"6px"}}>Dated</div>
-                            <Value>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} InputLabelProps={{ shrink: true }}/>
-                            </Value>
-                        </HeaderInput>
-                        <HeaderInput>
-                            <div style={{paddingBottom:"6px"}}><b>Amount</b></div>
-                            <Value style={{ flexGrow: "0" }}>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" />
-                            </Value>
-                        </HeaderInput>
+                                <div style={{ paddingBottom: "6px" }}>For Hospitalization / Pathalogical Investigation / OPD / X-Ray / ECG and Other </div>
+                                <Value>
+                                    {/* <TextField onChange={handleInputData} className={classes.inputReceipt} name="other" type="text" size="small" label="Amount" /> */}
+                                </Value>
+                            </HeaderInput>
+                            {!chequePay && <div style={{height:"52px"}}></div>}
+                            {chequePay && 
+                            <HeaderInput>
+                                <div style={{ paddingBottom: "6px" }}>Cheque No.</div>
+                                <Value>
+                                    <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeNo" type="text" size="small" label="Check No." />
+                                </Value>
 
-                    </Form>
-                </Paper>
+                                <div style={{ paddingBottom: "6px" }}>Dated</div>
+                                <Value>
+                                    <TextField onChange={handleInputData} className={classes.inputReceipt} name="chequeDate" type="datetime-local" size="small" label="Date" value={receipt.chequeDate} InputLabelProps={{ shrink: true }} />
+                                </Value>
+                            </HeaderInput>}
+                            <HeaderInput>
+                                <div style={{ paddingBottom: "6px" }}><b>Amount</b></div>
+                                <Value style={{ flexGrow: "0" }}>
+                                    <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" disabled={locked ? true : false} />
+                                </Value>
+                            </HeaderInput>
+
+                        </Form>
+                    </Paper>
+                </ViewBox>
                 <ButtonContainer>
-                    <Button onClick={SaveReceipt} className={classes.button}> Save </Button>
+                    <Button onClick={SaveReceipt} className={classes.button} disabled={locked ? true : false}> Save </Button>
                 </ButtonContainer>
             </Container>
 

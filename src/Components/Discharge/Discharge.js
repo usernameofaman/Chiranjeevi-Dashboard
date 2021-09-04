@@ -232,7 +232,7 @@ export default function Discharge(props) {
 
     const [items, setItems] = React.useState([{ name: "", amount: 0 }])
     const changeItemsLength = (e) => {
-        console.log(e)
+        //console.log(e)
         if (e === "add")
             setItems([...items, { name: "", amount: 0 }])
         if (e === "remove") {
@@ -255,7 +255,7 @@ export default function Discharge(props) {
         newState[index].amount = amountValue;
         setItems(newState);
         calculateTotal()
-        console.log(items)
+        //console.log(items)
     }
 
     //Calculate Total
@@ -332,7 +332,7 @@ export default function Discharge(props) {
             },
             inventory: items,
         }
-        console.log(patientData)
+        //console.log(patientData)
         const patientRef = firebase.database().ref("PatientsIPD");
         patientRef.push(patientData).then(() => {
         }).catch(() => {

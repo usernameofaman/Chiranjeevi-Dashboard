@@ -167,7 +167,7 @@ function ViewIPDReceipt() {
     const [patient, setPatient] = React.useState({ receipt: [] });
     const fetchData = () => {
         const res = FirebaseFunction.getOneData("ActivePatients", "fileNo", fileNo);
-        console.log(res)
+        //console.log(res)
         if (res.selectedId === "") Toast.apiFailureToast("Does not exist")
         else {
             if (res.data.receipt){
@@ -181,7 +181,7 @@ function ViewIPDReceipt() {
     }
     const [slip , setSlip] = React.useState({})
     const setReceipt = (changeSlip) => {
-        console.log(changeSlip)
+        //console.log(changeSlip)
         setSlip(changeSlip)
     }
 

@@ -66,11 +66,7 @@ export default function Dashboard() {
                             Patient List
                         </Button>
                     </NavLink>
-                    <NavLink className="navlinkstyle" to="/Lab">
-                        <Button className={classes.MainButton} variant="contained" >
-                            Lab
-                        </Button>
-                    </NavLink>
+                
                     <NavLink className="navlinkstyle" to="/Doctors">
                         <Button className={classes.MainButton} variant="contained" >
                             Doctors

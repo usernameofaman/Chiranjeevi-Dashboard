@@ -20,7 +20,7 @@ function getOneData(db, order, id) {
         if (snapshot.val()) { selectedId = Object.keys(snapshot.val()); }
         snapshot.forEach(function (child) {
             data = child.val()
-            console.log(child.val())
+            //console.log(child.val())
         });
     });
     return {
@@ -135,7 +135,7 @@ async function increaseSerial() {
         serialNo: serialNo + 1,
     }
     await serialRef.update(newSerial).then(() => {
-        console.log("Sr. No Updated")
+        //console.log("Sr. No Updated")
     }).catch(() => {
         Toast.apiFailureToast("Server Error")
     })
@@ -155,7 +155,7 @@ async function increaseFileNo() {
         fileNo: serialNo + 1,
     }
     await serialRef.update(newSerial).then(() => {
-        Toast.apiSuccessToast("SerialNo Updated")
+        
     }).catch(() => {
         Toast.apiFailureToast("Server Error")
     })

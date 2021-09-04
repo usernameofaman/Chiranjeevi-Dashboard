@@ -34,7 +34,7 @@ export default function PatientList(props) {
       }
       await setPatients(userArrayIPD)
       await setPatientsOPD(userArrayOPD)
-      console.log(userArrayIPD)
+      //console.log(userArrayIPD)
     })
   }
 
@@ -46,6 +46,10 @@ export default function PatientList(props) {
   const printReceipt = (patient) => {
     setSelectedPatient(patient);
     setView(1);
+  }
+  const printReceiptIPD = (patient) => {
+    setSelectedPatient(patient);
+    setView(3);
   }
   const dischargePatient = (patient) => {
     setSelectedPatient(patient);
@@ -73,7 +77,7 @@ export default function PatientList(props) {
                     <TableComponent.BodyColumn >{patient.ward}</TableComponent.BodyColumn>
                     <TableComponent.BodyColumn >{patient.advance}</TableComponent.BodyColumn>
                     <TableComponent.BodyColumn >{patient.fileNo}</TableComponent.BodyColumn>
-                    <TableComponent.BodyColumn onClick={() => printReceipt(patient)} ><Button style={{ background: "#0c6361", color: "white" }}>Receipt</Button></TableComponent.BodyColumn>
+                    <TableComponent.BodyColumn onClick={() => printReceiptIPD(patient)} ><Button style={{ background: "#0c6361", color: "white" }}>Receipt</Button></TableComponent.BodyColumn>
                     <TableComponent.BodyColumn onClick={() => dischargePatient(patient)}><Button style={{ background: "#0c6361", color: "white" }}>Discharge</Button></TableComponent.BodyColumn>
                   </TableComponent.BodyRow>
                 ))}
@@ -105,6 +109,8 @@ export default function PatientList(props) {
         <Receipt mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
       {view === 2 &&
         <Discharge mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
+        {view === 3 &&
+        <Receipt mode="IPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
     </>
   )
 }

@@ -106,7 +106,7 @@ export default function Doctors() {
     });
     const handleInput = (e) => {
         setInventory({ ...inventory, [e.target.name]: e.target.value })
-        console.log(inventory)
+        //console.log(inventory)
     }
     const saveData = () => {
         const inventoryRef = firebase.database().ref("Inventory");

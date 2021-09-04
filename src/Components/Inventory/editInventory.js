@@ -71,28 +71,24 @@ export default function EditInventory() {
                  inventoryList.push({ id, ... inventoryData[id] })
             }
             setInventorys( inventoryList)
-            console.log( inventoryList)
+            //console.log( inventoryList)
         });
     }
     const [selectedInventoryId , setSelectedInventoryId] = React.useState("");
     // setDialog Open/Close
     const [openDialog, setOpenDialog] = React.useState(false);
-    const handleDialogOpen = async( inventory) => {
+    const handleDialogOpen = async( inventory,key) => {
         const response = await getOneData("Inventory","name",inventory.name)
         setSelectedInventory(response.data)
         setSelectedInventoryId(response.selectedId)
-        setOpenDialog(true);
-        // setSelectedInventory( inventory)
-        setOpenDialog(true);
+        if(key==="DELETE") setDeleteDialog(true);
+        
+        if(key==="EDIT") setOpenDialog(true);
     };
     const handleDialogClose = () => {
         setOpenDialog(false);
     };
     const [deleteDialog, setDeleteDialog] = React.useState(false);
-    const handleDeleteOpen = ( inventory) => {
-        setSelectedInventory( inventory)
-        setDeleteDialog(true);
-    };
     const handleDeleteClose = () => {
         setDeleteDialog(false);
     };
@@ -100,7 +96,7 @@ export default function EditInventory() {
     const [selectedInventory , setSelectedInventory] = React.useState("");
     const editInventoryInput = (e) => {
         setSelectedInventory({ ...selectedInventory, [e.target.name]: e.target.value })
-        console.log(selectedInventory)
+        //console.log(selectedInventory)
     }
 
     //Update Logic
@@ -146,10 +142,10 @@ export default function EditInventory() {
                                 <TableComponent.BodyColumn >{ inventory.unit}</TableComponent.BodyColumn>
                                 <TableComponent.BodyColumn >{ inventory.type==="LAB" ? "Lab" : "Hospital" }</TableComponent.BodyColumn>
                                 <TableComponent.BodyColumn >
-                                    <Button onClick={() => handleDialogOpen( inventory)} className={classes.buttonSubmit} variant="contained" color="primary">
+                                    <Button onClick={() => handleDialogOpen( inventory,"EDIT")} className={classes.buttonSubmit} variant="contained" color="primary">
                                             <DeleteIcon/>
                                         Edit</Button>
-                                    <Button onClick={() => handleDeleteOpen( inventory)} className={classes.buttonSubmit} variant="contained" color="primary">
+                                    <Button onClick={() => handleDialogOpen( inventory,"DELETE")} className={classes.buttonSubmit} variant="contained" color="primary">
                                             <EditIcon/>
                                         Delete</Button>
                                 </TableComponent.BodyColumn>
@@ -175,7 +171,7 @@ function getOneData(db, order, id) {
         if (snapshot.val()) { selectedId = Object.keys(snapshot.val()); }
         snapshot.forEach(function (child) {
             data = child.val()
-            console.log(child.val())
+            //console.log(child.val())
         });
     });
     return {

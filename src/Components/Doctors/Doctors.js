@@ -105,7 +105,7 @@ export default function Doctors() {
     });
     const handleInput = (e) => {
         setDoctor({ ...doctor, [e.target.name]: e.target.value })
-        console.log(doctor)
+        //console.log(doctor)
     }
     const [showLoader , setLoader ] = React.useState(false)
     const saveData = () => {
@@ -120,7 +120,7 @@ export default function Doctors() {
             setLoader(false)
             setTab(1)
         }).catch(() => {
-            console.log("NONE")
+            //console.log("NONE")
             Toast.apiFailureToast("Server Error")
         });
     }

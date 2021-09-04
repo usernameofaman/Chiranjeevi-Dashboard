@@ -43,7 +43,7 @@ export default function Login() {
   })
   const takingUserInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
-    console.log(user)
+    //console.log(user)
   }
   useEffect(() => {
     getDataForLogin();
@@ -63,7 +63,7 @@ export default function Login() {
   }
 
   const CreateUser = () => {
-    console.log(dbUsers)
+    //console.log(dbUsers)
     if (user.username === dbUsers[0].username && user.password === dbUsers[0].password) {
       history.push("/Dashboard")
     }

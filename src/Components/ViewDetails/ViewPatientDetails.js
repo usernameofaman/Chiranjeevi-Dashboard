@@ -108,7 +108,7 @@ export default function NewPatient(props) {
         });
     }
     const updatePatientDetails = () => {
-        // console.log("HEre")
+        // //console.log("HEre")
         const userRef = firebase.database().ref("ActivePatients").child(selectedId[0]);
         userRef.update(patient).then(() => {
             Toast.apiSuccessToast("Patient details updated")
