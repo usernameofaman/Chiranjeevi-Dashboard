@@ -143,6 +143,11 @@ export default function NewPatient(props) {
         type: "IPD",
     })
     const handleinput = (e) => {
+        console.log(patient)
+        if(e.target.name==="MobileNumber" && e.target.value.length>12)
+        return
+        if(e.target.name=== "Age" && isNaN(e.target.value))
+        return
         setPatient({ ...patient, [e.target.name]: e.target.value })
     }
 
@@ -187,7 +192,7 @@ export default function NewPatient(props) {
                         </Typography>
                         <OneField >
                             <TextField onChange={handleinput} className={classes.input} name="Name" size="small" label="Name" variant="outlined" />
-                            <TextField onChange={handleinput} className={classes.input} name="Age" size="small" label="Age" type="number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="Age" size="small" label="Age" variant="outlined" type='number' value={patient.Age}/>
                             <TextField onChange={handleinput} className={classes.input} name="Address" size="small" label="Address" variant="outlined" />
 
                         </OneField>
@@ -232,7 +237,7 @@ export default function NewPatient(props) {
                             />
                         </OneField>
                         <OneField>
-                            <TextField onChange={handleinput} className={classes.input} name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" />
+                            <TextField onChange={handleinput} className={classes.input} name="MobileNumber" type="number" size="small" label="Mobile Number" variant="outlined" value={patient.MobileNumber}/>
                         </OneField>
                         <OneField>
                             <Button onClick={() => saveData()} className={classes.buttonSubmit} variant="contained" color="primary">Submit</Button>

@@ -36,3 +36,6 @@ html {
 .capitalize{
     text-transform: capitalize;
 }
+.MuiButton-label{
+  pointer-events: none;
+}

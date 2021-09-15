@@ -45,11 +45,11 @@ class Example extends React.Component {
         //console.log(this.props.patient)
         return (
             <FlexContainer>
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient}/>
                 <ReactToPrint
                     trigger={() => <ButtonPrint>Print</ButtonPrint>}
                     content={() => this.componentRef}
                 />
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient}/>
             </FlexContainer>
         );
     }

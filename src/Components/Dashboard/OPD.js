@@ -40,23 +40,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OPD() {
     const classes = useStyles();
-    const [tabs , setTabs] = React.useState(0);
+    const [tabs , setTabs] = React.useState(1);
 
     return (
         <div>
             <ButtonContainer>
-                <Button onClick={() => setTabs(1)} className={classes.MainButton} variant="contained">
+                {/* <Button onClick={() => setTabs(1)} className={classes.MainButton} variant="contained">
                     Add OPD Patient
-                </Button>
-                <Button onClick={() => setTabs(2)} className={classes.MainButton} variant="contained">
+                </Button> */}
+                {/* <Button onClick={() => setTabs(2)} className={classes.MainButton} variant="contained">
                     New Receipt
-                </Button>
-                <Button  className={classes.MainButton} variant="contained">
-                    View Receipt
-                </Button>
-                <Button className={classes.MainButton} variant="contained" >
-                    Modify Receipt
-                </Button>
+                </Button> */}
+                
             </ButtonContainer>
             <Container>
                 {tabs===0 &&

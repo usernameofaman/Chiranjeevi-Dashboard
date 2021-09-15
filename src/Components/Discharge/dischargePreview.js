@@ -79,7 +79,7 @@ const HorizontalLine = styled.div`
 `
 const TextSection = styled.div`
     padding: 0px 10px 0px 50px;
-    width : 40%;
+    /* width : 40%; */
     margin: 5px 0px 5px 0px;
    
 `
@@ -152,10 +152,11 @@ export default function DischargePreview(props) {
                     <Section style={{paddingTop:"30px"}}> 
                         {itemList.map((item) => (
                             <ItemsList>
-                                <TextSection>
+                                <TextSection style={{width : "50%"}}>
                                     <Typography >{item.name}</Typography>
                                 </TextSection>
-                                <TextSection>
+                                    <Typography ><div style={{display:"flex", width:"40px"}}> X {item.unitValue} </div></Typography>
+                                <TextSection style={{width : "20%"}}>
                                     <Typography >{item.amount}</Typography>
                                 </TextSection>
                             </ItemsList>
@@ -168,17 +169,17 @@ export default function DischargePreview(props) {
                 </div>
                 <HorizontalLine />
                 <div style={{ display: "flex", width: "50%", justifyContent: "flex-start", padding: "50px" }} >
-                    <TextSection style={{ padding: "0px" }}>
+                    <TextSection style={{ padding: "0px" , width:"40%"}}>
                         <BillText >Total </BillText>
-                        <BillText >{patient.discharge?.adjustment && "Adjustnemt"}</BillText>
+                        <BillText >{patient.discharge?.adjustment && "Adjustment"}</BillText>
                         <BillText >Remaining </BillText>
                         <BillText >Paid </BillText>
                     </TextSection>
-                    <TextSection style={{ padding: "0px", marginLeft: "1px" }}>
+                    <TextSection style={{ padding: "0px", marginLeft: "1px" , width:"40%"}}>
                         <BillText >{patient.discharge?.total} </BillText>
                         <BillText >{patient.discharge?.adjustment}  </BillText>
                         <BillText >{patient.discharge?.total- patient.discharge?.adjustment - patient.advance} </BillText>
-                        <BillText >500  </BillText>
+                        <BillText >{patient.advance} </BillText>
                     </TextSection>
                 </div>
 

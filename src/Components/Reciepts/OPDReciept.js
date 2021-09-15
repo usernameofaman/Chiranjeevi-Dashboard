@@ -134,15 +134,22 @@ function OPDReciept(props) {
             })
         }
         if (props.patient) {
+            // console.log(patient)
             setPatient(props.patient)
+            if(props.patient.amount!=="")
+                    setReceipt({...receipt,amount:props.patient.amount})
         }
         getSerialNo();
     }, []);
 
     const getSerialNo =async () => {
         await FirebaseFunction.getData("Utilities").then((res) => {
-            //console.log(res)
-            setReceipt({ ...receipt, serialNo: res[0].serialNo + 1 })
+            try{
+                // console.log(res)
+                setReceipt({ ...receipt, serialNo: res[0].serialNo + 1 })
+            } catch (error) {
+                console.log(error)
+            }
         });
     }
 
@@ -239,7 +246,7 @@ function OPDReciept(props) {
                         <HeaderInput>
                             <div style={{ paddingBottom: "6px" }}><b>Amount</b></div>
                             <Value style={{ flexGrow: "0" }}>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" disabled={locked ? true : false}/>
+                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" disabled={locked ? true : false} value={patient.amount ? patient.amount : ""} InputLabelProps={{ shrink: patient.amount === "" ? false : true }}/>
                             </Value>
                         </HeaderInput>
 

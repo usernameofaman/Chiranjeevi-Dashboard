@@ -12,11 +12,15 @@ import { Button } from '@material-ui/core';
 import Toast from '../Common/snackbar'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import moment from 'moment';
+import DeleteDialog from './deleteDialog'
 
 
 const TelePhone = styled.img`
     width:18px;
     height:18px;
+`
+const UnitButtons = styled.div`
+    display:flex;
 `
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +34,16 @@ const useStyles = makeStyles((theme) => ({
         margin: "20px",
         width: "120px",
         height: "50px",
+        background: '#0C6361',
+        color: "white",
+        '&:hover': {
+            backgroundColor: '#238887',
+        },
+    },
+    unitButtons: {
+        margin: "0px 5px",
+        minWidth: "20px",
+        height: "30px",
         background: '#0C6361',
         color: "white",
         '&:hover': {
@@ -137,7 +151,7 @@ const MainFormSection = styled.div`
 `
 
 const Select = styled.select`
-    width:70%;
+    width:50%;
     border-radius: 5px;
     height: 32px;
     padding: 0px 10px 0px 10px;
@@ -169,6 +183,12 @@ const AmountField = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+`
+const UnitValue = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
 `
 
 export default function Discharge(props) {
@@ -230,11 +250,11 @@ export default function Discharge(props) {
 
     // setting items State
 
-    const [items, setItems] = React.useState([{ name: "", amount: 0 }])
+    const [items, setItems] = React.useState([{ name: "", amount: 0, unitValue: 1 }])
     const changeItemsLength = (e) => {
         //console.log(e)
         if (e === "add")
-            setItems([...items, { name: "", amount: 0 }])
+            setItems([...items, { name: "", amount: 0, unitValue: 1 }])
         if (e === "remove") {
             if (items.length > 1) {
                 let newState = [...items];
@@ -244,25 +264,37 @@ export default function Discharge(props) {
         }
     }
     const handleInventoryData = (e, index) => {
-        let amountValue = ""
-        InventoryList.forEach((item) => {
-            if (item.name === e.target.value) {
-                amountValue = item.amount;
+        console.log(e.target)
+        if (e.target.name === "increase" || e.target.name === "decrease") {
+            let newState = [...items];
+            if (e.target.name === "increase")
+                newState[index].unitValue = items[index].unitValue + 1;
+            else {
+                if (items[index].unitValue > 1)
+                    newState[index].unitValue = items[index].unitValue - 1;
             }
-        })
-        let newState = [...items];
-        newState[index].name = e.target.value;
-        newState[index].amount = amountValue;
-        setItems(newState);
-        calculateTotal()
-        //console.log(items)
+            setItems(newState);
+        }
+        else {
+            let amountValue = ""
+            InventoryList.forEach((item) => {
+                if (item.name === e.target.value) {
+                    amountValue = item.amount;
+                }
+            })
+            let newState = [...items];
+            newState[index].name = e.target.value;
+            newState[index].amount = amountValue;
+            setItems(newState);
+        }
+        calculateTotal();
     }
 
     //Calculate Total
     const calculateTotal = () => {
         let totalVal = 0
         items.forEach((item) => {
-            totalVal += item.amount;
+            totalVal += item.amount * item.unitValue;
         })
         setDischargeData({ ...dischargeData, total: totalVal })
     }
@@ -320,8 +352,10 @@ export default function Discharge(props) {
 
     const dischargePatient = () => {
         let balanceVal
+        console.log(dischargeData.total, patient.advance, patient.adjustment)
         if (dischargeData.adjustment === "")
-            balanceVal = dischargeData.total - patient.advance
+            balanceVal = dischargeData.total - patient.advance;
+        else balanceVal = dischargeData.total - patient.advance - dischargeData.adjustment;
         const patientData = {
             ...patient,
             discharge: {
@@ -332,7 +366,7 @@ export default function Discharge(props) {
             },
             inventory: items,
         }
-        //console.log(patientData)
+        console.log(patientData)
         const patientRef = firebase.database().ref("PatientsIPD");
         patientRef.push(patientData).then(() => {
         }).catch(() => {
@@ -340,23 +374,32 @@ export default function Discharge(props) {
         });
         const userRef = firebase.database().ref("ActivePatients").child(patient.id);
         userRef.remove().then(() => {
-            Toast.apiSuccessToast("Patient details updated")
+            Toast.apiFailureToast("Patient has been Discharged")
         }).catch(() => {
             Toast.apiFailureToast("Server Error")
         })
-        setTab(1);
+        props.backToDashboard();
     }
-
+    const [deleteDialog, setDeleteDialog] = React.useState(false);
+    const handleDeleteOpen = async (doctor) => {
+        setDeleteDialog(true);
+    };
+    const handleDeleteClose = () => {
+        setDeleteDialog(false);
+    };
+  
     return (
         <>
             {tab === 0 ?
                 <Container>
                     <div style={{ display: "flex" }}>
                         <Button className={classes.buttons} onClick={updatePatientDetails} variant="outlined"> Save </Button>
-                        <Button className={classes.buttons} onClick={dischargePatient} variant="outlined"> Discharge </Button>
+                        <Button className={classes.buttons} onClick={handleDeleteOpen} variant="outlined"> Discharge </Button>
                         {props.patient ? <Button className={classes.buttonCancel} onClick={() => props.backToDashboard()} variant="outlined"> Cancel </Button> :
                             <Button className={classes.buttonCancel} onClick={() => props.changeTabs(0)} variant="outlined"> Cancel </Button>}
                     </div>
+                    <DeleteDialog handleClose={handleDeleteClose} open={deleteDialog} dischargePatient={dischargePatient}/>
+
                     <Form>
                         <Section>
                             <LogoAndHeading>
@@ -395,11 +438,16 @@ export default function Discharge(props) {
                                         <Select onChange={(e) => handleInventoryData(e, index)} value={item.name} >
                                             <option selected disabled value="">Select</option>
                                             {InventoryList.map((item, index) => (
-                                                <option value={item.name}>{item.name}</option>
+                                                <option value={item.name}>{item.name}/{item.unit}</option>
                                             ))}
                                         </Select>
+                                        <UnitButtons>
+                                            <Button onClick={(e) => handleInventoryData(e, index)} name="increase" className={classes.unitButtons} variant="contained">+</Button>
+                                            <UnitValue>{items[index].unitValue}</UnitValue>
+                                            <Button onClick={(e) => handleInventoryData(e, index)} name="decrease" className={classes.unitButtons} variant="outlined">-</Button>
+                                        </UnitButtons>
                                         <ItemPrice>
-                                            {items[index].amount === 0 ? "" : items[index].amount}
+                                            {items[index].amount === 0 ? "" : items[index].amount * items[index].unitValue}
                                             {items[index].amount === 0 ? "" : "Rs"}
                                         </ItemPrice>
                                     </ItemContainer>

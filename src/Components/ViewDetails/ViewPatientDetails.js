@@ -96,16 +96,17 @@ export default function NewPatient(props) {
     const handleInputEdit = (e) => {
         setPatient({...patient,[e.target.name]:e.target.value})
     }
-    const getPatientDetails = () => {
+    const getPatientDetails = async (number) => {
         setEditMode(false)
         const userRef = firebase.database().ref("ActivePatients");
-        var userQuery = userRef.orderByChild("fileNo").equalTo(fileNo);
+        var userQuery = await userRef.orderByChild("fileNo").equalTo(number);
         userQuery.once("value", function (snapshot) {
-            setSelectedId(Object.keys(snapshot.val()))
+            // setSelectedId(Object.keys(snapshot.val()))
             snapshot.forEach(function (child) {
                 setPatient(child.val())
             });
         });
+        
     }
     const updatePatientDetails = () => {
         // //console.log("HEre")
@@ -130,6 +131,7 @@ export default function NewPatient(props) {
                     <OneField >
                         <TextField
                             onChange={handleFileNo}
+                            name="fileNo"
                             className={classes.input}
                             id="input-with-icon-textfield"
                             type="number"
