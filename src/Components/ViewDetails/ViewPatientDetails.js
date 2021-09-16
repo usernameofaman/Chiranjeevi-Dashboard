@@ -98,15 +98,18 @@ export default function NewPatient(props) {
     }
     const getPatientDetails = async (number) => {
         setEditMode(false)
+        let intNumber = parseInt(number)
         const userRef = firebase.database().ref("ActivePatients");
-        var userQuery = await userRef.orderByChild("fileNo").equalTo(number);
+        var userQuery = userRef.orderByChild("fileNo").equalTo(intNumber);
         userQuery.once("value", function (snapshot) {
-            // setSelectedId(Object.keys(snapshot.val()))
+            console.log("here",snapshot.val())
+            if (snapshot.val())
+                setSelectedId(Object.keys(snapshot.val()))
             snapshot.forEach(function (child) {
-                setPatient(child.val())
+                setPatient(child.val());
             });
+            
         });
-        
     }
     const updatePatientDetails = () => {
         // //console.log("HEre")
