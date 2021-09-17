@@ -29,8 +29,7 @@ function App() {
     //     <Route exact path="/Inventory" component={Inventory} />
     //     <Route exact path="/NAN" component={UnderConstruction} />
     //     <Route exact path="/Reports" component={Reports} />
-    //     <Route exact path="*" component={Error} />        
-
+    //     <Route exact path="*" component={Error} />       
     //   </Switch>
     // </BrowserRouter>
 
