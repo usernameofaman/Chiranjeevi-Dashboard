@@ -5,6 +5,7 @@ import OPDForm from './Components/Dashboard/OPD'
 import IPDForm from './Components/Forms/IPDForm'
 import Patients from './Components/Dashboard/PatientList'
 import UnderConstruction from './Components/UnderConstruction/UnderConstruction'
+import Reports from './Components/Reports/Reports'
 import Error from './Components/Error/Error'
 import IPD from './Components/Dashboard/IPD'
 import Doctors from './Components/Doctors/Doctors'
@@ -27,6 +28,7 @@ function App() {
         <Route exact path="/PatientsList" component={Patients} />
         <Route exact path="/Inventory" component={Inventory} />
         <Route exact path="/NAN" component={UnderConstruction} />
+        <Route exact path="/Reports" component={Reports} />
         <Route exact path="*" component={Error} />        
 
       </Switch>

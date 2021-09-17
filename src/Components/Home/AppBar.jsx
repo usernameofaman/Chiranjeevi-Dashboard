@@ -69,7 +69,7 @@ export default function ButtonAppBar() {
           justifyContent: "center",
           alignItems: "center"
         }}>
-          Cheeranjeevi
+          Chiranjeevi
         </Typography>
         <Divider />
         <NavLink className="navlinkstyle" to="/OPD">
@@ -88,6 +88,12 @@ export default function ButtonAppBar() {
           <ListItem button>
             <ListItemIcon><DashboardIcon /></ListItemIcon>
             <ListItemText primary={'Dashboard'} />
+          </ListItem>
+        </NavLink>
+        <NavLink className="navlinkstyle" to="/Reports">
+          <ListItem button>
+            <ListItemIcon><DashboardIcon /></ListItemIcon>
+            <ListItemText primary={'Reports'} />
           </ListItem>
         </NavLink>
       </List>
