@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import firebase from '../utils/firebase'
 import { history } from "../utils/history";
+import { login } from '../../utils';
+import Toast from '../Common/snackbar'
 
 const useStyles = makeStyles((theme) => ({
   login: {
@@ -17,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     width: "100%",
-      background: "#0C6361",
-      '&:hover': {
-          backgroundColor: '#0C6361',
-          boxShadow: 'none',
-      },
- 
-    
+    background: "#0C6361",
+    '&:hover': {
+      backgroundColor: '#0C6361',
+      boxShadow: 'none',
+    },
+
+
   }
 }));
 
@@ -43,29 +45,46 @@ export default function Login() {
   })
   const takingUserInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
-    //console.log(user)
+    // console.log(user)
   }
   useEffect(() => {
     getDataForLogin();
   });
   const getDataForLogin = () => {
-    if (dbUsers === 0) {
-      const userRef = firebase.database().ref("User");
-      userRef.on("value", async (snapshot) => {
-        const users = snapshot.val();
-        const userArray = [];
-        for (let id in users) {
-          userArray.push(users[id])
-        }
-        await setDbUsers(userArray)
-      })
-    }
+
+  }
+  const SignUp = () => {
+    // return
+    const inventoryRef = firebase.database().ref("Users");
+    const UserData = {
+      name: user.username,
+      password: user.password,
+    };
+    console.log(UserData)
+    inventoryRef.push(UserData).then(() => {
+      Toast.apiSuccessToast("User Added")
+    }).catch(() => {
+      Toast.apiFailureToast("Server Error")
+    });
   }
 
-  const CreateUser = () => {
-    //console.log(dbUsers)
-    if (user.username === dbUsers[0].username && user.password === dbUsers[0].password) {
+  const UserLogin = async () => {
+    let checkUser;
+    const userRef = await firebase.database().ref("Users");
+    var userQuery = await userRef.orderByChild("name").equalTo(user.username);
+    await userQuery.once("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        checkUser = child.val()
+        console.log(child.val())
+      });
+    });
+    console.log(checkUser, user)
+    if (checkUser && checkUser.password === user.password) {
+      login()
+      Toast.apiSuccessToast("Login Success")
       history.push("/Dashboard")
+    } else {
+      Toast.apiFailureToast("Password Error")
     }
   }
 
@@ -73,9 +92,9 @@ export default function Login() {
     <Container>
       {/* <Loader/> */}
       <form className={classes.login} noValidate autoComplete="off">
-        <TextField onChange={takingUserInput} name="username"  label="Username" variant="outlined" />
-        <TextField onChange={takingUserInput} name="password"  type="password" label="Password" variant="outlined" />
-        <Button onClick={CreateUser} className={classes.btn} variant="contained" color="primary">Login</Button>
+        <TextField onChange={takingUserInput} name="username" label="Username" variant="outlined" />
+        <TextField onChange={takingUserInput} name="password" type="password" label="Password" variant="outlined" />
+        <Button onClick={UserLogin} className={classes.btn} variant="contained" color="primary">Login</Button>
       </form>
     </Container>
   );

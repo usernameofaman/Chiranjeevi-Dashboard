@@ -16,6 +16,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import { logout } from '../../utils';
+import { history } from "../utils/history";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +43,11 @@ export default function ButtonAppBar() {
   const [state, setState] = React.useState({
     left: false,
   });
+
+  const Logout = () => {
+    logout()
+    history.push("/")
+  }
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -116,7 +124,7 @@ export default function ButtonAppBar() {
         ))}
       </div>
       <div className={classes.root}>
-        <AppBar style={{ background: '#0C6361', }} position="static">
+        <AppBar style={{ background: '#0C6361',justifyContent:"space-between",flexDirection:"row" }} position="static">
           <Toolbar>
             <IconButton onClick={toggleDrawer('left', true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
@@ -130,6 +138,7 @@ export default function ButtonAppBar() {
               </Button>
             </NavLink>
           </Toolbar>
+          <Button style={{marginRight:"10px"}} color="inherit" onClick={Logout}>Logout</Button>
         </AppBar>
         <Drawer />
       </div>
