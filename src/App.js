@@ -8,6 +8,7 @@ import UnderConstruction from './Components/UnderConstruction/UnderConstruction'
 import Reports from './Components/Reports/Reports'
 import Error from './Components/Error/Error'
 import IPD from './Components/Dashboard/IPD'
+import Voucher from './Components/Voucher/printModule'
 import Doctors from './Components/Doctors/Doctors'
 import Inventory from './Components/Inventory/Inventory'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
@@ -31,6 +32,7 @@ function App() {
         <PrivateRoute component={Inventory} path="/Inventory" exact />
         <PrivateRoute component={UnderConstruction} path="/NAN" exact />
         <PrivateRoute component={Reports} path="/Reports" exact />
+        <PrivateRoute component={Voucher} path="/Voucher" exact />
         <PrivateRoute component={Error} path="*" exact />
       </Switch>
     </BrowserRouter>

@@ -7,7 +7,8 @@ export default {
     increaseSerial,
     inWords,
     toTitleCase,
-    increaseFileNo
+    increaseFileNo,
+    increaseVoucher
 }
 
 function getOneData(db, order, id) {
@@ -127,6 +128,26 @@ async function increaseSerial() {
         const serialData = snap.val();
         for (let id in serialData) {
             serialNo = serialData[id].serialNo;
+        }
+    });
+
+    serialRef = firebase.database().ref("Utilities").child("-MhbovXK-FVTfe87HBlh");
+    const newSerial = {
+        serialNo: serialNo + 1,
+    }
+    await serialRef.update(newSerial).then(() => {
+        //console.log("Sr. No Updated")
+    }).catch(() => {
+        Toast.apiFailureToast("Server Error")
+    })
+}
+async function increaseVoucher() {
+    let serialRef = await firebase.database().ref("Utilities");
+    let serialNo;
+    await serialRef.on('value', (snap) => {
+        const serialData = snap.val();
+        for (let id in serialData) {
+            serialNo = serialData[id].voucherSerial;
         }
     });
 

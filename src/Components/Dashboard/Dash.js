@@ -56,6 +56,11 @@ export default function Dashboard() {
                             IPD
                         </Button>
                     </NavLink>
+                    <NavLink className="navlinkstyle" to="/Voucher">
+                        <Button className={classes.MainButton} variant="contained" >
+                            Voucher
+                        </Button>
+                    </NavLink>
                     <NavLink className="navlinkstyle" to="/Inventory">
                         <Button className={classes.MainButton} variant="contained" >
                             Inventory
