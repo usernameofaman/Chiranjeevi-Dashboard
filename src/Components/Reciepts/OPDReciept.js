@@ -171,10 +171,12 @@ function OPDReciept(props) {
         serialNo: "", name: "", amountInWords: "", otherAmount: "", chequeNo: "", chequeDate: "", amount: "", date: moment(Date.now()).format("YYYY-MM-DDTHH:mm")
     })
     const handleInputData = (e) => {
-        setReceipt({ ...receipt, [e.target.name]: e.target.value });
         if (e.target.name === "amount" && !isNaN(e.target.value)) {
             let response = FirebaseFunction.toTitleCase(FirebaseFunction.inWords(e.target.value));
-            setReceipt({ ...receipt, amountInWords: response });
+            let parsedAmount = parseInt(e.target.value)
+            setReceipt({ ...receipt, [e.target.name]: parsedAmount, amountInWords: response });
+        } else {
+            setReceipt({ ...receipt, [e.target.name]: e.target.value });
         }
     }
 
@@ -246,7 +248,7 @@ function OPDReciept(props) {
                         <HeaderInput>
                             <div style={{ paddingBottom: "6px" }}><b>Amount</b></div>
                             <Value style={{ flexGrow: "0" }}>
-                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" disabled={locked ? true : false} value={patient.amount ? patient.amount : ""} InputLabelProps={{ shrink: patient.amount === "" ? false : true }}/>
+                                <TextField onChange={handleInputData} className={classes.inputReceipt} name="amount" type="number" size="small" label="Amount" disabled={locked ? true : false} value={patient.amount ? patient.amount : receipt.amount} InputLabelProps={{ shrink: patient.amount === "" ? false : true }}/>
                             </Value>
                         </HeaderInput>
 
