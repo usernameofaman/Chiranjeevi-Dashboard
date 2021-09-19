@@ -326,6 +326,10 @@ export default function Discharge(props) {
 
     const updatePatientDetails = async () => {
         // Preparing Data
+        console.log(items.length)
+        if(items.length===1 && items[0].name===""){
+            Toast.apiFailureToast("Add Something to Discharge")
+        }
         let balanceVal
         if (dischargeData.adjustment === "")
             balanceVal = dischargeData.total - patient.advance

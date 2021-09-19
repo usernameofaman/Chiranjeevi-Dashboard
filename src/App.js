@@ -17,23 +17,6 @@ import PublicRoute from './PublicRoute';
 
 function App() {
   return (
-    // <BrowserRouter>
-    //   <Switch>
-    //     <Route exact path="/" component={Home} />
-    //     {/* <Route exact path="/Dashboard" component={Dashboard} />  */}
-    //     <Route exact path="/Doctors" component={Doctors} /> 
-    //     <Route exact path="/IPDForm" component={IPDForm} /> 
-    //     <Route exact path="/OPD" component={OPDForm} />
-    //     <Route exact path="/IPD" component={IPD} />
-    //     <Route exact path="/PatientsList" component={Patients} />
-    //     <Route exact path="/Inventory" component={Inventory} />
-    //     <Route exact path="/NAN" component={UnderConstruction} />
-    //     <Route exact path="/Reports" component={Reports} />
-    //     <Route exact path="*" component={Error} />        
-
-    //   </Switch>
-    // </BrowserRouter>
-
     <BrowserRouter>
       <AppBar />
       <Switch>

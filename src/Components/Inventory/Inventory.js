@@ -109,6 +109,10 @@ export default function Doctors() {
         //console.log(inventory)
     }
     const saveData = () => {
+        if(inventory.name==="" || !inventory.unit || !inventory.type){
+            Toast.apiFailureToast("Fill all the fields");
+            return
+        }
         const inventoryRef = firebase.database().ref("Inventory");
         const inventoryData = {
             name: inventory.name,

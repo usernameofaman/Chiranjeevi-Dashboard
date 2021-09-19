@@ -137,6 +137,7 @@ export default function NewPatient(props) {
         RegisterNumber: "",
         advance: "",
         room: "",
+        ward:"",
         dateAdmit: admitdate,
         dateDischarge: "",
         MobileNumber: "",
@@ -152,6 +153,11 @@ export default function NewPatient(props) {
     }
 
     const saveData = () => {
+        if(patient.Name==="" || patient.age==="" || patient.sex==="" || patient.address==="" || patient.referredBy==="" ||
+            patient.consultant==="" || patient.referredBy ==="" || patient.RegisterNumber==="" || patient.ward==="" ){
+                Toast.apiFailureToast("Fill all the fields");
+                return;
+            }
         const patientRef = firebase.database().ref("ActivePatients");
         const patientData = {
             name: patient.Name,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components'
@@ -74,7 +74,7 @@ export default function Dashboard() {
                     </NavLink>
                 </ButtonContainer>
             </Container>
-            <PatientList/>
+            <PatientList />
         </>
     );
 }

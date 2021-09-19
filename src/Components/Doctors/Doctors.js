@@ -108,7 +108,12 @@ export default function Doctors() {
         //console.log(doctor)
     }
     const [showLoader , setLoader ] = React.useState(false)
+
     const saveData = () => {
+        if(doctor.name===""){
+            Toast.apiFailureToast("Fill Doctor Name");
+            return
+        }
         const doctorRef = firebase.database().ref("Doctors");
         const doctorData = {
             name: doctor.name,

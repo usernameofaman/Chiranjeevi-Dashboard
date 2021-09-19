@@ -22,17 +22,17 @@ class ComponentToPrint extends React.Component {
     constructor(props) {
         super(props);
     }
-render(){
-    //console.log(this.props.mode)
-    return (
-        <>
-        {this.props.mode==="IPD" ?
-        <Receipt patient={this.props.patient}/> :
-        <OPDReceipt patient={this.props.patient}/>
-         }
-        </>
-    )
-}
+    render() {
+        //console.log(this.props.mode)
+        return (
+            <>
+                {this.props.mode === "IPD" ?
+                    <Receipt patient={this.props.patient} /> :
+                    <OPDReceipt patient={this.props.patient} />
+                }
+            </>
+        )
+    }
 
 }
 
@@ -45,11 +45,12 @@ class Example extends React.Component {
         //console.log(this.props.patient)
         return (
             <FlexContainer>
+                <ButtonPrint onClick={this.props.backToDashboard}>Back</ButtonPrint>
                 <ReactToPrint
                     trigger={() => <ButtonPrint>Print</ButtonPrint>}
                     content={() => this.componentRef}
                 />
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient}/>
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient} />
             </FlexContainer>
         );
     }

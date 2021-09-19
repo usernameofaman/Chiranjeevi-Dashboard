@@ -195,6 +195,10 @@ function IPDReciept(props) {
 
     const SaveReceipt = () => {
         ////console.log(patient)
+        if(receipt.amount===""){
+            Toast.apiFailureToast("Enter amount")
+            return
+        }
         if (!patient.name) {
             Toast.apiFailureToast("Please Add Patient")
             return

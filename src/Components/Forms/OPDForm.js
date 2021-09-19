@@ -126,8 +126,19 @@ export default function NewPatient(props) {
 
     const saveData = () => {
         //console.log(patient)
-        if(!patient.name) Toast.apiFailureToast("Enter Valid Patient Name")
-        if(!patient.age) Toast.apiFailureToast("Enter Valid Patient Name")
+        if(!patient.name) {
+            Toast.apiFailureToast("Enter Valid Patient Name")
+            return
+        }
+        if(!patient.age) {
+            Toast.apiFailureToast("Enter Valid Patient Age")
+            return
+        }
+        if(!patient.consultant) {
+            Toast.apiFailureToast("Select Valid Patient Consultant")
+            return
+        }
+
         const patientRef = firebase.database().ref("ActivePatients");
         const patientData = {
             name: patient.name,
