@@ -329,6 +329,7 @@ export default function Discharge(props) {
         console.log(items.length)
         if(items.length===1 && items[0].name===""){
             Toast.apiFailureToast("Add Something to Discharge")
+            return
         }
         let balanceVal
         if (dischargeData.adjustment === "")
@@ -408,7 +409,7 @@ export default function Discharge(props) {
                         <Section>
                             <LogoAndHeading>
                                 <LogoHolder>
-                                    <Logo src="Images/Discharge.png" />
+                                    <Logo src="Images/logoN.png" />
                                 </LogoHolder>
                                 <TextHolder>
                                     <Typography variant="h3">

@@ -131,7 +131,7 @@ export default function ButtonAppBar() {
             </IconButton>
             <NavLink className="navlinkstyle" exact to="/Dashboard">
               <Button style={{ background: "transparent", color: "white" }}>
-                <img style={{ width: "40px" }} src="./Images/logo.png" alt="logo" />
+                <img style={{ width: "40px" }} src="./Images/logoN.png" alt="logo" />
                 <Typography style={{ fontFamily: "'Source Sans Pro', sans-serif", fontWeight: "bolder", fontSize: "26px" }} variant="h6" className={classes.title}>
                   Cheeranjeevi
                 </Typography>
