@@ -15,7 +15,7 @@ const FlexContainer = styled.div`
 const ButtonPrint = styled.button`
     width:120px;
     height:50px;
-    margin-bottom: 20px;
+    margin : 0 10px 0 0;
 `
 
 class ComponentToPrint extends React.Component {
@@ -27,8 +27,8 @@ class ComponentToPrint extends React.Component {
         return (
             <>
                 {this.props.mode === "IPD" ?
-                    <Receipt patient={this.props.patient} /> :
-                    <OPDReceipt patient={this.props.patient} />
+                    <Receipt patient={this.props.patient} serialNo={this.props.serialNo}/> :
+                    <OPDReceipt patient={this.props.patient} serialNo={this.props.serialNo}/>
                 }
             </>
         )
@@ -42,15 +42,18 @@ class Example extends React.Component {
     }
 
     render() {
-        //console.log(this.props.patient)
+        // console.log(this.props)
         return (
             <FlexContainer>
+                <div>
+
                 <ButtonPrint onClick={this.props.backToDashboard}>Back</ButtonPrint>
                 <ReactToPrint
                     trigger={() => <ButtonPrint>Print</ButtonPrint>}
                     content={() => this.componentRef}
-                />
-                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient} />
+                    />
+                    </div>
+                <ComponentToPrint ref={(el) => (this.componentRef = el)} mode={this.props.mode} patient={this.props.patient} serialNo={this.props.serialNo} />
             </FlexContainer>
         );
     }

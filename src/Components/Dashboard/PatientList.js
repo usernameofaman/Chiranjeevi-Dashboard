@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import Receipt from '../Reciepts/printModule'
 import Discharge from '../Discharge/Discharge'
-
+import FirebaseFunction from '../utils/firebaseFunctions';
 const TableContainer = styled.div`
     padding-left: 40px;
 `
@@ -13,9 +13,11 @@ const TableContainer = styled.div`
 export default function PatientList(props) {
   const [patients, setPatients] = React.useState([1, 2])
   const [patientsOPD, setPatientsOPD] = React.useState([1, 2])
+  const [serialNo , setSerialNo] = React.useState(0)
   useEffect(() => {
     getDataForList();
   }, []);
+
   const getDataForList = () => {
     const userRef = firebase.database().ref("ActivePatients");
     userRef.on("value", async (snapshot) => {
@@ -106,11 +108,11 @@ export default function PatientList(props) {
           </TableContainer>
         </>}
       {view === 1 &&
-        <Receipt mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
+        <Receipt mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard} serialNo={serialNo}/>}
       {view === 2 &&
-        <Discharge mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
+        <Discharge mode="OPD" patient={selectedPatient} backToDashboard={backToDashboard} />}
         {view === 3 &&
-        <Receipt mode="IPD" patient={selectedPatient} backToDashboard={backToDashboard}/>}
+        <Receipt mode="IPD" patient={selectedPatient} backToDashboard={backToDashboard} serialNo={serialNo}/>}
     </>
   )
 }

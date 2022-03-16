@@ -213,7 +213,7 @@ function ViewIPDReceipt() {
                             <Section >
                                 <LogoAndHeading>
                                     <LogoHolder>
-                                        <Logo src="/Images/Discharge.png" />
+                                        <Logo src="/Images/logoN.png" />
                                     </LogoHolder>
                                     <TextHolder>
                                         <Typography variant="h3">
